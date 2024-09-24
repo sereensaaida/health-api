@@ -6,6 +6,7 @@ use App\Controllers\AboutController;
 use App\Controllers\DietsController;
 use App\Controllers\FoodsController;
 use App\Controllers\CountriesController;
+use App\Controllers\FactsController;
 use App\Controllers\RecommendationsController;
 use App\Helpers\DateTimeHelper;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -22,8 +23,11 @@ return static function (Slim\App $app): void {
     $app->get('/diets/{diet_id}', [DietsController::class, 'handleGetDietsId']);
     // $app->get('/test', [TestController::class, 'handleTest']);S
 
-    // Food route
+    // Foods route
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
+
+    // Facts route
+    $app->get('/facts', [FactsController::class, 'handleGetfacts']);
 
     // $app->get('/test', [TestController::class, 'handleTest']);
 
