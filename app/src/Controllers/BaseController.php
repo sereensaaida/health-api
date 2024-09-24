@@ -10,6 +10,7 @@ abstract class BaseController
 {
 
     public function __construct() {}
+    
     protected function renderJson(Response $response, array $data, int $status_code = 200): Response
     {
         // var_dump($data);
