@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controllers\AboutController;
 use App\Controllers\FoodsController;
 use App\Controllers\CountriesController;
+use App\Controllers\FactsController;
 use App\Controllers\RecommendationsController;
 use App\Helpers\DateTimeHelper;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -18,8 +19,11 @@ return static function (Slim\App $app): void {
     //* ROUTE: GET /
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
 
-    // Food route
+    // Foods route
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
+
+    // Facts route
+    $app->get('/facts', [FactsController::class, 'handleGetfacts']);
 
     // $app->get('/test', [TestController::class, 'handleTest']);
 
