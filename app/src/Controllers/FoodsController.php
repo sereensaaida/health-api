@@ -20,17 +20,18 @@ class FoodsController extends BaseController
     }
 
     //* GET /foods -> Foods collection handler
-    public function handleGetFoods(Request $request, Response $response): Response{
+    public function handleGetFoods(Request $request, Response $response): Response
+    {
 
         //* Retrieving the filter parameters from the request
         $filter_params = $request->getQueryParams();
 
-        $this->foods_model->setPaginationOptions(
-            current_page: $filter_params
-            ['current_page'],
-            records_per_page: $filter_params
-            ['page_size']
-        );
+        // $this->foods_model->setPaginationOptions(
+        //     current_page: $filter_params
+        //     ['current_page'],
+        //     records_per_page: $filter_params
+        //     ['page_size']
+        // );
 
 
         $foods = $this->foods_model->getFoods($filter_params);
@@ -41,6 +42,4 @@ class FoodsController extends BaseController
             "application/json",
         )->withStatus(200);
     }
-
-
 }
