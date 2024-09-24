@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Controllers\AboutController;
+use App\Controllers\DietsController;
 use App\Controllers\FoodsController;
 use App\Controllers\CountriesController;
 use App\Controllers\FactsController;
@@ -18,6 +19,8 @@ return static function (Slim\App $app): void {
     // Routes with authentication
     //* ROUTE: GET /
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
+    $app->get('/diets', [DietsController::class, 'handleGetDiets']);
+    // $app->get('/test', [TestController::class, 'handleTest']);S
 
     // Foods route
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
