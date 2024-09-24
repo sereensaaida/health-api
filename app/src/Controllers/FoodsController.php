@@ -26,7 +26,7 @@ class FoodsController extends BaseController
         //* Retrieving the filter parameters from the request
         $filter_params = $request->getQueryParams();
 
-        //TODO Pagination
+        //TODO Pagination: Find a way to make it work without conflicting
         // $this->foods_model->setPaginationOptions(
         //     current_page: $filter_params
         //     ['current_page'],
@@ -42,5 +42,18 @@ class FoodsController extends BaseController
             "Content-Type",
             "application/json",
         )->withStatus(200);
+
+    }
+
+    public function handleGetFoodId(Request $request, Response $response, array $uri_args): Response
+    {
+        // Getting the food_id form the URI
+        $food_id = $uri_args['food_id'];
+
+        //* Validating that a valid ID is inputted in the URI - Because we can never trust what the user is putting in.
+
+        
+
+
     }
 }

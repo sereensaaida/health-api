@@ -22,7 +22,20 @@ class FoodsModel extends BaseModel
             $named_params_values['category'] = $filter_params['category'];
         }
 
+        // SERVING SIZE
+        if (isset($filter_params['serving_size'])) {
+            $sql .= " AND serving_size = CONCAT(:serving_size, '%') ";
+            $named_params_values['serving_size'] = $filter_params['serving_size'];
+        }
+
+        //TODO CALORIES
+        // if (isset($filter_params['min_calories'])) {
+        //     $sql .= " AND calories BETWEEN CONCAT(:min_calories, '%') AND CONCAT(:max_calories, '%')";
+        //     $named_params_values['category'] = $filter_params['category'];
+        // }
+
         $foods = (array) $this->fetchAll($sql, $named_params_values);
         return $foods;
     }
+
 }

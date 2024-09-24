@@ -17,6 +17,9 @@ class FactsModel extends BaseModel
 
         $sql = 'SELECT * from facts WHERE 1';
 
+        // Filtering:
+
+
         if (isset($filter_params['category'])) {
             $sql .= " AND category LIKE CONCAT(:category, '%') ";
             $named_params_values['category'] = $filter_params['category'];
