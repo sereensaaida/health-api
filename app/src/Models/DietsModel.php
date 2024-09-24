@@ -24,4 +24,19 @@ class DietsModel extends BaseModel
         //*Step 3: should return an array
         return $diets_info;
     }
+
+    // get diets by id
+
+    public function getDietsId(int $diet_id): mixed
+    {
+        //*sql query
+        $query = "SELECT * from diets WHERE diet_id = :diet_id";
+        //*fetch Single
+        $diet_info = $this->fetchSingle(
+            $query,
+            ["diet_id" => $diet_id]
+        );
+        //*return the information to the controller
+        return $diet_info;
+    }
 }

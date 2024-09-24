@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\FoodsModel;
+use App\Models\FactsModel;
 use App\Core\AppSettings;
 use App\Exceptions\HttpInvalidInputsException;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -11,16 +11,16 @@ use Fig\Http\Message\StatusCodeInterface;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpSpecializedException;
 
-class FoodsController extends BaseController
+class FactsController extends BaseController
 {
 
-    public function __construct(private FoodsModel $foods_model)
+    public function __construct(private FactsModel $facts_model)
     {
         parent::__construct();
     }
 
     //* GET /foods -> Foods collection handler
-    public function handleGetFoods(Request $request, Response $response): Response
+    public function handleGetFacts(Request $request, Response $response): Response
     {
 
         //* Retrieving the filter parameters from the request
@@ -35,7 +35,7 @@ class FoodsController extends BaseController
         // );
 
 
-        $foods = $this->foods_model->getFoods($filter_params);
+        $foods = $this->facts_model->getFacts($filter_params);
         $json_payload = json_encode($foods);
         $response->getBody()->write($json_payload);
         return $response->withHeader(
