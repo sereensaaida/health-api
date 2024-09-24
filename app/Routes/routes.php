@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Controllers\AboutController;
+use App\Controllers\CountriesController;
+use App\Controllers\RecommendationsController;
 use App\Helpers\DateTimeHelper;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -27,4 +29,10 @@ return static function (Slim\App $app): void {
         $response->getBody()->write(json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR));
         return $response;
     });
+
+    //* ROUTE: GET /recommendations
+    $app->get('/recommendations', [RecommendationsController::class, 'handleGetRecommendations']);
+
+    //* ROUTE: GET /countries
+    $app->get('/countries', [CountriesController::class, 'handleGetCountries']);
 };
