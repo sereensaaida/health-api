@@ -18,13 +18,36 @@ class DietsController extends BaseController
     public function handleGetDiets(Request $request, Response $response)
     {
         //*Retrieve filtering
-        $filter_params = $request->getQueryParams();
-
+        //$filter_params = $request->getQueryParams();
         $diets = $this->dietsModel->getDiets();
-
+        //* Converts the values to json
+        $json_payload = json_encode($diets);
+        //*write the json data in the body
+        $response->getBody()->write($json_payload);
+        //*return the response with the Content-type header & status code
         return $response->withHeader(
             "Content-Type",
             "application/json",
         )->withStatus(200);
+    }
+
+    //handle get diets by id (expecting an arg from request)
+    public function handleGetDietsId(Request $request, Response $response, array $args)
+    {
+        //*Step 1: Validate that the user has sent the right argument
+
+        //*Step 2: Error handling
+
+        //*Step 3: Call the db from the model
+        $diets = $this->dietsModel->getDietsId($args["diet_id"]);
+        //*Step 4: Encode in json & put it in the response
+        //$json_info = json_encode($diets);
+        //*Step 5: Send the response with the Header & status code
+        //$response = $response->getBody()->write($json_info);
+
+        return $this->renderJson(
+            $response,
+            (array) $diets
+        );
     }
 }

@@ -19,6 +19,7 @@ return static function (Slim\App $app): void {
     //* ROUTE: GET /
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
     $app->get('/diets', [DietsController::class, 'handleGetDiets']);
+    $app->get('/diets/{diet_id}', [DietsController::class, 'handleGetDietsId']);
     // $app->get('/test', [TestController::class, 'handleTest']);S
 
     // Food route
