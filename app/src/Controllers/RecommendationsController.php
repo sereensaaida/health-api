@@ -5,13 +5,52 @@ namespace App\Controllers;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Models\RecommendationsModel;
+use Fig\Http\Message\StatusCodeInterface;
+use App\Exceptions\HttpInvalidInputsException;
+use App\Helpers\PaginationHelper;
 
-class RecommendationsController
+class RecommendationsController extends BaseController
 {
     public function __construct(private RecommendationsModel $recommendations_model) {}
     public function handleGetRecommendations(Request $request, Response $response): Response
     {
         $json_payload = json_encode($this->recommendations_model->getRecommendations());
+        $response->getBody()->write($json_payload);
+        return $response->withHeader(
+            "content-Type",
+            "application/json"
+        )->withStatus(201);
+    }
+
+    public function handleGetRecommendationId(Request $request, Response $response, array $uri_args): Response
+    {
+
+        if (!isset($uri_args["recommendation_id"])) {
+            return $this->renderJson(
+                $response,
+                [
+                    "status" => "error",
+                    "code" => "400",
+                    "message" => "The supplied recommendation Id is not found"
+                ],
+                StatusCodeInterface::STATUS_BAD_REQUEST
+            );
+        }
+
+        $recommendation_id = $uri_args["recommendation_id"];
+        $recommendation_id_pattern = '/^([0-9]*)$/';
+
+
+        if (preg_match($recommendation_id_pattern, $recommendation_id) === 0) {
+            throw new HttpInvalidInputsException(
+                $request,
+                "invalid recommendation id provided"
+            );
+        }
+
+
+
+        $json_payload = json_encode($this->recommendations_model->getRecommendationsId($recommendation_id));
         $response->getBody()->write($json_payload);
         return $response->withHeader(
             "content-Type",

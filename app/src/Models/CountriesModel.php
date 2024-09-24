@@ -15,4 +15,14 @@ class CountriesModel extends BaseModel
         $sql = "SELECT * FROM countries";
         return   (array)$this->fetchAll($sql);
     }
+
+    public function getCountryId(string $country_id): mixed
+    {
+        $query = "SELECT * FROM countries WHERE country_id = :country_id";
+        $country_info = $this->fetchSingle(
+            $query,
+            ["country_id" => $country_id]
+        );
+        return $country_info;
+    }
 }

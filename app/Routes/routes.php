@@ -37,9 +37,14 @@ return static function (Slim\App $app): void {
         return $response;
     });
 
+    //RECOMMENDATIONS RESSOURCE
     //* ROUTE: GET /recommendations
     $app->get('/recommendations', [RecommendationsController::class, 'handleGetRecommendations']);
+    //*ROUTE: GET /recommendations/{recommendation_id}
+    $app->get('/recommendations/{recommendation_id}', [RecommendationsController::class, 'handleGetRecommendationId']);
 
+    //COUNTRIES RESSOURCE
     //* ROUTE: GET /countries
     $app->get('/countries', [CountriesController::class, 'handleGetCountries']);
+    $app->get('/countries/{country_id}', [CountriesController::class, 'handleGetCountryId']);
 };
