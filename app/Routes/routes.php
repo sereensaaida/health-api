@@ -6,6 +6,7 @@ use App\Controllers\AboutController;
 use App\Controllers\DietsController;
 use App\Controllers\FoodsController;
 use App\Controllers\CountriesController;
+use App\Controllers\GuidelinesController;
 use App\Controllers\FactsController;
 use App\Controllers\RecommendationsController;
 use App\Helpers\DateTimeHelper;
@@ -49,6 +50,11 @@ return static function (Slim\App $app): void {
     $app->get('/recommendations', [RecommendationsController::class, 'handleGetRecommendations']);
     //*ROUTE: GET /recommendations/{recommendation_id}
     $app->get('/recommendations/{recommendation_id}', [RecommendationsController::class, 'handleGetRecommendationId']);
+
+    //Guidelines Ressource
+    $app->get('/guidelines', [GuidelinesController::class, 'handleGetGuidelines']);
+    //*ROUTE: GET /recommendations/{recommendation_id}
+    $app->get('/guidelines/{guideline_id}', [GuidelinesController::class, 'handleGetGuidelineId']);
 
     //COUNTRIES RESSOURCE
     //* ROUTE: GET /countries
