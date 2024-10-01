@@ -19,9 +19,20 @@ class FactsModel extends BaseModel
 
         // Filtering:
 
-        $foods = (array) $this->fetchAll($sql, $named_params_values);
-        return $foods;
+        $facts = (array) $this->fetchAll($sql, $named_params_values);
+        return $facts;
     }
 
-    
+    public function getFactId(string $nutrition_id): mixed
+    {
+
+        $sql = "SELECT * FROM facts WHERE nutrition_id = :nutrition_id";
+
+        $fact_info = $this->fetchSingle(
+            $sql,
+            ["nutrition_id" => $nutrition_id]
+        );
+
+        return $fact_info;
+    }
 }

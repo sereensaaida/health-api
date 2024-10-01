@@ -94,4 +94,24 @@ class FoodsModel extends BaseModel
 
         return $result;
     }
+
+    public function getFoodRecommendations(String $food_id): mixed
+    {
+        $food = $this->getFoodId($food_id);
+
+        $sql = "SELECT * FROM recommendations WHERE food_id = :food_id";
+
+        $facts = $this->fetchAll(
+            $sql,
+            ["food_id" => $food_id]
+        );
+
+        $result = [
+            'food' => $food,
+            'facts' => $facts,
+        ];
+
+        return $result;
+    }
+
 }

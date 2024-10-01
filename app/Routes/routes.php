@@ -30,6 +30,7 @@ return static function (Slim\App $app): void {
 
     // Facts route
     $app->get('/facts', [FactsController::class, 'handleGetfacts']);
+    $app->get('/facts/{fact_id}', [FactsController::class, 'handleGetFactsId']);
 
     // $app->get('/test', [TestController::class, 'handleTest']);
 
