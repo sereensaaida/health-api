@@ -19,13 +19,20 @@ class FactsModel extends BaseModel
 
         // Filtering:
 
+        $facts = (array) $this->fetchAll($sql, $named_params_values);
+        return $facts;
+    }
 
-        if (isset($filter_params['category'])) {
-            $sql .= " AND category LIKE CONCAT(:category, '%') ";
-            $named_params_values['category'] = $filter_params['category'];
-        }
+    public function getFactId(string $nutrition_id): mixed
+    {
 
-        $foods = (array) $this->fetchAll($sql, $named_params_values);
-        return $foods;
+        $sql = "SELECT * FROM facts WHERE nutrition_id = :nutrition_id";
+
+        $fact_info = $this->fetchSingle(
+            $sql,
+            ["nutrition_id" => $nutrition_id]
+        );
+
+        return $fact_info;
     }
 }

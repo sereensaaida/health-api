@@ -34,15 +34,11 @@ class FoodsController extends BaseController
         //     ['page_size']
         // );
 
-
         $foods = $this->foods_model->getFoods($filter_params);
-        $json_payload = json_encode($foods);
-        $response->getBody()->write($json_payload);
-        return $response->withHeader(
-            "Content-Type",
-            "application/json",
-        )->withStatus(200);
-
+        return $this->renderJson(
+            $response,
+            $foods
+        );
     }
 
     public function handleGetFoodId(Request $request, Response $response, array $uri_args): Response
@@ -51,9 +47,57 @@ class FoodsController extends BaseController
         $food_id = $uri_args['food_id'];
 
         //* Validating that a valid ID is inputted in the URI - Because we can never trust what the user is putting in.
+        if (!isset($uri_args["food_id"])) {
+            return $this->renderJson(
+                $response,
+                [
+                    "status" => "error",
+                    "code" => "400",
+                    "message" => "No food ID provided."
 
-        
+                ],
+                StatusCodeInterface::STATUS_BAD_REQUEST
+            );
+        }
 
+        //TODO ADD VALIDATION
+        // if (preg_match($player_id_pattern, $player_id) === 0) {
+        //     throw new HttpInvalidInputsException(
+        //         $request,
+        //         "Invalid food ID provided",
+        //     );
+        // }
 
+        //* Step 3) If valid, fetch the appropriate data for the specific player from the DB
+        $food = $this->foods_model->getFoodId($food_id);
+        if ($food === false) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching food found"
+            );
+        }
+
+        return $this->renderJson(
+            $response,
+            $food
+        );
+    }
+
+    public function handleGetFoodFacts(Request $request, Response $response, array $uri_args): Response
+    {
+        $food_id = $uri_args['food_id'];
+
+        $results = $this->foods_model->getFoodFacts($food_id);
+
+        return $this->renderJson($response, $results);
+    }
+
+    public function handleGetFoodIdRecommendation(Request $request, Response $response, array $uri_args): Response
+    {
+        $food_id = $uri_args['food_id'];
+
+        $results = $this->foods_model->getFoodRecommendations($food_id);
+
+        return $this->renderJson($response, $results);
     }
 }

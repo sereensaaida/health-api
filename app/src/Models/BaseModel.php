@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Core\PDOService;
+use App\Helpers\PaginationHelper;
 use PDO;
 use Exception;
 
@@ -115,6 +116,42 @@ abstract class BaseModel
     protected function count($sql, $args = []): int
     {
         return $this->run($sql, $args)->rowCount();
+    }
+
+    protected function paginate($sql, $args = [], $fetchMode = PDO::FETCH_ASSOC): array
+    {
+        $parameters_values = [];
+        //* Step 1) Count: Get the number of records/rows that will be produced upon executing the supplied SQL query ($sql)
+        $rows_count = $this->count($sql, $args);
+
+        //* Step 2) Instantiate the PaginationHelper class, and pass the required inputs to its constructor
+        $helper = new PaginationHelper($this->current_page, $this->records_per_page, $rows_count);
+
+        //* Step 3) Retrieve the offset from the PaginationHelper's instance
+        $offset = $helper->getOffset();
+
+        //* Step 4) Constrain the number of records: Append the LIMIT directive (records_per_page) to the SQL query: LIMIT and OFFSET
+        $sql .= " LIMIT {$this->records_per_page} OFFSET {$offset}";
+
+        //* Step 5) Execute the SQL query: fetchAll
+        // We are fetching all because we want to get all of the data from the DB
+        $data = (array) $this->fetchAll(sql: $sql, args: $args);
+
+        //* Step 6) Include/combine the metadata with the data
+        //Here we are getting the meta data such as current page, page size...
+        $meta = $helper->getPaginationMetadata();
+
+        // Two ways to produce the results:
+        // 1)
+        // $results = array(
+        //     "meta" => $meta,
+        //     "data" => $data
+        // );
+
+        // 2)
+        $results["meta"] = $meta;
+        $results["data"] = $data;
+        return $results;
     }
 
     /**
