@@ -17,12 +17,14 @@ class CountriesController extends BaseController
     public function __construct(private CountriesModel $countries_model) {}
     public function handleGetCountries(Request $request, Response $response): Response
     {
-        $json_payload = json_encode($this->countries_model->getCountries());
+        $filter_params = $request->getQueryParams();
+        $countries = $this->countries_model->getCountries($filter_params);
+        $json_payload = json_encode($countries);
         $response->getBody()->write($json_payload);
         return $response->withHeader(
             "content-Type",
             "application/json"
-        )->withStatus(201);
+        )->withStatus(200);
     }
 
     public function handleGetCountryId(Request $request, Response $response, array $uri_args): Response

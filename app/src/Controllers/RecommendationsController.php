@@ -14,12 +14,14 @@ class RecommendationsController extends BaseController
     public function __construct(private RecommendationsModel $recommendations_model) {}
     public function handleGetRecommendations(Request $request, Response $response): Response
     {
-        $json_payload = json_encode($this->recommendations_model->getRecommendations());
+        $filter_params = $request->getQueryParams();
+        $recommendations = $this->recommendations_model->getRecommendations($filter_params);
+        $json_payload = json_encode($recommendations);
         $response->getBody()->write($json_payload);
         return $response->withHeader(
             "content-Type",
             "application/json"
-        )->withStatus(201);
+        )->withStatus(200);
     }
 
     public function handleGetRecommendationId(Request $request, Response $response, array $uri_args): Response
