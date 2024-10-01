@@ -20,15 +20,8 @@ class DietsController extends BaseController
         //*Retrieve filtering
         //$filter_params = $request->getQueryParams();
         $diets = $this->dietsModel->getDiets();
-        //* Converts the values to json
-        $json_payload = json_encode($diets);
-        //*write the json data in the body
-        $response->getBody()->write($json_payload);
-        //*return the response with the Content-type header & status code
-        return $response->withHeader(
-            "Content-Type",
-            "application/json",
-        )->withStatus(200);
+
+        return $this->renderJson($response, $diets);
     }
 
     //handle get diets by id (expecting an arg from request)
@@ -47,7 +40,7 @@ class DietsController extends BaseController
 
         return $this->renderJson(
             $response,
-            (array) $diets
+            $diets
         );
     }
 }

@@ -73,6 +73,8 @@ abstract class BaseModel
         return $stmt;
     }
 
+    //filter params
+
     /**
      * Executes the provided query.
      *

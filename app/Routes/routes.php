@@ -6,6 +6,7 @@ use App\Controllers\AboutController;
 use App\Controllers\DietsController;
 use App\Controllers\FoodsController;
 use App\Controllers\CountriesController;
+use App\Controllers\ExercisesController;
 use App\Controllers\FactsController;
 use App\Controllers\RecommendationsController;
 use App\Helpers\DateTimeHelper;
@@ -19,9 +20,15 @@ return static function (Slim\App $app): void {
     // Routes with authentication
     //* ROUTE: GET /
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
+    //*get /diets
     $app->get('/diets', [DietsController::class, 'handleGetDiets']);
+    //*get /diets/{diets_id}
     $app->get('/diets/{diet_id}', [DietsController::class, 'handleGetDietsId']);
-    // $app->get('/test', [TestController::class, 'handleTest']);S
+    //*get /exercises
+    $app->get('/exercises', [ExercisesController::class, 'handleGetExercises']);
+    //*get /exercises/{exercise_id}
+    $app->get('/exercises/{exercise_id}', [ExercisesController::class, 'handleGetExercisesById']);
+    // $app->get('/test', [TestController::class, 'handleTest']);
 
     // Foods route
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
