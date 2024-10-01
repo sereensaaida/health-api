@@ -34,14 +34,11 @@ class FoodsController extends BaseController
         //     ['page_size']
         // );
 
-
         $foods = $this->foods_model->getFoods($filter_params);
-        $json_payload = json_encode($foods);
-        $response->getBody()->write($json_payload);
-        return $response->withHeader(
-            "Content-Type",
-            "application/json",
-        )->withStatus(200);
+        return $this->renderJson(
+            $response,
+            $foods
+        );
     }
 
     public function handleGetFoodId(Request $request, Response $response, array $uri_args): Response
@@ -91,6 +88,15 @@ class FoodsController extends BaseController
         $food_id = $uri_args['food_id'];
 
         $results = $this->foods_model->getFoodFacts($food_id);
+
+        return $this->renderJson($response, $results);
+    }
+
+    public function handleGetFoodIdRecommendation(Request $request, Response $response, array $uri_args): Response
+    {
+        $food_id = $uri_args['food_id'];
+
+        $results = $this->foods_model->getFoodRecommendations($food_id);
 
         return $this->renderJson($response, $results);
     }
