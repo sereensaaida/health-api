@@ -19,13 +19,9 @@ class FactsModel extends BaseModel
 
         // Filtering:
 
-
-        if (isset($filter_params['category'])) {
-            $sql .= " AND category LIKE CONCAT(:category, '%') ";
-            $named_params_values['category'] = $filter_params['category'];
-        }
-
         $foods = (array) $this->fetchAll($sql, $named_params_values);
         return $foods;
     }
+
+    
 }
