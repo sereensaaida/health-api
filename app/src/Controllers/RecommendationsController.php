@@ -16,12 +16,7 @@ class RecommendationsController extends BaseController
     {
         $filter_params = $request->getQueryParams();
         $recommendations = $this->recommendations_model->getRecommendations($filter_params);
-        $json_payload = json_encode($recommendations);
-        $response->getBody()->write($json_payload);
-        return $response->withHeader(
-            "content-Type",
-            "application/json"
-        )->withStatus(200);
+        return $this->renderJson($response, $recommendations);
     }
 
     public function handleGetRecommendationId(Request $request, Response $response, array $uri_args): Response
@@ -49,14 +44,7 @@ class RecommendationsController extends BaseController
                 "invalid recommendation id provided"
             );
         }
-
-
-
-        $json_payload = json_encode($this->recommendations_model->getRecommendationsId($recommendation_id));
-        $response->getBody()->write($json_payload);
-        return $response->withHeader(
-            "content-Type",
-            "application/json"
-        )->withStatus(201);
+        $recommendation = $this->recommendations_model->getRecommendationsId($recommendation_id);
+        return $this->renderJson($response, $recommendation);
     }
 }

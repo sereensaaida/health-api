@@ -19,12 +19,7 @@ class CountriesController extends BaseController
     {
         $filter_params = $request->getQueryParams();
         $countries = $this->countries_model->getCountries($filter_params);
-        $json_payload = json_encode($countries);
-        $response->getBody()->write($json_payload);
-        return $response->withHeader(
-            "content-Type",
-            "application/json"
-        )->withStatus(200);
+        return $this->renderJson($response, $countries);
     }
 
     public function handleGetCountryId(Request $request, Response $response, array $uri_args): Response
@@ -54,12 +49,7 @@ class CountriesController extends BaseController
         }
 
 
-
-        $json_payload = json_encode($this->countries_model->getCountryId(country_id: $country_id));
-        $response->getBody()->write($json_payload);
-        return $response->withHeader(
-            "content-Type",
-            "application/json"
-        )->withStatus(201);
+        $country = $this->countries_model->getCountryId(country_id: $country_id);
+        return $this->renderJson($response, $country);
     }
 }
