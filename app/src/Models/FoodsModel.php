@@ -17,6 +17,7 @@ class FoodsModel extends BaseModel
 
         $sql = 'SELECT * from foods WHERE 1';
 
+        //* FILTERING:
         // CATEGORY
         if (isset($filter_params['category'])) {
             $sql .= " AND category LIKE CONCAT(:category, '%') ";
@@ -60,5 +61,37 @@ class FoodsModel extends BaseModel
 
         $foods = (array) $this->fetchAll($sql, $named_params_values);
         return $foods;
+    }
+
+    public function getFoodId(string $food_id): mixed
+    {
+        $sql = "SELECT * FROM foods WHERE food_id = :food_id";
+
+        $food_info = $this->fetchSingle(
+            $sql,
+            ["food_id" => $food_id]
+        );
+        return $food_info;
+    }
+
+    //* Sub collection resource
+    // We retrieve a single/specific food's nutrition facts. This is because Facts is dependent on foods.
+    public function getFoodFacts(String $food_id): mixed
+    {
+        $food = $this->getFoodId($food_id);
+
+        $sql = "SELECT * FROM facts WHERE food_id = :food_id";
+
+        $facts = $this->fetchAll(
+            $sql,
+            ["food_id" => $food_id]
+        );
+
+        $result = [
+            'food' => $food,
+            'facts' => $facts,
+        ];
+
+        return $result;
     }
 }
