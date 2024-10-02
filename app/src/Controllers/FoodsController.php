@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Fig\Http\Message\StatusCodeInterface;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpSpecializedException;
+use validation\index;
 
 class FoodsController extends BaseController
 {
@@ -26,13 +27,19 @@ class FoodsController extends BaseController
         //* Retrieving the filter parameters from the request
         $filter_params = $request->getQueryParams();
 
-        //* Pagination: Find a way to make it work without conflicting
-        if (isset($filter_params['current_page'])) {
+
+        if (testValidatePagingParams($filter_params) == true) {
+
             $this->foods_model->setPaginationOptions(
                 current_page: $filter_params['current_page'],
                 records_per_page: $filter_params['page_size']
             );
         }
+
+
+
+        //* Pagination: Find a way to make it work without conflicting
+
 
 
         $foods = $this->foods_model->getFoods($filter_params);
