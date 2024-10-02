@@ -27,10 +27,13 @@ class FoodsController extends BaseController
         $filter_params = $request->getQueryParams();
 
         //* Pagination: Find a way to make it work without conflicting
-        $this->foods_model->setPaginationOptions(
-            current_page: $filter_params['current_page'],
-            records_per_page: $filter_params['page_size']
-        );
+        if (isset($filter_params['current_page'])) {
+            $this->foods_model->setPaginationOptions(
+                current_page: $filter_params['current_page'],
+                records_per_page: $filter_params['page_size']
+            );
+        }
+
 
         $foods = $this->foods_model->getFoods($filter_params);
         return $this->renderJson(

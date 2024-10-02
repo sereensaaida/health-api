@@ -18,18 +18,31 @@ class FactsModel extends BaseModel
         $sql = 'SELECT * from facts WHERE 1';
 
         // Filtering:
-        // CONTENT SIZE
-        //TODO Check that minimum is smaller than maximum
+
+        // PROTEIN
         // Minimum
-        if (isset($filter_params['minimum_content'])) {
-            $sql .= " AND content >= CONCAT(:minimum_content)";
-            $named_params_values['minimum_content'] = $filter_params['minimum_content'];
+        if (isset($filter_params['minimum_protein'])) {
+            $sql .= " AND protein >= CONCAT(:minimum_protein)";
+            $named_params_values['minimum_protein'] = $filter_params['minimum_protein'];
         }
 
         // Maximum
-        if (isset($filter_params['maximum_content'])) {
-            $sql .= " AND content <= CONCAT(:maximum_content)";
-            $named_params_values['maximum_content'] = $filter_params['maximum_content'];
+        if (isset($filter_params['maximum_protein'])) {
+            $sql .= " AND protein <= CONCAT(:maximum_protein)";
+            $named_params_values['maximum_protein'] = $filter_params['maximum_protein'];
+        }
+
+        // CARBS
+        // Minimum
+        if (isset($filter_params['minimum_carbs'])) {
+            $sql .= " AND carbohydrates >= CONCAT(:minimum_carbs)";
+            $named_params_values['minimum_carbs'] = $filter_params['minimum_carbs'];
+        }
+
+        // Maximum
+        if (isset($filter_params['maximum_carbs'])) {
+            $sql .= " AND carbohydrates <= CONCAT(:maximum_carbs)";
+            $named_params_values['maximum_carbs'] = $filter_params['maximum_carbs'];
         }
 
         $facts = (array) $this->paginate($sql, $named_params_values);

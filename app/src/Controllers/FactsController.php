@@ -27,10 +27,10 @@ class FactsController extends BaseController
         $filter_params = $request->getQueryParams();
 
         //* Pagination
-        $this->facts_model->setPaginationOptions(
-            current_page: $filter_params['current_page'],
-            records_per_page: $filter_params['page_size']
-        );
+        // $this->facts_model->setPaginationOptions(
+        //     current_page: $filter_params['current_page'],
+        //     records_per_page: $filter_params['page_size']
+        // );
 
 
         $facts = $this->facts_model->getFacts($filter_params);
