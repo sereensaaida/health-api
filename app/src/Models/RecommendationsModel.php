@@ -66,4 +66,19 @@ class RecommendationsModel extends BaseModel
         );
         return $recommendation_info;
     }
+
+    //fetch everything from workout recommendation where exercise_id..
+
+    public function getRecommendationsByExercise_id($exercise_id): mixed
+    {
+        //*sql statement
+        $sql = "SELECT * FROM recommendations WHERE exercise_id = :exercise_id";
+        //*fetch all the results
+        $recommendation_info = $this->fetchAll(
+            $sql,
+            ['exercise_id' => $exercise_id]
+        );
+        //*return the information
+        return $recommendation_info;
+    }
 }

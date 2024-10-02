@@ -37,4 +37,8 @@ class ExercisesModel extends BaseModel
         //return the data
         return $exercises_info;
     }
+
+    //*! come back to it  get exercices based on the recommendations
+
+
 }
