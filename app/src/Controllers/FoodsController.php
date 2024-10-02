@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Fig\Http\Message\StatusCodeInterface;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpSpecializedException;
+use validation\index;
 
 class FoodsController extends BaseController
 {
@@ -26,13 +27,20 @@ class FoodsController extends BaseController
         //* Retrieving the filter parameters from the request
         $filter_params = $request->getQueryParams();
 
-        //TODO Pagination: Find a way to make it work without conflicting
-        // $this->foods_model->setPaginationOptions(
-        //     current_page: $filter_params
-        //     ['current_page'],
-        //     records_per_page: $filter_params
-        //     ['page_size']
-        // );
+
+        if (testValidatePagingParams($filter_params) == true) {
+
+            $this->foods_model->setPaginationOptions(
+                current_page: $filter_params['current_page'],
+                records_per_page: $filter_params['page_size']
+            );
+        }
+
+
+
+        //* Pagination: Find a way to make it work without conflicting
+
+
 
         $foods = $this->foods_model->getFoods($filter_params);
         return $this->renderJson(
@@ -60,13 +68,13 @@ class FoodsController extends BaseController
             );
         }
 
-        //TODO ADD VALIDATION
-        // if (preg_match($player_id_pattern, $player_id) === 0) {
-        //     throw new HttpInvalidInputsException(
-        //         $request,
-        //         "Invalid food ID provided",
-        //     );
-        // }
+        $food_id_pattern = '/^([0-9]*)$/';
+        if (preg_match($food_id_pattern, $food_id) === 0) {
+            throw new HttpInvalidInputsException(
+                $request,
+                "Invalid food ID provided. Please provide a valid ID."
+            );
+        }
 
         //* Step 3) If valid, fetch the appropriate data for the specific player from the DB
         $food = $this->foods_model->getFoodId($food_id);
