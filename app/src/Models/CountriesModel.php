@@ -61,4 +61,21 @@ class CountriesModel extends BaseModel
         );
         return $country_info;
     }
+
+    public function getCountryGuidelines($country_id): mixed
+    {
+        $country = $this->getCountryId($country_id);
+        $sql = "SELECT * FROM GUIDELINES WHERE country_id = :country_id";
+        $guideline_info = $this->fetchAll(
+            $sql,
+            ["country_id" => $country_id]
+        );
+
+        $result = [
+            'country' => $country,
+            'guideline_info' => $guideline_info
+        ];
+
+        return $result;
+    }
 }

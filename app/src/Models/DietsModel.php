@@ -36,6 +36,7 @@ class DietsModel extends BaseModel
             $query,
             ["diet_id" => $diet_id]
         );
+
         //*return the information to the controller
         return $diet_info;
     }

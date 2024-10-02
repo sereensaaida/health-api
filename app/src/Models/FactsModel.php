@@ -19,7 +19,33 @@ class FactsModel extends BaseModel
 
         // Filtering:
 
-        $facts = (array) $this->fetchAll($sql, $named_params_values);
+        // PROTEIN
+        // Minimum
+        if (isset($filter_params['minimum_protein'])) {
+            $sql .= " AND protein >= CONCAT(:minimum_protein)";
+            $named_params_values['minimum_protein'] = $filter_params['minimum_protein'];
+        }
+
+        // Maximum
+        if (isset($filter_params['maximum_protein'])) {
+            $sql .= " AND protein <= CONCAT(:maximum_protein)";
+            $named_params_values['maximum_protein'] = $filter_params['maximum_protein'];
+        }
+
+        // CARBS
+        // Minimum
+        if (isset($filter_params['minimum_carbs'])) {
+            $sql .= " AND carbohydrates >= CONCAT(:minimum_carbs)";
+            $named_params_values['minimum_carbs'] = $filter_params['minimum_carbs'];
+        }
+
+        // Maximum
+        if (isset($filter_params['maximum_carbs'])) {
+            $sql .= " AND carbohydrates <= CONCAT(:maximum_carbs)";
+            $named_params_values['maximum_carbs'] = $filter_params['maximum_carbs'];
+        }
+
+        $facts = (array) $this->paginate($sql, $named_params_values);
         return $facts;
     }
 
