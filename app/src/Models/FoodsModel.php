@@ -59,7 +59,7 @@ class FoodsModel extends BaseModel
             $named_params_values['maximum_content'] = $filter_params['maximum_content'];
         }
 
-        $foods = (array) $this->fetchAll($sql, $named_params_values);
+        $foods = (array) $this->paginate($sql, $named_params_values);
         return $foods;
     }
 
@@ -113,5 +113,4 @@ class FoodsModel extends BaseModel
 
         return $result;
     }
-
 }

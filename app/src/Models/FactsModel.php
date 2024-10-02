@@ -18,8 +18,21 @@ class FactsModel extends BaseModel
         $sql = 'SELECT * from facts WHERE 1';
 
         // Filtering:
+        // CONTENT SIZE
+        //TODO Check that minimum is smaller than maximum
+        // Minimum
+        if (isset($filter_params['minimum_content'])) {
+            $sql .= " AND content >= CONCAT(:minimum_content)";
+            $named_params_values['minimum_content'] = $filter_params['minimum_content'];
+        }
 
-        $facts = (array) $this->fetchAll($sql, $named_params_values);
+        // Maximum
+        if (isset($filter_params['maximum_content'])) {
+            $sql .= " AND content <= CONCAT(:maximum_content)";
+            $named_params_values['maximum_content'] = $filter_params['maximum_content'];
+        }
+
+        $facts = (array) $this->paginate($sql, $named_params_values);
         return $facts;
     }
 

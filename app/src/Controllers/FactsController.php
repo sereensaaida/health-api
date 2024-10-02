@@ -26,13 +26,11 @@ class FactsController extends BaseController
         //* Retrieving the filter parameters from the request
         $filter_params = $request->getQueryParams();
 
-        //TODO Pagination
-        // $this->foods_model->setPaginationOptions(
-        //     current_page: $filter_params
-        //     ['current_page'],
-        //     records_per_page: $filter_params
-        //     ['page_size']
-        // );
+        //* Pagination
+        $this->facts_model->setPaginationOptions(
+            current_page: $filter_params['current_page'],
+            records_per_page: $filter_params['page_size']
+        );
 
 
         $facts = $this->facts_model->getFacts($filter_params);

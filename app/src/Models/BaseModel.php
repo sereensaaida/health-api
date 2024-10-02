@@ -139,7 +139,7 @@ abstract class BaseModel
 
         //* Step 6) Include/combine the metadata with the data
         //Here we are getting the meta data such as current page, page size...
-        $meta = $helper->getPaginationMetadata();
+        $meta = $helper->getPaginationInfo();
 
         // Two ways to produce the results:
         // 1)
