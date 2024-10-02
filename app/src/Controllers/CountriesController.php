@@ -52,4 +52,13 @@ class CountriesController extends BaseController
         $country = $this->countries_model->getCountryId(country_id: $country_id);
         return $this->renderJson($response, $country);
     }
+
+    public function handleGetCountryGuidelines(Request $request, Response $response,  array $uri_args): Response
+    {
+
+        $country_id = $uri_args['country_id'];
+        $results = $this->countries_model->getCountryGuidelines($country_id);
+
+        return $this->renderJson($response, $results);
+    }
 }
