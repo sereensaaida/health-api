@@ -96,7 +96,7 @@ class PaginationHelper
      *
      * @return array An array containing information about the pagination metadata.
      */
-    public function getPaginationInfo(): array
+    public function getPaginationMetadata(): array
     {
         return array(
             "total" => $this->total_records,

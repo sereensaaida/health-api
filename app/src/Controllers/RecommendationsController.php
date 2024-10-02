@@ -47,4 +47,19 @@ class RecommendationsController extends BaseController
         $recommendation = $this->recommendations_model->getRecommendationsId($recommendation_id);
         return $this->renderJson($response, $recommendation);
     }
+
+    //handle get recommendation by exercice id
+    public function handleGetRecommendationsByExercise(Request $request, Response $response, array $args): Response
+    {
+        //get the filter params
+
+        //validate the filter params
+
+        //validate pagination
+
+        //get data
+        $data = $this->recommendations_model->getRecommendationsByExercise_id($args['exercise_id']);
+        //return data in renderjson
+        return $this->renderJson($response, $data);
+    }
 }
