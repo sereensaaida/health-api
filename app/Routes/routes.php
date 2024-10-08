@@ -33,6 +33,9 @@ return static function (Slim\App $app): void {
 
     //* Foods routes
     // GET
+    //*get /recommendation/{recommendation_id}/exercise
+    $app->get('/exercises/{exercise_id}/recommendations', [ExercisesController::class, 'handleGetRecommendationsByExercise']);
+    // Foods route
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
     $app->get('/foods/{food_id}', [FoodsController::class, 'handleGetFoodId']);
     $app->get('/foods/{food_id}/facts', [FoodsController::class, 'handleGetFoodFacts']);
@@ -73,4 +76,6 @@ return static function (Slim\App $app): void {
     //* ROUTE: GET /countries
     $app->get('/countries', [CountriesController::class, 'handleGetCountries']);
     $app->get('/countries/{country_id}', [CountriesController::class, 'handleGetCountryId']);
+    $app->get('/countries/{country_id}/guidelines', [CountriesController::class, 'handleGetCountryGuidelines']);
+    $app->post('/countries', [CountriesController::class, 'handleCreateCountry']);
 };

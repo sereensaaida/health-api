@@ -44,12 +44,31 @@ class CountriesController extends BaseController
         if (preg_match($country_id_pattern, $country_id) === 0) {
             throw new HttpInvalidInputsException(
                 $request,
-                "invalid country id provided"
+                "Invalid country id provided"
             );
         }
 
 
         $country = $this->countries_model->getCountryId(country_id: $country_id);
         return $this->renderJson($response, $country);
+    }
+
+    public function handleGetCountryGuidelines(Request $request, Response $response,  array $uri_args): Response
+    {
+
+        $country_id = $uri_args['country_id'];
+        $results = $this->countries_model->getCountryGuidelines($country_id);
+
+        return $this->renderJson($response, $results);
+    }
+
+    //
+
+
+    public function handleCreateCountry(Request $request, Response $response): Response
+    {
+        echo "hiiiii";
+
+        return $response;
     }
 }

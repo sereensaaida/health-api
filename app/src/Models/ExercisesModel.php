@@ -37,4 +37,24 @@ class ExercisesModel extends BaseModel
         //return the data
         return $exercises_info;
     }
+
+    //*! come back to it  get exercices based on the recommendations
+    public function getRecommendationsByExercise_id($exercise_id): mixed
+    {
+        $exercise = $this->getExercisesById($exercise_id);
+        //*sql statement
+        $sql = "SELECT * FROM recommendations WHERE exercise_id = :exercise_id";
+        //*fetch all the results
+        $recommendation = $this->fetchAll(
+            $sql,
+            ['exercise_id' => $exercise_id]
+        );
+        $result =
+            [
+                'exercise' => $exercise,
+                'recommendation' => $recommendation
+            ];
+        //*return the information
+        return $result;
+    }
 }

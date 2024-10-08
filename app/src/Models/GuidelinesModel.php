@@ -65,5 +65,6 @@ class GuidelinesModel extends BaseModel
             ["guideline_id" => $guideline_id]
         );
         return $guidelines_info;
+        
     }
 }

@@ -66,4 +66,26 @@ class RecommendationsModel extends BaseModel
         );
         return $recommendation_info;
     }
+
+    //fetch everything from workout recommendation where exercise_id..
+
+
+    // public function getFoodFacts(String $food_id): mixed
+    // {
+    //     $food = $this->getFoodId($food_id);
+
+    //     $sql = "SELECT * FROM facts WHERE food_id = :food_id";
+
+    //     $facts = $this->fetchAll(
+    //         $sql,
+    //         ["food_id" => $food_id]
+    //     );
+
+    //     $result = [
+    //         'food' => $food,
+    //         'facts' => $facts,
+    //     ];
+
+    //     return $result;
+    // }
 }

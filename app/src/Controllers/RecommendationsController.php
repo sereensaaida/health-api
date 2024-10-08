@@ -47,4 +47,7 @@ class RecommendationsController extends BaseController
         $recommendation = $this->recommendations_model->getRecommendationsId($recommendation_id);
         return $this->renderJson($response, $recommendation);
     }
+
+    //handle get recommendation by exercice id
+
 }
