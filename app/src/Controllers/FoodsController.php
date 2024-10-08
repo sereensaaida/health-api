@@ -103,4 +103,13 @@ class FoodsController extends BaseController
 
         return $this->renderJson($response, $results);
     }
+
+    public function handleCreateFood(Request $request, Response $response): Response
+    {
+        echo 'hello';
+
+        return $response;
+
+    }
+
 }
