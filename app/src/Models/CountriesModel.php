@@ -78,4 +78,25 @@ class CountriesModel extends BaseModel
 
         return $result;
     }
+
+    public function insertCountry(array $country): mixed
+    {
+        $this->insert(
+            "Countries",
+            $country
+        );
+        
+        return "blah";
+    }
+
+    public function updateCountry(array $country): mixed
+    {
+        $this->update(
+            "Countries",
+            $country,
+            ["country_id => $country[country_id]"]
+        );
+
+        return "blah";
+    }
 }
