@@ -52,4 +52,11 @@ class ExercisesController extends BaseController
         //return data in renderjson
         return $this->renderJson($response, $data);
     }
+
+    public function handleGetExercisesClass(Request $request, Response $response): Response
+    {
+        echo "aye";
+
+        return $response;
+    }
 }
