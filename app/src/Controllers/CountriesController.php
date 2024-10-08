@@ -61,4 +61,14 @@ class CountriesController extends BaseController
 
         return $this->renderJson($response, $results);
     }
+
+    //
+
+
+    public function handleCreateCountry(Request $request, Response $response): Response
+    {
+        echo "hiiiii";
+
+        return $response;
+    }
 }
