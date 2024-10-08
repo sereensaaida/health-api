@@ -31,14 +31,19 @@ return static function (Slim\App $app): void {
     $app->get('/exercises/{exercise_id}', [ExercisesController::class, 'handleGetExercisesById']);
     // $app->get('/test', [TestController::class, 'handleTest']);
 
-    // Foods route
+    //* Foods routes
+    // GET
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
     $app->get('/foods/{food_id}', [FoodsController::class, 'handleGetFoodId']);
     $app->get('/foods/{food_id}/facts', [FoodsController::class, 'handleGetFoodFacts']);
+    // POST
+    $app->post('/foods', [FoodsController::class, 'handleCreateFood']);
 
-    // Facts route
+    //* Facts routes
+    // GET
     $app->get('/facts', [FactsController::class, 'handleGetfacts']);
     $app->get('/facts/{fact_id}', [FactsController::class, 'handleGetFactsId']);
+    // POST
 
     // $app->get('/test', [TestController::class, 'handleTest']);
 
