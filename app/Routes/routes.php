@@ -18,34 +18,47 @@ return static function (Slim\App $app): void {
 
     // Routes without authentication check: /login, /token
 
-    // Routes with authentication
-    //* ROUTE: GET /
+
+    // get /
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
-    //*get /diets
+
+//* DIET ROUTES
+    //get /diets
     $app->get('/diets', [DietsController::class, 'handleGetDiets']);
-    //*get /diets/{diets_id}
+    //get /diets/{diets_id}
     $app->get('/diets/{diet_id}', [DietsController::class, 'handleGetDietsId']);
-    //*get /exercises
+
+//* EXERCISE ROUTES
+    //get /exercises
     $app->get('/exercises', [ExercisesController::class, 'handleGetExercises']);
-    //*get /exercises/{exercise_id}
+    //get /exercises/{exercise_id}
     $app->get('/exercises/{exercise_id}', [ExercisesController::class, 'handleGetExercisesById']);
+<<<<<<< Updated upstream
     // $app->get('/test', [TestController::class, 'handleTest']);
 
     //* Foods routes
     // GET
     //*get /recommendation/{recommendation_id}/exercise
+=======
+    //get /recommendation/{recommendation_id}/exercise
+>>>>>>> Stashed changes
     $app->get('/exercises/{exercise_id}/recommendations', [ExercisesController::class, 'handleGetRecommendationsByExercise']);
-    //*post /exercises
+    //post /exercises
     $app->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
-    // Foods route
+
+//* FOODS ROUTES
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
     $app->get('/foods/{food_id}', [FoodsController::class, 'handleGetFoodId']);
     $app->get('/foods/{food_id}/facts', [FoodsController::class, 'handleGetFoodFacts']);
     // POST
     $app->post('/foods', [FoodsController::class, 'handleCreateFood']);
 
+<<<<<<< Updated upstream
     //* Facts routes
     // GET
+=======
+    //* Facts route
+>>>>>>> Stashed changes
     $app->get('/facts', [FactsController::class, 'handleGetfacts']);
     $app->get('/facts/{fact_id}', [FactsController::class, 'handleGetFactsId']);
     // POST
