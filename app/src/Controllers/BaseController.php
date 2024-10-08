@@ -1,16 +1,17 @@
 <?php
 
-declare(strict_types=1);
+//declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Validation\Validator;
 use Psr\Http\Message\ResponseInterface as Response;
 
 abstract class BaseController
 {
 
     public function __construct() {}
-    
+
     protected function renderJson(Response $response, array $data, int $status_code = 200): Response
     {
         // var_dump($data);
@@ -19,5 +20,35 @@ abstract class BaseController
         $response->getBody()->write($payload);
 
         return $response->withStatus($status_code)->withAddedHeader(HEADERS_CONTENT_TYPE, APP_MEDIA_TYPE_JSON);
+    }
+
+    protected function isPagingParamsValid($data): bool
+    {
+        // An array element can be associated with one or more validation rules.
+        // Validation rules must be wrapped in an associative array where:
+        // NOTE:
+        //     key => must be an existing key  in the data array to be validated.
+        //     value => array of one or more rules.
+        $rules = array(
+            'current_page' => [
+                'required',
+                'integer',
+                ['min', 1]
+            ],
+            'page_size' => [
+                'required',
+                'integer',
+                ['min', 1],
+                ['max', 10]
+            ]
+        );
+        // Create a validator and override the default language used in expressing the error messages.
+        $validator = new Validator($data, [], 'en');
+        // Important: map the validation rules before calling validate()
+        $validator->mapFieldsRules($rules);
+        // if ($validator->validate()) {
+        //     return false;
+        // }
+        return $validator->validate();
     }
 }

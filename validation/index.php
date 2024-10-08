@@ -11,16 +11,16 @@ echo "Validation in progress... <br>";
 
 //TODO: To run the remaining tests, uncomment the following
 //      functions calls.
-//testValidatePagingParams(filter_params);
+testValidatePagingParams();
 //testValidatePersonInfo();
 //testValidateArray();
 //testSingleValue();
 
-function testValidatePagingParams($filter_params)
+function testValidatePagingParams()
 {
     // The array containing the data to be validated.
     $data = array(
-        "page" => $filter_params['current_page'],
+        "page" => ,
         "page_size" => $filter_params['page_size'],
     );
     // An array element can be associated with one or more validation rules.

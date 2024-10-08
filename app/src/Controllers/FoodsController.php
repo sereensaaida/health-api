@@ -24,23 +24,18 @@ class FoodsController extends BaseController
     public function handleGetFoods(Request $request, Response $response): Response
     {
 
+
         //* Retrieving the filter parameters from the request
         $filter_params = $request->getQueryParams();
-
-
-        if (testValidatePagingParams($filter_params) == true) {
-
+        //dd($filter_params);
+        if ($this->isPagingParamsValid($filter_params) === true) {
             $this->foods_model->setPaginationOptions(
                 current_page: $filter_params['current_page'],
                 records_per_page: $filter_params['page_size']
             );
         }
 
-
-
         //* Pagination: Find a way to make it work without conflicting
-
-
 
         $foods = $this->foods_model->getFoods($filter_params);
         return $this->renderJson(

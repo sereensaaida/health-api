@@ -44,7 +44,7 @@ class CountriesController extends BaseController
         if (preg_match($country_id_pattern, $country_id) === 0) {
             throw new HttpInvalidInputsException(
                 $request,
-                "invalid country id provided"
+                "Invalid country id provided"
             );
         }
 
