@@ -3,15 +3,17 @@
 namespace App\Controllers;
 
 use App\Models\ExercisesModel;
+use App\Services\ExerciseService;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class ExercisesController extends BaseController
 {
     //*Step 1) get the model class constructor
-    public function __construct(private ExercisesModel $exercisesModel) //important to have the model as private
+    public function __construct(private ExercisesModel $exercisesModel, private ExerciseService $exerciseService) //important to have the model as private
     {
         parent::__construct();
+        $this->exerciseService = $exerciseService;
     }
 
     //*Step 2) method to handle the data
@@ -53,10 +55,27 @@ class ExercisesController extends BaseController
         return $this->renderJson($response, $data);
     }
 
+    //*POST exercises
     public function handleGetExercisesClass(Request $request, Response $response): Response
     {
-        echo "aye";
+        //echo "aye";
+        // 1) Retrieve data included in the request (post body)
+        $new_exercise = $request->getParsedBody();
+        var_dump($new_exercise);
+        $result = $this->exerciseService->createExercise($new_exercise);
+        $payload = [];
+        $status_code = 201;
 
-        return $response;
+        if ($result->isSuccess()) {
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload["success"] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["errors"] = $result->getData();
+        $payload["status"] = $status_code;
+        //pass the received data to the service
+        return $this->renderJson($response, $payload, $status_code);
     }
 }

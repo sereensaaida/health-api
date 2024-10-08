@@ -113,4 +113,15 @@ class FoodsModel extends BaseModel
 
         return $result;
     }
+
+    public function insertFood(array $new_food_info): mixed
+    {
+        // We dont have to write the SQl statement:
+        //$sql = "INSERT INTO foods (food_id, name, category, calories, serving_size, content, avg_price, is_vegan) VALUES (:food_id, name, category, calories, ////serving_size, content, avg_price, is_vegan)";
+
+        // Instead do this:
+        $last_id = $this->insert('foods', $new_food_info);
+
+        return $last_id;
+    }
 }

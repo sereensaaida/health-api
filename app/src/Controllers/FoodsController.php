@@ -11,13 +11,16 @@ use Fig\Http\Message\StatusCodeInterface;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpSpecializedException;
 use validation\index;
+use App\Services\FoodsService;
 
 class FoodsController extends BaseController
 {
 
-    public function __construct(private FoodsModel $foods_model)
+    public function __construct(private FoodsModel $foods_model, private FoodsService $food_service)
     {
         parent::__construct();
+        $this->foods_model = $foods_model;
+        $this->food_service = $food_service;
     }
 
     //* GET /foods -> Foods collection handler
@@ -104,12 +107,29 @@ class FoodsController extends BaseController
         return $this->renderJson($response, $results);
     }
 
+    //? POST /foods
     public function handleCreateFood(Request $request, Response $response): Response
     {
-        echo 'hello';
+        //* Step 1) Retrieve data included in the POST request body
+        $new_food = $request->getParsedBody();
+        //dd($new_food);
 
-        return $response;
+        //* Step 2) Pass the data that is received to the service
+        $result = $this->food_service->createFood($new_food);
 
+        $payload = [];
+        $status_code = 201;
+
+        if ($result->isSuccess()) {
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload['success'] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["errors"] = $result->getData();
+        $payload["status"] = $status_code;
+
+        return $this->renderJson($response, $payload, $status_code);
     }
-
 }

@@ -57,4 +57,11 @@ class ExercisesModel extends BaseModel
         //*return the information
         return $result;
     }
+
+    public function insertExercise(array $new_exercise): mixed
+    {
+        $last_id = $this->insert("exercises",  $new_exercise);
+        //missing the http response
+        return $last_id;
+    }
 }
