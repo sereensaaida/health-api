@@ -33,15 +33,12 @@ return static function (Slim\App $app): void {
     $app->get('/exercises', [ExercisesController::class, 'handleGetExercises']);
     //get /exercises/{exercise_id}
     $app->get('/exercises/{exercise_id}', [ExercisesController::class, 'handleGetExercisesById']);
-<<<<<<< Updated upstream
     // $app->get('/test', [TestController::class, 'handleTest']);
 
     //* Foods routes
     // GET
     //*get /recommendation/{recommendation_id}/exercise
-=======
     //get /recommendation/{recommendation_id}/exercise
->>>>>>> Stashed changes
     $app->get('/exercises/{exercise_id}/recommendations', [ExercisesController::class, 'handleGetRecommendationsByExercise']);
     //post /exercises
     $app->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
@@ -53,12 +50,9 @@ return static function (Slim\App $app): void {
     // POST
     $app->post('/foods', [FoodsController::class, 'handleCreateFood']);
 
-<<<<<<< Updated upstream
     //* Facts routes
     // GET
-=======
     //* Facts route
->>>>>>> Stashed changes
     $app->get('/facts', [FactsController::class, 'handleGetfacts']);
     $app->get('/facts/{fact_id}', [FactsController::class, 'handleGetFactsId']);
     // POST
