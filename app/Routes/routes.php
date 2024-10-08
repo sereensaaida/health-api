@@ -72,4 +72,5 @@ return static function (Slim\App $app): void {
     $app->get('/countries', [CountriesController::class, 'handleGetCountries']);
     $app->get('/countries/{country_id}', [CountriesController::class, 'handleGetCountryId']);
     $app->get('/countries/{country_id}/guidelines', [CountriesController::class, 'handleGetCountryGuidelines']);
+    $app->post('/countries', [CountriesController::class, 'handleCreateCountry']);
 };
