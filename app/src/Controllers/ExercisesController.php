@@ -37,4 +37,19 @@ class ExercisesController extends BaseController
         //json encode
         return $this->renderJson($response, $data);
     }
+
+    public function handleGetRecommendationsByExercise(Request $request, Response $response, array $args): Response
+    {
+        //get the filter params
+
+        //validate the filter params
+
+        //validate pagination
+
+        //get data
+        var_dump($args);
+        $data = $this->exercisesModel->getRecommendationsByExercise_id($args['exercise_id']);
+        //return data in renderjson
+        return $this->renderJson($response, $data);
+    }
 }

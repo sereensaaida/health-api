@@ -69,16 +69,23 @@ class RecommendationsModel extends BaseModel
 
     //fetch everything from workout recommendation where exercise_id..
 
-    public function getRecommendationsByExercise_id($exercise_id): mixed
-    {
-        //*sql statement
-        $sql = "SELECT * FROM recommendations WHERE exercise_id = :exercise_id";
-        //*fetch all the results
-        $recommendation_info = $this->fetchAll(
-            $sql,
-            ['exercise_id' => $exercise_id]
-        );
-        //*return the information
-        return $recommendation_info;
-    }
+
+    // public function getFoodFacts(String $food_id): mixed
+    // {
+    //     $food = $this->getFoodId($food_id);
+
+    //     $sql = "SELECT * FROM facts WHERE food_id = :food_id";
+
+    //     $facts = $this->fetchAll(
+    //         $sql,
+    //         ["food_id" => $food_id]
+    //     );
+
+    //     $result = [
+    //         'food' => $food,
+    //         'facts' => $facts,
+    //     ];
+
+    //     return $result;
+    // }
 }

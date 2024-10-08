@@ -31,7 +31,7 @@ return static function (Slim\App $app): void {
     $app->get('/exercises/{exercise_id}', [ExercisesController::class, 'handleGetExercisesById']);
     // $app->get('/test', [TestController::class, 'handleTest']);
     //*get /recommendation/{recommendation_id}/exercise
-    $app->get('/recommendations/{recommendation_id}/exercises', [RecommendationsController::class, 'getRecommendationsByExercise_id']);
+    $app->get('/exercises/{exercise_id}/recommendations', [ExercisesController::class, 'handleGetRecommendationsByExercise']);
     // Foods route
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
     $app->get('/foods/{food_id}', [FoodsController::class, 'handleGetFoodId']);
