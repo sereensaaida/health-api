@@ -7,6 +7,8 @@ use App\Exceptions\HttpInvalidInputsException;
 use App\Helpers\PaginationHelper;
 use App\Models\CountriesModel;
 use App\Services\CountriesService;
+use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpSpecializedException;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -15,17 +17,37 @@ use Symfony\Component\Console\Event\ConsoleCommandEvent;
 class CountriesController extends BaseController
 {
 
-    public function __construct(private CountriesModel $countries_model, private CountriesService $countries_service) {}
+    //*Creating Construct Method
+    public function __construct(private CountriesModel $countries_model, private CountriesService $countries_service)
+    {
+        parent::__construct();
+        $this->countries_model = $countries_model;
+        $this->countries_service = $countries_service;
+    }
+
+    //* Get /countries -> countries collection handler
     public function handleGetCountries(Request $request, Response $response): Response
     {
+        //*Pagination  and filter implementation
         $filter_params = $request->getQueryParams();
+        //*Pagination validation
+        if ($this->isPagingParamsValid($filter_params) === true) {
+            $this->countries_model->setPaginationOptions(
+                current_page: $filter_params['current_page'],
+                records_per_page: $filter_params['page_size']
+            );
+        }
+
+        //*send to countries model and return JSON response
         $countries = $this->countries_model->getCountries($filter_params);
         return $this->renderJson($response, $countries);
     }
 
+    //* Get /countries/{country_id}
     public function handleGetCountryId(Request $request, Response $response, array $uri_args): Response
     {
 
+        //* Checking if country ID is present, if not throw an error
         if (!isset($uri_args["country_id"])) {
             return $this->renderJson(
                 $response,
@@ -38,10 +60,11 @@ class CountriesController extends BaseController
             );
         }
 
+        //* If valid, retrieving country id and defining appropriate pattern
         $country_id = $uri_args["country_id"];
         $country_id_pattern = '/^([0-9]*)$/';
 
-
+        //* Verifying if pattern matches, if not, throw exception
         if (preg_match($country_id_pattern, $country_id) === 0) {
             throw new HttpInvalidInputsException(
                 $request,
@@ -50,26 +73,62 @@ class CountriesController extends BaseController
         }
 
 
+        //* Fetch country record with proper model method, return JSON response
         $country = $this->countries_model->getCountryId(country_id: $country_id);
+        if ($country === false) {
+            throw new HttpNotFoundException(
+                $request,
+                "no country found"
+            );
+        }
         return $this->renderJson($response, $country);
     }
 
+    //* Subcollection implementation
     public function handleGetCountryGuidelines(Request $request, Response $response,  array $uri_args): Response
     {
+        //* Checking if country ID is present, if not throw an error
+        if (!isset($uri_args["country_id"])) {
+            return $this->renderJson(
+                $response,
+                [
+                    "status" => "error",
+                    "code" => "400",
+                    "message" => "The supplied country Id is not found"
+                ],
+                StatusCodeInterface::STATUS_BAD_REQUEST
+            );
+        }
 
-        $country_id = $uri_args['country_id'];
+        //* If valid, retrieving country id and defining appropriate pattern
+        $country_id = $uri_args["country_id"];
+        $country_id_pattern = '/^([0-9]*)$/';
+
+        if (preg_match($country_id_pattern, $country_id) === 0) {
+            throw new HttpInvalidInputsException(
+                $request,
+                "Invalid country id provided"
+            );
+        }
+
+        //*Checking if entry is present in country table, if not throwing an exception
+        $country = $this->countries_model->getCountryId($country_id);
+        if ($country === false) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching country record found"
+            );
+        }
+
+        //*Fetching guidelines from proper country id
         $results = $this->countries_model->getCountryGuidelines($country_id);
-
         return $this->renderJson($response, $results);
     }
 
-    //
-
-
+    //*(Build 2: Create Country instance)
     public function handleCreateCountry(Request $request, Response $response): Response
     {
-        echo "quak";
-        //1) Handle Client Request (extract and validate?)
+        //* 1) Handle Client Request (extract and validate?)
         $new_country = $request->getParsedBody();
         //dd($new_country);
 
@@ -84,13 +143,9 @@ class CountriesController extends BaseController
             $payload["success"] = false;
         }
         //2) Send to service
-
-        //
         $payload["message"] = $result->getMessage();
         $payload["errors"] = $result->getData();
         $payload["status"] = $status_code;
-
-
         return $this->renderJson($response, $payload, $status_code);
     }
 }

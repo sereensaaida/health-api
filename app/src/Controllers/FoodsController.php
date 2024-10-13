@@ -113,7 +113,7 @@ class FoodsController extends BaseController
             );
         }
 
-        //* Step 3) If valid, fetch the appropriate data for the specific player from the DB
+        //* Step 3) If valid, fetch the appropriate data for the specific food from the DB
         $food = $this->foods_model->getFoodId($food_id);
         if ($food === false) {
             throw new HttpNotFoundException(
@@ -161,6 +161,4 @@ class FoodsController extends BaseController
 
         return $this->renderJson($response, $payload, $status_code);
     }
-
-
 }
