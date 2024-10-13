@@ -14,7 +14,19 @@ class RecommendationsController extends BaseController
     public function __construct(private RecommendationsModel $recommendations_model) {}
     public function handleGetRecommendations(Request $request, Response $response): Response
     {
+        // if (isset($filter_params["current_page"])) {
+        //     $this->exercisesModel->setPaginationOptions(
+        //         $filter_params["current_page"],
+        //         $filter_params["page_size"]
+        //     );
+        // }
         $filter_params = $request->getQueryParams();
+        if (isset($filter_params["current_page"])) {
+            $this->recommendations_model->setPaginationOptions(
+                $filter_params["current_page"],
+                $filter_params["page_size"]
+            );
+        }
         $recommendations = $this->recommendations_model->getRecommendations($filter_params);
         return $this->renderJson($response, $recommendations);
     }

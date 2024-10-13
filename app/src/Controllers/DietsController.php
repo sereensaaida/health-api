@@ -18,8 +18,16 @@ class DietsController extends BaseController
     public function handleGetDiets(Request $request, Response $response)
     {
         //*Retrieve filtering
+        $filter_params = $request->getQueryParams();
+        //set the pagination
+        if (isset($filter_params["current_page"])) {
+            $this->dietsModel->setPaginationOptions(
+                $filter_params["current_page"],
+                $filter_params["page_size"]
+            );
+        }
         //$filter_params = $request->getQueryParams();
-        $diets = $this->dietsModel->getDiets();
+        $diets = $this->dietsModel->getDiets($filter_params);
 
         return $this->renderJson($response, $diets);
     }

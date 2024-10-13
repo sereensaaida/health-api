@@ -13,15 +13,48 @@ class ExercisesModel extends BaseModel
         parent::__construct($pdo);
     }
     //*Step 2) Get all the exercices from the db
-    public function getExercices(): mixed
+    public function getExercises(array $filter_params): mixed
     {
+        //possible filters: exercise_type,difficulty_level, muscle_targeted, calories_burned, equipment_needed
         //query statement
-        $sql = "SELECT * FROM exercises";
-
+        $params_value = [];
+        $sql = "SELECT * FROM exercises WHERE 1";
+        //*exercise_type
+        if (isset($filter_params["exercise_type"])) {
+            //add to the sql statement
+            $sql .= " AND exercise_type LIKE CONCAT (:exercise_type, '%')";
+            $params_value["exercise_type"] = $filter_params["exercise_type"];
+        }
+        //*difficulty_level
+        if (isset($filter_params["difficulty_level"])) {
+            //add to the sql statement
+            $sql .= " AND difficulty_level LIKE CONCAT (:difficulty_level, '%')";
+            $params_value["difficulty_level"] = $filter_params["difficulty_level"];
+        }
+        //*muscles_targeted
+        if (isset($filter_params["muscles_targeted"])) {
+            //add to the sql statement
+            $sql .= " AND muscles_targeted LIKE CONCAT (:muscles_targeted, '%')";
+            $params_value["muscles_targeted"] = $filter_params["muscles_targeted"];
+        }
+        //*calories_burned
+        if (isset($filter_params["calories_burned_per_min"])) {
+            //add to the sql statement
+            $sql .= " AND calories_burned_per_min LIKE CONCAT (:calories_burned_per_min, '%')";
+            $params_value["calories_burned_per_min"] = $filter_params["calories_burned_per_min"];
+        }
+        //*equipment_needed
+        if (isset($filter_params["equipment_needed"])) {
+            //add to the sql statement
+            $sql .= " AND equipment_needed LIKE CONCAT (:equipment_needed, '%')";
+            $params_value["equipment_needed"] = $filter_params["equipment_needed"];
+        }
         //fetch all
-        $exercises_info = $this->fetchAll($sql);
+        //$exercises_info = $this->fetchAll($sql);
         //return the fetch all
-        return $exercises_info;
+        //$players = (array) $this->paginate($query, $named_params_value);
+        $exercise = $this->paginate($sql, $params_value);
+        return $exercise;
     }
 
     //*Step 3) Get informations by id

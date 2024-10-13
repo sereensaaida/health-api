@@ -51,7 +51,7 @@ class RecommendationsModel extends BaseModel
         }
 
 
-        $recommendations = (array) $this->fetchAll($sql, $named_params);
+        $recommendations = $this->paginate($sql, $named_params);
 
         return $recommendations;
     }
@@ -66,5 +66,4 @@ class RecommendationsModel extends BaseModel
         );
         return $recommendation_info;
     }
-
 }
