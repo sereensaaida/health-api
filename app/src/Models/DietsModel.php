@@ -13,10 +13,20 @@ class DietsModel extends BaseModel
     }
 
     //get /diets
-    public function getDiets(array $filter_params): mixed
+    public function getDiets(array $filter_params = []): mixed
     {
-        //where we'll store the filters to send to the controller
         $params_values = [];
+
+        //* Sorting:
+        $sortBy = isset($filter_params['sort_by']) ? $filter_params['sort_by'] : 'diet_id';
+        $order = isset($filter_params['order']) ? $filter_params['order'] : 'asc';
+
+        // Validating te sorting params
+        $validSortingParameters = ['diet_id', 'diet_name', 'protein_goal'];
+        $sortBy = in_array($sortBy, $validSortingParameters) ? $sortBy : 'diet_id';
+        $order = ($order === 'desc') ? 'desc' : 'asc';
+
+        //where we'll store the filters to send to the controller
         //*Step 1:query
         $query = "SELECT * FROM diets WHERE 1";
         //*Step 2: get the filters
@@ -50,6 +60,9 @@ class DietsModel extends BaseModel
             $query .= " AND diet_name LIKE CONCAT (:diet_name, '%')";
             $params_values["diet_name"] = $filter_params["diet_name"];
         }
+
+        //sorting
+        $query .= " ORDER BY $sortBy $order";
         //*paginate the response
         $diets_info = $this->paginate(
             $query,
