@@ -15,7 +15,16 @@ class FoodsModel extends BaseModel
     {
         $named_params_values = [];
 
-        $sql = 'SELECT * from foods WHERE 1';
+        //* Sorting:
+        $sortBy = isset($filter_params['sort_by']) ? $filter_params['sort_by'] : 'food_id';
+        $order = isset($filter_params['order']) ? $filter_params['order'] : 'asc';
+
+        // Validating te sorting params
+        $validSortingParameters = ['food_id', 'name', 'category', 'avg_price', 'calories'];
+        $sortBy = in_array($sortBy, $validSortingParameters) ? $sortBy : 'food_id';
+        $order = ($order === 'desc') ? 'desc' : 'asc';
+
+        $sql = "SELECT * FROM foods WHERE 1";
 
         //* FILTERING:
 
@@ -59,6 +68,9 @@ class FoodsModel extends BaseModel
             $sql .= " AND content <= CONCAT(:maximum_content)";
             $named_params_values['maximum_content'] = $filter_params['maximum_content'];
         }
+
+        // Sorting
+        $sql .= " ORDER BY $sortBy $order";
 
         $foods = (array) $this->paginate($sql, $named_params_values);
         return $foods;
