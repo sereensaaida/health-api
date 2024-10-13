@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Models\GuidelinesModel;
+use Slim\Exception\HttpNotFoundException;
 use Fig\Http\Message\StatusCodeInterface;
 use App\Exceptions\HttpInvalidInputsException;
 use App\Helpers\PaginationHelper;
@@ -12,11 +13,10 @@ use App\Helpers\PaginationHelper;
 class GuidelinesController extends BaseController
 {
     //*Creating Construct Method
-    public function __construct(private GuidelinesModel $guidelines_model, private GuidelinesService $guidelines_service)
+    public function __construct(private GuidelinesModel $guidelines_model)
     {
         parent::__construct();
         $this->guidelines_model = $guidelines_model;
-        $this->guidelines_service = $guidelines_service;
     }
 
     //*Get /guidelines -> guidelines collection handler
@@ -54,10 +54,15 @@ class GuidelinesController extends BaseController
             );
         }
 
+
+
         //* If valid, retrieving guideline id and defining appropriate pattern
         $guideline_id = $uri_args["guideline_id"];
-        $guideline_id_pattern = '/^([0-9]*)$/';
+        if (!$this->isIdValid(['id' => $guideline_id])) {
+            throw new HttpInvalidInputsException($request, "Invalid guideline ID provided.");
+        }
 
+        $guideline_id_pattern = '/^([0-9]*)$/';
         //* Verifying if pattern matches, if not, throw exception
         if (preg_match($guideline_id_pattern, $guideline_id) === 0) {
             throw new HttpInvalidInputsException(

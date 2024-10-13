@@ -22,44 +22,36 @@ return static function (Slim\App $app): void {
     // get /
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
 
-//* DIET ROUTES
-    //get /diets
+    //* DIET ROUTES
+    //GET
     $app->get('/diets', [DietsController::class, 'handleGetDiets']);
-    //get /diets/{diets_id}
     $app->get('/diets/{diet_id}', [DietsController::class, 'handleGetDietsId']);
 
-//* EXERCISE ROUTES
-    //get /exercises
+    //* EXERCISE ROUTES
+    //GET
     $app->get('/exercises', [ExercisesController::class, 'handleGetExercises']);
-    //get /exercises/{exercise_id}
     $app->get('/exercises/{exercise_id}', [ExercisesController::class, 'handleGetExercisesById']);
-    // $app->get('/test', [TestController::class, 'handleTest']);
-
-    //* Foods routes
-    // GET
-    //*get /recommendation/{recommendation_id}/exercise
-    //get /recommendation/{recommendation_id}/exercise
     $app->get('/exercises/{exercise_id}/recommendations', [ExercisesController::class, 'handleGetRecommendationsByExercise']);
-    //post /exercises
+
+    //POST
     $app->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
 
-//* FOODS ROUTES
+    //* FOODS ROUTES
+    //GET
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
     $app->get('/foods/{food_id}', [FoodsController::class, 'handleGetFoodId']);
     $app->get('/foods/{food_id}/facts', [FoodsController::class, 'handleGetFoodFacts']);
     // POST
     $app->post('/foods', [FoodsController::class, 'handleCreateFood']);
 
-    //* Facts routes
+    //* FACTS ROUTES
     // GET
-    //* Facts route
     $app->get('/facts', [FactsController::class, 'handleGetfacts']);
     $app->get('/facts/{fact_id}', [FactsController::class, 'handleGetFactsId']);
-    // POST
 
-    // $app->get('/test', [TestController::class, 'handleTest']);
 
-    //* ROUTE: GET /ping
+
+    //* PING ROUTES
     $app->get('/ping', function (Request $request, Response $response, $args) {
 
         $payload = [
@@ -70,21 +62,21 @@ return static function (Slim\App $app): void {
         return $response;
     });
 
-    //RECOMMENDATIONS RESSOURCE
-    //* ROUTE: GET /recommendations
+    //* RECOMMENDATIONS ROUTES
+    //GET
     $app->get('/recommendations', [RecommendationsController::class, 'handleGetRecommendations']);
-    //*ROUTE: GET /recommendations/{recommendation_id}
     $app->get('/recommendations/{recommendation_id}', [RecommendationsController::class, 'handleGetRecommendationId']);
 
-    //Guidelines Ressource
+    //* GUIDELINES ROUTES
+    //GET
     $app->get('/guidelines', [GuidelinesController::class, 'handleGetGuidelines']);
-    //*ROUTE: GET /recommendations/{recommendation_id}
     $app->get('/guidelines/{guideline_id}', [GuidelinesController::class, 'handleGetGuidelineId']);
 
-    //COUNTRIES RESSOURCE
-    //* ROUTE: GET /countries
+    //* COUNTRIES ROUTES
+    //GET
     $app->get('/countries', [CountriesController::class, 'handleGetCountries']);
     $app->get('/countries/{country_id}', [CountriesController::class, 'handleGetCountryId']);
     $app->get('/countries/{country_id}/guidelines', [CountriesController::class, 'handleGetCountryGuidelines']);
+    //POST
     $app->post('/countries', [CountriesController::class, 'handleCreateCountry']);
 };

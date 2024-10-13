@@ -19,12 +19,48 @@ class AboutController extends BaseController
         $data = array(
             'api' => self::API_NAME,
             'version' => self::API_VERSION,
-            'about' => 'Welcome! This i a Web service that provides this and that...',
-            'authors' => 'Sereen Saaida, Micka, Damiano',
-            'resources' => '/blah'
+            'about' => 'Welcome to our health API! This i a Web service that provides information concerning guidelines to achieve a healthier lifestyle!',
+            'authors' => 'Sereen Saaida, Michaella Nsumanyi, Damiano Miloncini',
+            'resources' => [
+                [
+                    "name" => "Countries",
+                    "uri" => "/countries",
+                    "description" => "Retrieves a list of all countries."
+                ],
+                [
+                    "name" => "Diets",
+                    "uri" => "/diets",
+                    "description" => "Retrieves a list of all diets."
+                ],
+                [
+                    "name" => "Exercise",
+                    "uri" => "/exercises",
+                    "description" => "Retrieves a list of all exercises."
+                ],
+                [
+                    "name" => "Guidelines",
+                    "uri" => "/guidelines",
+                    "description" => "Retrieves a list of all guidelines."
+                ],
+                [
+                    "name" => "Facts",
+                    "uri" => "/facts",
+                    "description" => "Retrieves a list of all facts."
+                ],
+                [
+                    "name" => "Foods",
+                    "uri" => "/foods",
+                    "description" => "Retrieves a list of all foods."
+                ],
+                [
+                    "name" => "recommendations",
+                    "uri" => "/recommendations",
+                    "description" => "Retrieves a list of all recommendations."
+                ],
+
+            ]
         );
 
         return $this->renderJson($response, $data);
-        
     }
 }

@@ -22,7 +22,7 @@ abstract class BaseController
         return $response->withStatus($status_code)->withAddedHeader(HEADERS_CONTENT_TYPE, APP_MEDIA_TYPE_JSON);
     }
 
-    protected function isPagingParamsValid($data): bool
+    protected static function isPagingParamsValid($data): bool
     {
         // An array element can be associated with one or more validation rules.
         // Validation rules must be wrapped in an associative array where:
@@ -49,6 +49,21 @@ abstract class BaseController
         // if ($validator->validate()) {
         //     return false;
         // }
+        return $validator->validate();
+    }
+
+    protected static function isIdValid($data): bool
+    {
+        $rules = array(
+            'id' => [
+                'required',
+                'integer',
+                ['min', 1]
+            ]
+        );
+
+        $validator = new Validator($data, [], 'en');
+        $validator->mapFieldsRules($rules);
         return $validator->validate();
     }
 }
