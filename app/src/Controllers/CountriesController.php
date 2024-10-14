@@ -67,16 +67,6 @@ class CountriesController extends BaseController
             throw new HttpInvalidInputsException($request, "Invalid country ID provided.");
         }
 
-        /**$country_id_pattern = '/^([0-9]*)$/';
-
-        //* Verifying if pattern matches, if not, throw exception
-        if (preg_match($country_id_pattern, $country_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "Invalid country id provided"
-            );
-        }
-         **/
 
         //* Fetch country record with proper model method, return JSON response
         $country = $this->countries_model->getCountryId(country_id: $country_id);
@@ -111,16 +101,7 @@ class CountriesController extends BaseController
         if (!$this->isIdValid(['id' => $country_id])) {
             throw new HttpInvalidInputsException($request, "Invalid country ID provided.");
         }
-        
-        $country_id = $uri_args["country_id"];
-        $country_id_pattern = '/^([0-9]*)$/';
 
-        if (preg_match($country_id_pattern, $country_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "Invalid country id provided"
-            );
-        }
 
         //*Checking if entry is present in country table, if not throwing an exception
         $country = $this->countries_model->getCountryId($country_id);

@@ -11,7 +11,18 @@ class CountriesModel extends BaseModel
         parent::__construct($pdo);
     }
 
-    //* Get /countries
+//* Get /countries
+/**
+ * this method fetches a list of countries customized with given filtering and sorting parameters entered from the user
+ *
+ *the method creates an sql query that has additional conditions concatenated to it based on the *entered/valid parameters equivalent to each field in the countries table. the query can also be *concatenated with sorting parameters (if entered by the user)
+ *
+ *
+ * @param array $filter_params is an associative array containing any/ALL parameters inputted by the user through thunder client
+ * @return mixed is the returned value that includes countries corresponding to the filtered parameters (if any)
+ *
+ * @throws Exception if an error occurs when executing the sql statement, errors can range from syntax to db configuration problems
+ */
     public function getCountries(array $filter_params = []): mixed
     {
         //*Declaring named parameters and initiating query
