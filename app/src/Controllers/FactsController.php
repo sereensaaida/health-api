@@ -11,15 +11,32 @@ use Fig\Http\Message\StatusCodeInterface;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpSpecializedException;
 
+/**
+ * Class FactsController
+ *
+ * This controller class handles operations related to Facts
+ */
 class FactsController extends BaseController
 {
 
+    /**
+     * FoodsModel constructor.
+     *
+     * @param FactsModel $facts_model Reference to the facts model
+     */
     public function __construct(private FactsModel $facts_model)
     {
         parent::__construct();
     }
 
     //* GET /foods -> Foods collection handler
+    /**
+     * Handler for getting the facts collection
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetFacts(Request $request, Response $response): Response
     {
         //* Retrieving the filter parameters from the request
@@ -43,6 +60,13 @@ class FactsController extends BaseController
         );
     }
 
+    /**
+     * Handler for getting the facts singleton resource
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetFactsId(Request $request, Response $response, array $uri_args): Response
     {
         $fact_id = $uri_args['fact_id'];

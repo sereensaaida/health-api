@@ -24,7 +24,7 @@ class FoodsController extends BaseController
     /**
      * FoodsModel constructor.
      *
-     * @param FoodsModel $foods_model The instance of food model
+     * @param FoodsModel $foods_model Reference to the foods model
      */
     public function __construct(private FoodsModel $foods_model, private FoodsService $food_service)
     {
@@ -34,6 +34,13 @@ class FoodsController extends BaseController
     }
 
     //* GET /foods -> Foods collection handler
+    /**
+     * Handler for getting the foods collection
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetFoods(Request $request, Response $response): Response
     {
         // Obtaining the query parameters
@@ -57,6 +64,13 @@ class FoodsController extends BaseController
         );
     }
 
+    /**
+     * Handler for getting the foods singleton resource
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetFoodId(Request $request, Response $response, array $uri_args): Response
     {
         // Getting the food_id form the URI
@@ -95,6 +109,13 @@ class FoodsController extends BaseController
         );
     }
 
+    /**
+     * Handler for getting the foods sub-collection of facts
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetFoodFacts(Request $request, Response $response, array $uri_args): Response
     {
         $food_id = $uri_args['food_id'];
