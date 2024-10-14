@@ -13,6 +13,11 @@ use App\Helpers\PaginationHelper;
 class GuidelinesController extends BaseController
 {
     //*Creating Construct Method
+    /**
+     * Guidelines model constructor.
+     *
+     * @param GuidelinesModel $guidelines_model Reference to the guideliens model
+     */
     public function __construct(private GuidelinesModel $guidelines_model)
     {
         parent::__construct();
@@ -20,6 +25,13 @@ class GuidelinesController extends BaseController
     }
 
     //*Get /guidelines -> guidelines collection handler
+    /**
+     * Handler for getting the guidelines collection
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetGuidelines(Request $request, Response $response): Response
     {
         //*Pagination and filter implementing
@@ -39,6 +51,14 @@ class GuidelinesController extends BaseController
     }
 
     //* Get /guidelines/{guidelines_id} implementation
+    /**
+     * Handler for getting the guidelines collection by id
+     *
+     * @param Request $request The user request
+     * @param array $uri_args Arguments representing id entered by user
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetGuidelinesId(Request $request, Response $response, array $uri_args): Response
     {
         //* Checking if guideline ID is present, if not throw an error
