@@ -23,10 +23,12 @@ class ExercisesController extends BaseController
         $filter_params = $request->getQueryParams();
         //TODO: handle validation
         if (isset($filter_params["current_page"])) {
-            $this->exercisesModel->setPaginationOptions(
-                $filter_params["current_page"],
-                $filter_params["page_size"]
-            );
+            if ($this->isPagingParamsValid($filter_params)) {
+                $this->exercisesModel->setPaginationOptions(
+                    $filter_params["current_page"],
+                    $filter_params["page_size"]
+                );
+            }
         }
         //get data & encode the data into json format
         $exercisesData = $this->exercisesModel->getExercises($filter_params);

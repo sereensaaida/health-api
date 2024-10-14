@@ -18,6 +18,16 @@ class ExercisesModel extends BaseModel
         //possible filters: exercise_type,difficulty_level, muscle_targeted, calories_burned, equipment_needed
         //query statement
         $params_value = [];
+        //* Sorting:
+        $sortBy = isset($filter_params['sort_by']) ? $filter_params['sort_by'] : 'exercise_id';
+        $order = isset($filter_params['order']) ? $filter_params['order'] : 'asc';
+
+        // Validating te sorting params
+        $validSortingParameters = ['exercise_id', 'name', 'exercise_type'];
+        $sortBy = in_array($sortBy, $validSortingParameters) ? $sortBy : 'exercise_id';
+
+        //*Filtering
+        $order = ($order === 'desc') ? 'desc' : 'asc';
         $sql = "SELECT * FROM exercises WHERE 1";
         //*exercise_type
         if (isset($filter_params["exercise_type"])) {
@@ -49,10 +59,7 @@ class ExercisesModel extends BaseModel
             $sql .= " AND equipment_needed LIKE CONCAT (:equipment_needed, '%')";
             $params_value["equipment_needed"] = $filter_params["equipment_needed"];
         }
-        //fetch all
-        //$exercises_info = $this->fetchAll($sql);
-        //return the fetch all
-        //$players = (array) $this->paginate($query, $named_params_value);
+        $sql .= " ORDER BY $sortBy $order";
         $exercise = $this->paginate($sql, $params_value);
         return $exercise;
     }
@@ -71,7 +78,6 @@ class ExercisesModel extends BaseModel
         return $exercises_info;
     }
 
-    //*! come back to it  get exercices based on the recommendations
     public function getRecommendationsByExercise_id($exercise_id): mixed
     {
         $exercise = $this->getExercisesById($exercise_id);

@@ -22,10 +22,12 @@ class RecommendationsController extends BaseController
         // }
         $filter_params = $request->getQueryParams();
         if (isset($filter_params["current_page"])) {
-            $this->recommendations_model->setPaginationOptions(
-                $filter_params["current_page"],
-                $filter_params["page_size"]
-            );
+            if ($this->isPagingParamsValid($filter_params)) {
+                $this->recommendations_model->setPaginationOptions(
+                    $filter_params["current_page"],
+                    $filter_params["page_size"]
+                );
+            }
         }
         $recommendations = $this->recommendations_model->getRecommendations($filter_params);
         return $this->renderJson($response, $recommendations);

@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\HttpInvalidInputsException;
+
+//require_once("../validation/index.php");
 use App\Models\DietsModel;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -19,14 +22,15 @@ class DietsController extends BaseController
     {
         //*Retrieve filtering
         $filter_params = $request->getQueryParams();
-        //set the pagination
+
         if (isset($filter_params["current_page"])) {
-            $this->dietsModel->setPaginationOptions(
-                $filter_params["current_page"],
-                $filter_params["page_size"]
-            );
+            if ($this->isPagingParamsValid($filter_params)) {
+                $this->dietsModel->setPaginationOptions(
+                    $filter_params["current_page"],
+                    $filter_params["page_size"]
+                );
+            }
         }
-        //$filter_params = $request->getQueryParams();
         $diets = $this->dietsModel->getDiets($filter_params);
 
         return $this->renderJson($response, $diets);

@@ -13,6 +13,13 @@ class RecommendationsModel extends BaseModel
     public function getRecommendations(array $filter_params = []): mixed
     {
         $named_params = [];
+        //* Sorting:
+        $sortBy = isset($filter_params['sort_by']) ? $filter_params['sort_by'] : 'recommendation_id';
+        $order = isset($filter_params['order']) ? $filter_params['order'] : 'asc';
+        // Validating te sorting params
+        $validSortingParameters = ['recommendation_id', 'duration_minutes', 'sets'];
+        $sortBy = in_array($sortBy, $validSortingParameters) ? $sortBy : 'recommendation_id';
+        $order = ($order === 'desc') ? 'desc' : 'asc';
         $sql = "SELECT * FROM recommendations WHERE 1";
 
         if (isset($filter_params['diet_id'])) {
@@ -50,7 +57,7 @@ class RecommendationsModel extends BaseModel
             $named_params['additional_notes'] = $filter_params['additional_notes'];
         }
 
-
+        $sql .= " ORDER BY $sortBy $order";
         $recommendations = $this->paginate($sql, $named_params);
 
         return $recommendations;
