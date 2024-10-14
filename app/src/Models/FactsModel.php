@@ -15,7 +15,18 @@ class FactsModel extends BaseModel
     {
         $named_params_values = [];
 
+        // Getting the sorting parameters
+        $sortBy = isset($filter_params['sort_by']) ? $filter_params['sort_by'] : 'food_id';
+        $order = isset($filter_params['order']) ? $filter_params['order'] : 'asc';
+
+        // Validating te sorting params
+        $validSortingParameters = ['nutrition_id', 'carbohydrates', 'protein', 'sugar', 'sodium', 'cholesterol'];
+        $sortBy = in_array($sortBy, $validSortingParameters) ? $sortBy : 'nutrition_id';
+        $order = ($order === 'desc') ? 'desc' : 'asc';
+
         $sql = 'SELECT * from facts WHERE 1';
+
+
 
         // Filtering:
 
@@ -44,6 +55,9 @@ class FactsModel extends BaseModel
             $sql .= " AND carbohydrates <= CONCAT(:maximum_carbs)";
             $named_params_values['maximum_carbs'] = $filter_params['maximum_carbs'];
         }
+
+        // Sorting
+        $sql .= " ORDER BY $sortBy $order";
 
         $facts = (array) $this->paginate($sql, $named_params_values);
         return $facts;

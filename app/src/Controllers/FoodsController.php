@@ -26,8 +26,10 @@ class FoodsController extends BaseController
     //* GET /foods -> Foods collection handler
     public function handleGetFoods(Request $request, Response $response): Response
     {
-        //* Pagination: Retrieving the filter parameters from the request
+        // Obtaining the query parameters
         $filter_params = $request->getQueryParams();
+
+        //* Pagination
         //dd($filter_params);
         if ($this->isPagingParamsValid($filter_params) === true) {
             $this->foods_model->setPaginationOptions(
@@ -36,9 +38,9 @@ class FoodsController extends BaseController
             );
         }
 
-        //* Pagination: Find a way to make it work without conflicting
 
         $foods = $this->foods_model->getFoods($filter_params);
+
         return $this->renderJson(
             $response,
             $foods
