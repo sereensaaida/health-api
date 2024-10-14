@@ -44,23 +44,15 @@ class FoodsModel extends BaseModel
         $sql = "SELECT * FROM foods WHERE 1";
 
         //* FILTERING:
-
-        // CATEGORY
-        if (isset($filter_params['category'])) {
-            $sql .= " AND category LIKE CONCAT(:category, '%') ";
-            $named_params_values['category'] = $filter_params['category'];
-        }
-
-        // SERVING SIZE
-        if (isset($filter_params['serving_size'])) {
-            $sql .= " AND serving_size = CONCAT(:serving_size, '%') ";
-            $named_params_values['serving_size'] = $filter_params['serving_size'];
-        }
-
+        $allowed_fields = ['category', 'serving_size'];
+        $filter_result = $this->buildFilterConditions($filter_params, $allowed_fields);
+        $sql .= $filter_result['sql_conditions'];
+        $named_params = $filter_result['named_params'];
         // CALORIES
 
         //TODO Check that minimum is smaller than maximum
         // Minimum
+        //? i didnt apply the global filtering method as i dont really get why you're doing >=
         if (isset($filter_params['minimum_calories'])) {
             $sql .= " AND calories >= CONCAT(:minimum_calories)";
             $named_params_values['minimum_calories'] = $filter_params['minimum_calories'];
