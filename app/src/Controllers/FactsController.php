@@ -22,15 +22,18 @@ class FactsController extends BaseController
     //* GET /foods -> Foods collection handler
     public function handleGetFacts(Request $request, Response $response): Response
     {
-
         //* Retrieving the filter parameters from the request
         $filter_params = $request->getQueryParams();
 
-        //* Pagination
-        // $this->facts_model->setPaginationOptions(
-        //     current_page: $filter_params['current_page'],
-        //     records_per_page: $filter_params['page_size']
-        // );
+        //* Pagination: Retrieving the filter parameters from the request
+        $filter_params = $request->getQueryParams();
+        //dd($filter_params);
+        if ($this->isPagingParamsValid($filter_params) === true) {
+            $this->facts_model->setPaginationOptions(
+                current_page: $filter_params['current_page'],
+                records_per_page: $filter_params['page_size']
+            );
+        }
 
 
         $facts = $this->facts_model->getFacts($filter_params);
@@ -58,6 +61,14 @@ class FactsController extends BaseController
             );
         }
 
+        $fact_id_pattern = '/^([0-9]*)$/';
+        if (preg_match($fact_id_pattern, $fact_id) === 0) {
+            throw new HttpInvalidInputsException(
+                $request,
+                "Invalid fact ID provided. Please provide a valid ID."
+            );
+        }
+
         $fact = $this->facts_model->getFactId($fact_id);
         if ($fact === false) {
             throw new HttpNotFoundException(
@@ -65,6 +76,8 @@ class FactsController extends BaseController
                 "No matching fact found"
             );
         }
+
+
 
         return $this->renderJson(
             $response,

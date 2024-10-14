@@ -18,6 +18,7 @@ class FoodsModel extends BaseModel
         $sql = 'SELECT * from foods WHERE 1';
 
         //* FILTERING:
+
         // CATEGORY
         if (isset($filter_params['category'])) {
             $sql .= " AND category LIKE CONCAT(:category, '%') ";
