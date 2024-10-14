@@ -84,26 +84,8 @@ class ExercisesController extends BaseController
         // fetch the query params
         $filter_params = $request->getQueryParams();
         $exercise_id = $args["exercise_id"];
-        //TODO: validate the filters
-        if (!isset($exercise_id)) {
-            return $this->renderJson(
-                $response,
-                [
-                    "status" => "error",
-                    "code" => "400",
-                    "message" => "The supplied Id is not found"
-                ],
-                StatusCodeInterface::STATUS_BAD_REQUEST
-            );
-        }
-        $exercise_id_pattern = '/^([0-9]*)$/';
-
-
-        if (preg_match($exercise_id_pattern, $exercise_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "invalid id provided"
-            );
+        if (!$this->isIdValid(['id' => $exercise_id])) {
+            throw new HttpInvalidInputsException($request, "Invalid exercise ID provided.");
         }
         //fetch the data from the model
         $data = $this->exercisesModel->getExercisesById($args["exercise_id"]);

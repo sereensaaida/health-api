@@ -42,14 +42,8 @@ class DietsController extends BaseController
         //*Step 1: Validate that the user has sent the right argument
         $diet_id = $args["diet_id"];
         //*Step 2: Error handling
-        $diet_id_pattern = '/^([0-9]*)$/';
-
-
-        if (preg_match($diet_id_pattern, $diet_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "invalid id provided"
-            );
+        if (!$this->isIdValid(['id' => $diet_id])) {
+            throw new HttpInvalidInputsException($request, "Invalid diet ID provided.");
         }
         //*Step 3: Call the db from the model
         $diets = $this->dietsModel->getDietsId($args["diet_id"]);

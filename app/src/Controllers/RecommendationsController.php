@@ -36,27 +36,8 @@ class RecommendationsController extends BaseController
     public function handleGetRecommendationId(Request $request, Response $response, array $uri_args): Response
     {
         $recommendation_id = $uri_args["recommendation_id"];
-
-        if (!isset($recommendation_id)) {
-            return $this->renderJson(
-                $response,
-                [
-                    "status" => "error",
-                    "code" => "400",
-                    "message" => "The supplied recommendation Id is not found"
-                ],
-                StatusCodeInterface::STATUS_BAD_REQUEST
-            );
-        }
-
-        $recommendation_id_pattern = '/^([0-9]*)$/';
-
-
-        if (preg_match($recommendation_id_pattern, $recommendation_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "invalid recommendation id provided"
-            );
+        if (!$this->isIdValid(['id' => $recommendation_id])) {
+            throw new HttpInvalidInputsException($request, "Invalid recommendation ID provided.");
         }
         $recommendation = $this->recommendations_model->getRecommendationsId($recommendation_id);
         //check if the value exists in the db (out of bounds error handling)
