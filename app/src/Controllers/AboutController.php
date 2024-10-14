@@ -19,7 +19,7 @@ class AboutController extends BaseController
         $data = array(
             'api' => self::API_NAME,
             'version' => self::API_VERSION,
-            'about' => 'Welcome to our health API! This i a Web service that provides information concerning guidelines to achieve a healthier lifestyle!',
+            'about' => 'Welcome to our health API! This is a Web service that provides information concerning guidelines to achieve a healthier lifestyle!',
             'authors' => 'Sereen Saaida, Michaella Nsumanyi, Damiano Miloncini',
             'resources' => [
                 [

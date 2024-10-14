@@ -13,9 +13,19 @@ use Slim\Exception\HttpSpecializedException;
 use validation\index;
 use App\Services\FoodsService;
 
+/**
+ * Class FoodsController
+ *
+ * This controller class handles operations related to Foods
+ */
 class FoodsController extends BaseController
 {
 
+    /**
+     * FoodsModel constructor.
+     *
+     * @param FoodsModel $foods_model The 
+     */
     public function __construct(private FoodsModel $foods_model, private FoodsService $food_service)
     {
         parent::__construct();
@@ -66,12 +76,8 @@ class FoodsController extends BaseController
             );
         }
 
-        $food_id_pattern = '/^([0-9]*)$/';
-        if (preg_match($food_id_pattern, $food_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "Invalid food ID provided. Please provide a valid ID."
-            );
+        if (!$this->isIdValid(['id' => $food_id])) {
+            throw new HttpInvalidInputsException($request, "Invalid food ID provided.");
         }
 
         //* Step 3) If valid, fetch the appropriate data for the specific player from the DB
@@ -107,12 +113,8 @@ class FoodsController extends BaseController
             );
         }
 
-        $food_id_pattern = '/^([0-9]*)$/';
-        if (preg_match($food_id_pattern, $food_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "Invalid food ID provided. Please provide a valid ID."
-            );
+        if (!$this->isIdValid(['id' => $food_id])) {
+            throw new HttpInvalidInputsException($request, "Invalid food ID provided.");
         }
 
         //* Step 3) If valid, fetch the appropriate data for the specific food from the DB
