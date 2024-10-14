@@ -6,6 +6,8 @@ use App\Models\ExercisesModel;
 use App\Services\ExerciseService;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Fig\Http\Message\StatusCodeInterface;
+use App\Exceptions\HttpInvalidInputsException;
 
 class ExercisesController extends BaseController
 {
@@ -19,9 +21,51 @@ class ExercisesController extends BaseController
     //*Step 2) method to handle the data
     public function handleGetExercises(Request $request, Response $response): Response
     {
+        // $recommendation_id = $uri_args["recommendation_id"];
+
+        // if (!isset($recommendation_id)) {
+        //     return $this->renderJson(
+        //         $response,
+        //         [
+        //             "status" => "error",
+        //             "code" => "400",
+        //             "message" => "The supplied recommendation Id is not found"
+        //         ],
+        //         StatusCodeInterface::STATUS_BAD_REQUEST
+        //     );
+        // }
+
+        // $recommendation_id_pattern = '/^([0-9]*)$/';
+
+
+        // if (preg_match($recommendation_id_pattern, $recommendation_id) === 0) {
+        //     throw new HttpInvalidInputsException(
+        //         $request,
+        //         "invalid recommendation id provided"
+        //     );
+        // }
+        // $recommendation = $this->recommendations_model->getRecommendationsId($recommendation_id);
+        // //check if the value exists in the db (out of bounds error handling)
+        // if ($recommendation == false) {
+        //     throw new HttpInvalidInputsException(
+        //         $request,
+        //         "The recommendation ID provided does not exist in the database."
+        //     );
+        // }
         //get the query parameters
         $filter_params = $request->getQueryParams();
         //TODO: handle validation
+        if (!isset($exercise_id)) {
+            return $this->renderJson(
+                $response,
+                [
+                    "status" => "error",
+                    "code" => "400",
+                    "message" => "The supplied recommendation Id is not found"
+                ],
+                StatusCodeInterface::STATUS_BAD_REQUEST
+            );
+        }
         if (isset($filter_params["current_page"])) {
             if ($this->isPagingParamsValid($filter_params)) {
                 $this->exercisesModel->setPaginationOptions(
@@ -39,11 +83,37 @@ class ExercisesController extends BaseController
     {
         // fetch the query params
         $filter_params = $request->getQueryParams();
+        $exercise_id = $args["exercise_id"];
         //TODO: validate the filters
+        if (!isset($exercise_id)) {
+            return $this->renderJson(
+                $response,
+                [
+                    "status" => "error",
+                    "code" => "400",
+                    "message" => "The supplied Id is not found"
+                ],
+                StatusCodeInterface::STATUS_BAD_REQUEST
+            );
+        }
+        $exercise_id_pattern = '/^([0-9]*)$/';
 
+
+        if (preg_match($exercise_id_pattern, $exercise_id) === 0) {
+            throw new HttpInvalidInputsException(
+                $request,
+                "invalid id provided"
+            );
+        }
         //fetch the data from the model
         $data = $this->exercisesModel->getExercisesById($args["exercise_id"]);
         //json encode
+        if ($data == false) {
+            throw new HttpInvalidInputsException(
+                $request,
+                "The ID provided does not exist in the database."
+            );
+        }
         return $this->renderJson($response, $data);
     }
 

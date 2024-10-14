@@ -40,16 +40,29 @@ class DietsController extends BaseController
     public function handleGetDietsId(Request $request, Response $response, array $args)
     {
         //*Step 1: Validate that the user has sent the right argument
-
+        $diet_id = $args["diet_id"];
         //*Step 2: Error handling
+        $diet_id_pattern = '/^([0-9]*)$/';
 
+
+        if (preg_match($diet_id_pattern, $diet_id) === 0) {
+            throw new HttpInvalidInputsException(
+                $request,
+                "invalid id provided"
+            );
+        }
         //*Step 3: Call the db from the model
         $diets = $this->dietsModel->getDietsId($args["diet_id"]);
         //*Step 4: Encode in json & put it in the response
         //$json_info = json_encode($diets);
         //*Step 5: Send the response with the Header & status code
         //$response = $response->getBody()->write($json_info);
-
+        if ($diets == false) {
+            throw new HttpInvalidInputsException(
+                $request,
+                "The ID provided does not exist in the database."
+            );
+        }
         return $this->renderJson(
             $response,
             $diets

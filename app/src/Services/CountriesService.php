@@ -22,7 +22,7 @@ class CountriesService
 
         //Step 2) Create instance of country/insert in db (here or model?) if its valid
         //if not valid throw error msg on current  result
-        if($new_country.)
+        //if($new_country.)
 
         //Step 3) Call create country method
         $this->countries_model->insertCountry($new_country);
