@@ -6,12 +6,23 @@ use App\Core\PDOService;
 
 class GuidelinesModel extends BaseModel
 {
+    /**
+     * GuidelinesModel constructor.
+     *
+     * @param PDOService $dbo The database service object.
+     */
     public function __construct(PDOService $pdo)
     {
         parent::__construct($pdo);
     }
 
-    //*Get /countries
+    //*Get /guidelines
+    /**
+     * Retrieves a list of guidelines based on the filter parameters.
+     *
+     * @param array $filter_params An array of filtering options such as country id, calorie intake, protein intake, etc.
+     * @return array The filtered list of guidelines.
+     */
     public function getGuidelines(array $filter_params = []): mixed
     {
 
@@ -74,6 +85,12 @@ class GuidelinesModel extends BaseModel
     }
 
     //* Get /guideline/{guideline_id}
+    /**
+     * Retrieves a singleton resource for guidelines
+     *
+     * @param string $guideline_id The ID of the guideline to retrieve.
+     * @return mixed The guideline data or null if not found.
+     */
     public function getGuidelinesId(string $guideline_id): mixed
     {
 
