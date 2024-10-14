@@ -25,7 +25,7 @@ class ExercisesController extends BaseController
     {
         //get the query parameters
         $filter_params = $request->getQueryParams();
-        //TODO: handle validation
+        //: handle pagiantion validation
         if (isset($filter_params["current_page"])) {
             if ($this->isPagingParamsValid($filter_params)) {
                 $this->exercisesModel->setPaginationOptions(

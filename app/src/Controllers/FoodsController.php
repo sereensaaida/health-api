@@ -152,16 +152,14 @@ class FoodsController extends BaseController
         return $this->renderJson($response, $results);
     }
 
-    public function handleGetFoodIdRecommendation(Request $request, Response $response, array $uri_args): Response
-    {
-        $food_id = $uri_args['food_id'];
-
-        $results = $this->foods_model->getFoodRecommendations($food_id);
-
-        return $this->renderJson($response, $results);
-    }
-
     //? POST /foods
+    /**
+     * Handler for creating a food
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleCreateFood(Request $request, Response $response): Response
     {
         //* Step 1) Retrieve data included in the POST request body

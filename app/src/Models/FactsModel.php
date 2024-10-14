@@ -42,8 +42,6 @@ class FactsModel extends BaseModel
 
         $sql = 'SELECT * from facts WHERE 1';
 
-
-
         // Filtering:
 
         // PROTEIN
