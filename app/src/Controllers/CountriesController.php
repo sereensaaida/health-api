@@ -18,6 +18,7 @@ class CountriesController extends BaseController
 {
 
     //*Creating Construct Method
+    
     public function __construct(private CountriesModel $countries_model, private CountriesService $countries_service)
     {
         parent::__construct();

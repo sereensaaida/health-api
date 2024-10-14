@@ -24,7 +24,7 @@ class FoodsController extends BaseController
     /**
      * FoodsModel constructor.
      *
-     * @param FoodsModel $foods_model The 
+     * @param FoodsModel $foods_model The instance of food model
      */
     public function __construct(private FoodsModel $foods_model, private FoodsService $food_service)
     {
