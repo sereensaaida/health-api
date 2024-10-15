@@ -263,4 +263,28 @@ abstract class BaseModel
         $this->current_page = $current_page;
         $this->records_per_page = $records_per_page;
     }
+
+    /**
+     * Filtering.
+     *
+     * @param array $filter_params An array of filtering options such as by IDs,duration, etc.. requested by the client
+     * @param array $allowed_fields an array of filter names supported by the server
+     * @return array An array containing the sql statement to add to the base sql statement and the parameters accepted.
+     */
+    protected function buildFilterConditions(array $filter_params, array $allowed_fields)
+    {
+        $sql_conditions = '';
+        $named_params = [];
+
+        //check if the filter in the uri is a valid filter. make sure the value is not null
+        foreach ($filter_params as $field => $value) {
+            if (in_array($field, $allowed_fields) && isset($value)) {
+                //add to the sql statement
+                $sql_conditions .= " AND {$field} LIKE CONCAT(:{$field}, '%')";
+                $named_params[$field] = $value;
+            }
+        }
+
+        return ['sql_conditions' => $sql_conditions, 'named_params' => $named_params];
+    }
 }
