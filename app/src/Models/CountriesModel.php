@@ -6,23 +6,24 @@ use App\Core\PDOService;
 
 class CountriesModel extends BaseModel
 {
+
+    /**
+     * CountriesModel constructor.
+     *
+     * @param PDOService $dbo The database service object.
+     */
     public function __construct(PDOService $pdo)
     {
         parent::__construct($pdo);
     }
 
-//* Get /countries
-/**
- * this method fetches a list of countries customized with given filtering and sorting parameters entered from the user
- *
- *the method creates an sql query that has additional conditions concatenated to it based on the *entered/valid parameters equivalent to each field in the countries table. the query can also be *concatenated with sorting parameters (if entered by the user)
- *
- *
- * @param array $filter_params is an associative array containing any/ALL parameters inputted by the user through thunder client
- * @return mixed is the returned value that includes countries corresponding to the filtered parameters (if any)
- *
- * @throws Exception if an error occurs when executing the sql statement, errors can range from syntax to db configuration problems
- */
+    //* Get /countries
+    /**
+     * Retrieves a list of countries based on the filter parameters.
+     *
+     * @param array $filter_params An array of filtering options such as population, vegetarian percentage, name, etc.
+     * @return array The filtered list of countries.
+     */
     public function getCountries(array $filter_params = []): mixed
     {
         //*Declaring named parameters and initiating query
@@ -53,6 +54,12 @@ class CountriesModel extends BaseModel
 
 
     //* Get /country/{country_id}
+    /**
+     * Retrieves a singleton resource for countries
+     *
+     * @param string $country_id The ID of the country to retrieve.
+     * @return mixed The country data or null if not found.
+     */
     public function getCountryId(string $country_id): mixed
     {
         $query = "SELECT * FROM countries WHERE country_id = :country_id";
@@ -64,6 +71,14 @@ class CountriesModel extends BaseModel
     }
 
     //*Subcollection implementation /country/guidelines/{country_id}
+    //* Sub collection resource
+    // We retrieve a single/specific country's guidelines. This is because guidelines is dependent on countries.
+    /**
+     * Retrieves guidelines for a specific countries.
+     *
+     * @param string $country_id The country of the guidelines we are searching for.
+     * @return mixed The country's guidelines.
+     */
     public function getCountryGuidelines($country_id): mixed
     {
         $country = $this->getCountryId($country_id);
