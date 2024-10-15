@@ -4,13 +4,30 @@ namespace App\Models;
 
 use App\Core\PDOService;
 
+/**
+ * Class FoodsModel
+ *
+ * This model class handles operations related to the Food table
+ */
+
 class FoodsModel extends BaseModel
 {
+    /**
+     * FoodsModel constructor.
+     *
+     * @param PDOService $dbo The database service object.
+     */
     public function __construct(PDOService $dbo)
     {
         parent::__construct($dbo);
     }
 
+    /**
+     * Retrieves a list of foods based on the filter parameters.
+     *
+     * @param array $filter_params An array of filtering options such as category, calories, etc.
+     * @return array The filtered list of foods.
+     */
     public function getFoods(array $filter_params = []): array
     {
         $named_params_values = [];
@@ -76,6 +93,12 @@ class FoodsModel extends BaseModel
         return $foods;
     }
 
+    /**
+     * Retrieves a singleton resource of Food by its ID
+     *
+     * @param string $food_id The ID of the food
+     * @return mixed The food data
+     */
     public function getFoodId(string $food_id): mixed
     {
         $sql = "SELECT * FROM foods WHERE food_id = :food_id";
@@ -89,6 +112,12 @@ class FoodsModel extends BaseModel
 
     //* Sub collection resource
     // We retrieve a single/specific food's nutrition facts. This is because Facts is dependent on foods.
+    /**
+     * Retrieves nutrition facts for a specific food.
+     *
+     * @param string $food_id The ID of the food to get nutrition facts for.
+     * @return mixed The food's nutrition facts.
+     */
     public function getFoodFacts(String $food_id): mixed
     {
         $food = $this->getFoodId($food_id);
@@ -127,6 +156,12 @@ class FoodsModel extends BaseModel
         return $result;
     }
 
+    /**
+     * Inserts a new Food item into the database.
+     *
+     * @param array $new_food_info An array containing the information for the new food item.
+     * @return mixed The ID of the inserted food item.
+     */
     public function insertFood(array $new_food_info): mixed
     {
         // We dont have to write the SQl statement:

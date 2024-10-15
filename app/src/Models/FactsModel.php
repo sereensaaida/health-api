@@ -4,13 +4,29 @@ namespace App\Models;
 
 use App\Core\PDOService;
 
+/**
+ * Class FactsModel
+ *
+ * This model class handles operations related to the Fact table
+ */
 class FactsModel extends BaseModel
 {
+    /**
+     * FactsModel constructor.
+     *
+     * @param PDOService $dbo The database service object.
+     */
     public function __construct(PDOService $dbo)
     {
         parent::__construct($dbo);
     }
 
+    /**
+     * Retrieves a list of facts based on the filter parameters.
+     *
+     * @param array $filter_params An array of filtering options such as nutrition, carbohydrates, protein, etc.
+     * @return array The filtered list of facts.
+     */
     public function getFacts(array $filter_params = []): array
     {
         $named_params_values = [];
@@ -63,6 +79,12 @@ class FactsModel extends BaseModel
         return $facts;
     }
 
+    /**
+     * Retrieves a singleton resource for Facts
+     *
+     * @param string $fact_id The ID of the fact to retrieve.
+     * @return mixed The fact data or null if not found.
+     */
     public function getFactId(string $nutrition_id): mixed
     {
 
