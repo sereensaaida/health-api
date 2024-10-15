@@ -66,12 +66,8 @@ class FoodsController extends BaseController
             );
         }
 
-        $food_id_pattern = '/^([0-9]*)$/';
-        if (preg_match($food_id_pattern, $food_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "Invalid food ID provided. Please provide a valid ID."
-            );
+        if (!$this->isIdValid(['id' => $food_id])) {
+            throw new HttpInvalidInputsException($request, "Invalid food ID provided.");
         }
 
         //* Step 3) If valid, fetch the appropriate data for the specific player from the DB
@@ -107,12 +103,8 @@ class FoodsController extends BaseController
             );
         }
 
-        $food_id_pattern = '/^([0-9]*)$/';
-        if (preg_match($food_id_pattern, $food_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "Invalid food ID provided. Please provide a valid ID."
-            );
+        if (!$this->isIdValid(['id' => $food_id])) {
+            throw new HttpInvalidInputsException($request, "Invalid food ID provided.");
         }
 
         //* Step 3) If valid, fetch the appropriate data for the specific food from the DB

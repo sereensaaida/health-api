@@ -61,12 +61,8 @@ class FactsController extends BaseController
             );
         }
 
-        $fact_id_pattern = '/^([0-9]*)$/';
-        if (preg_match($fact_id_pattern, $fact_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "Invalid fact ID provided. Please provide a valid ID."
-            );
+        if (!$this->isIdValid(['id' => $fact_id])) {
+            throw new HttpInvalidInputsException($request, "Invalid fact ID provided.");
         }
 
         $fact = $this->facts_model->getFactId($fact_id);
