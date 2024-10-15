@@ -7,15 +7,26 @@ use App\Core\PDOService;
 class DietsModel extends BaseModel
 {
     //instantiate the pdo connection
+    /**
+     * DietsModel constructor.
+     *
+     * @param PDOService $dbo The database service object.
+     */
     public function __construct(PDOService $pdo)
     {
         parent::__construct($pdo);
     }
 
     //get /diets
+    /**
+     * Retrieves all diets.
+     *
+     * @param array $filter_params An array of filtering options such as by IDs,duration, etc..
+     * @return mixed An array of filtered or unfiltered diets.
+     */
     public function getDiets(array $filter_params = []): mixed
     {
-        $params_values = [];
+        $named_params = [];
 
         //* Sorting:
         $sortBy = isset($filter_params['sort_by']) ? $filter_params['sort_by'] : 'diet_id';
@@ -25,55 +36,32 @@ class DietsModel extends BaseModel
         $validSortingParameters = ['diet_id', 'diet_name', 'protein_goal'];
         $sortBy = in_array($sortBy, $validSortingParameters) ? $sortBy : 'diet_id';
         $order = ($order === 'desc') ? 'desc' : 'asc';
-
         //where we'll store the filters to send to the controller
         //*Step 1:query
-        $query = "SELECT * FROM diets WHERE 1";
+        $sql = "SELECT * FROM diets WHERE 1";
         //*Step 2: get the filters
-        //*is_gluten_free
-        if (isset($filter_params["is_gluten_free"])) {
-            $query .= " AND is_gluten_free LIKE CONCAT (:is_gluten_free, '%')";
-            $params_values["is_gluten_free"] = $filter_params["is_gluten_free"];
-        }
-        //*is_vegetarian
-        if (isset($filter_params["is_vegetarian"])) {
-            $query .= " AND is_vegetarian LIKE CONCAT (:is_vegetarian, '%')";
-            $params_values["is_vegetarian"] = $filter_params["is_vegetarian"];
-        }
-        //*protein_goal
-        if (isset($filter_params["protein_goal"])) {
-            $query .= " AND protein_goal LIKE CONCAT (:protein_goal, '%')";
-            $params_values["protein_goal"] = $filter_params["protein_goal"];
-        }
-        //*carbohydrate_goal
-        if (isset($filter_params["carbohydrate_goal"])) {
-            $query .= " AND carbohydrate_goal LIKE CONCAT (:carbohydrate_goal, '%')";
-            $params_values["carbohydrate_goal"] = $filter_params["carbohydrate_goal"];
-        }
-        //*calorie_goal
-        if (isset($filter_params["calorie_goal"])) {
-            $query .= " AND calorie_goal LIKE CONCAT (:calorie_goal, '%')";
-            $params_values["calorie_goal"] = $filter_params["calorie_goal"];
-        }
-        //*name
-        if (isset($filter_params["diet_name"])) {
-            $query .= " AND diet_name LIKE CONCAT (:diet_name, '%')";
-            $params_values["diet_name"] = $filter_params["diet_name"];
-        }
-
+        $allowed_fields = ['is_gluten_free', 'is_vegetarian', 'protein_goal', 'carbohydrate_goal', 'calorie_goal', 'diet_name'];
+        $filter_result = $this->buildFilterConditions($filter_params, $allowed_fields);
+        $sql .= $filter_result['sql_conditions'];
+        $named_params = $filter_result['named_params'];
         //sorting
-        $query .= " ORDER BY $sortBy $order";
+        $sql .= " ORDER BY $sortBy $order";
         //*paginate the response
         $diets_info = $this->paginate(
-            $query,
-            $params_values
+            $sql,
+            $named_params
         );
         //*Step 3: should return an array
         return $diets_info;
     }
 
     // get diets by id
-
+    /**
+     * Retrieves a singleton resource of exercise by its ID
+     *
+     * @param string $diet_id The ID of the diet
+     * @return mixed The diet data
+     */
     public function getDietsId(int $diet_id): mixed
     {
         //*sql query

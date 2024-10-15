@@ -6,63 +6,51 @@ use App\Core\PDOService;
 
 class RecommendationsModel extends BaseModel
 {
+    /**
+     * RecommendationsModel constructor.
+     *
+     * @param PDOService $dbo The database service object.
+     */
     public function __construct(PDOService $pdo)
     {
         parent::__construct($pdo);
     }
+    /**
+     * Retrieves all workout recommendations.
+     *
+     * @param array $filter_params An array of filtering options such as by IDs,duration, etc..
+     * @return mixed An array of filtered or unfiltered workout recommendations.
+     */
     public function getRecommendations(array $filter_params = []): mixed
     {
         $named_params = [];
         //* Sorting:
         $sortBy = isset($filter_params['sort_by']) ? $filter_params['sort_by'] : 'recommendation_id';
         $order = isset($filter_params['order']) ? $filter_params['order'] : 'asc';
-        // Validating te sorting params
+        // Validating the sorting params
         $validSortingParameters = ['recommendation_id', 'duration_minutes', 'sets'];
         $sortBy = in_array($sortBy, $validSortingParameters) ? $sortBy : 'recommendation_id';
         $order = ($order === 'desc') ? 'desc' : 'asc';
+        //query statement
         $sql = "SELECT * FROM recommendations WHERE 1";
-
-        if (isset($filter_params['diet_id'])) {
-            $sql .= " AND diet_id LIKE  CONCAT(:diet_id,'%')";
-            $named_params['diet_id'] = $filter_params['diet_id'];
-        }
-
-        if (isset($filter_params['exercise_id'])) {
-            $sql .= " AND exercise_id LIKE  CONCAT(:exercise_id,'%')";
-            $named_params['exercise_id'] = $filter_params['exercise_id'];
-        }
-
-        if (isset($filter_params['duration_minutes'])) {
-            $sql .= " AND duration_minutes LIKE  CONCAT(:duration_minutes,'%')";
-            $named_params['duration_minutes'] = $filter_params['duration_minutes'];
-        }
-
-        if (isset($filter_params['reps'])) {
-            $sql .= " AND reps LIKE  CONCAT(:reps,'%')";
-            $named_params['reps'] = $filter_params['reps'];
-        }
-
-        if (isset($filter_params['sets'])) {
-            $sql .= " AND sets LIKE  CONCAT(:sets,'%')";
-            $named_params['sets'] = $filter_params['sets'];
-        }
-
-        if (isset($filter_params['distance'])) {
-            $sql .= " AND distance LIKE  CONCAT(:distance,'%')";
-            $named_params['distance'] = $filter_params['distance'];
-        }
-
-        if (isset($filter_params['additional_notes'])) {
-            $sql .= " AND additional_notes LIKE  CONCAT(:additional_notes,'%')";
-            $named_params['additional_notes'] = $filter_params['additional_notes'];
-        }
-
+        //*Filtering:
+        $allowed_fields = ['diet_id', 'exercise_id', 'duration_minutes', 'reps', 'sets', 'distance', 'additional_notes'];
+        $filter_result = $this->buildFilterConditions($filter_params, $allowed_fields);
+        $sql .= $filter_result['sql_conditions'];
+        $named_params = $filter_result['named_params'];
+        //add the sorting statement at the end of the query
         $sql .= " ORDER BY $sortBy $order";
         $recommendations = $this->paginate($sql, $named_params);
 
         return $recommendations;
     }
 
+    /**
+     * Retrieves workout recommendations from a specific workout id.
+     *
+     * @param string $recommendation_id The ID of the recommendation you want to get information from.
+     * @return mixed data about the recommendation id.
+     */
     public function getRecommendationsId(string $recommendation_id): mixed
     {
 
