@@ -18,6 +18,7 @@ class DietsController extends BaseController
         parent::__construct();
     }
 
+    //*GET /diets
     public function handleGetDiets(Request $request, Response $response)
     {
         //*Retrieve filtering
@@ -37,26 +38,26 @@ class DietsController extends BaseController
     }
 
     //handle get diets by id (expecting an arg from request)
+    //*GET /diets/{diet_id}
     public function handleGetDietsId(Request $request, Response $response, array $args)
     {
         //*Step 1: Validate that the user has sent the right argument
         $diet_id = $args["diet_id"];
         //*Step 2: Error handling
+        //validate the id
         if (!$this->isIdValid(['id' => $diet_id])) {
             throw new HttpInvalidInputsException($request, "Invalid diet ID provided.");
         }
         //*Step 3: Call the db from the model
         $diets = $this->dietsModel->getDietsId($args["diet_id"]);
-        //*Step 4: Encode in json & put it in the response
-        //$json_info = json_encode($diets);
-        //*Step 5: Send the response with the Header & status code
-        //$response = $response->getBody()->write($json_info);
+        //validate if the id is not out of bounds
         if ($diets == false) {
             throw new HttpInvalidInputsException(
                 $request,
                 "The ID provided does not exist in the database."
             );
         }
+        //*Step 5: Send the response with the Header & status code
         return $this->renderJson(
             $response,
             $diets

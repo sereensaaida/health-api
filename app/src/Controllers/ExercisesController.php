@@ -19,6 +19,8 @@ class ExercisesController extends BaseController
     }
 
     //*Step 2) method to handle the data
+
+    //*GET /exercises
     public function handleGetExercises(Request $request, Response $response): Response
     {
         //get the query parameters
@@ -37,17 +39,17 @@ class ExercisesController extends BaseController
         return $this->renderJson($response, $exercisesData);
     }
     //* Handle fetch by id
+    //*GET /exercises/{exercise_id}
     public function handleGetExercisesById(Request $request, Response $response, array $args): Response
     {
-        // fetch the query params
-        $filter_params = $request->getQueryParams();
         $exercise_id = $args["exercise_id"];
+        //validate the id
         if (!$this->isIdValid(['id' => $exercise_id])) {
             throw new HttpInvalidInputsException($request, "Invalid exercise ID provided.");
         }
         //fetch the data from the model
         $data = $this->exercisesModel->getExercisesById($args["exercise_id"]);
-        //json encode
+        //validate if the id is not out of bounds
         if ($data == false) {
             throw new HttpInvalidInputsException(
                 $request,
@@ -57,18 +59,17 @@ class ExercisesController extends BaseController
         return $this->renderJson($response, $data);
     }
 
+    //*GET /exercise/{exercise_id}/recommendations
     public function handleGetRecommendationsByExercise(Request $request, Response $response, array $args): Response
     {
-        //get the filter params
-
-        //validate the filter params
         $exercise_id = $args["exercise_id"];
+        //validate the id
         if (!$this->isIdValid(['id' => $exercise_id])) {
             throw new HttpInvalidInputsException($request, "Invalid exercise ID provided.");
         }
         //get data
         $data = $this->exercisesModel->getRecommendationsByExercise_id($args['exercise_id']);
-        //var_dump($data["exercise"]);
+        //validate if the id is not out of bounds
         if ($data["exercise"] == false) {
             throw new HttpInvalidInputsException(
                 $request,

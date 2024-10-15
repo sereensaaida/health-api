@@ -12,9 +12,10 @@ use App\Helpers\PaginationHelper;
 class RecommendationsController extends BaseController
 {
     public function __construct(private RecommendationsModel $recommendations_model) {}
+
+    //*GET /recommendations
     public function handleGetRecommendations(Request $request, Response $response): Response
     {
-
         $filter_params = $request->getQueryParams();
         if (isset($filter_params["current_page"])) {
             if ($this->isPagingParamsValid($filter_params)) {
@@ -28,9 +29,11 @@ class RecommendationsController extends BaseController
         return $this->renderJson($response, $recommendations);
     }
 
+    //*GET /recommendations/{recommendation_id}
     public function handleGetRecommendationId(Request $request, Response $response, array $uri_args): Response
     {
         $recommendation_id = $uri_args["recommendation_id"];
+        //validate the id
         if (!$this->isIdValid(['id' => $recommendation_id])) {
             throw new HttpInvalidInputsException($request, "Invalid recommendation ID provided.");
         }
@@ -44,7 +47,4 @@ class RecommendationsController extends BaseController
         }
         return $this->renderJson($response, $recommendation);
     }
-
-    //handle get recommendation by exercice id
-
 }
