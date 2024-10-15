@@ -62,15 +62,6 @@ class GuidelinesController extends BaseController
             throw new HttpInvalidInputsException($request, "Invalid guideline ID provided.");
         }
 
-        $guideline_id_pattern = '/^([0-9]*)$/';
-        //* Verifying if pattern matches, if not, throw exception
-        if (preg_match($guideline_id_pattern, $guideline_id) === 0) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "invalid guideline id provided"
-            );
-        }
-
         //* Fetch guideline record with proper model method, return JSON response
         $guideline = $this->guidelines_model->getGuidelinesId($guideline_id);
         if ($guideline === false) {
@@ -80,29 +71,5 @@ class GuidelinesController extends BaseController
             );
         }
         return $this->renderJson($response, $guideline);
-    }
-
-    //*(Build 2: Create guideline instance)
-    public function handleCreateGuideline(Request $request, Response $response): Response
-    {
-        //* 1) Handle Client Request (extract and validate?)
-        $new_guideline = $request->getParsedBody();
-        //dd($new_guideline);
-
-        //Passing Service to result var and to appropriate method
-        $result = $this->guidelines_service->createCountry($new_guideline);
-        $payload = [];
-        $status_code = 201;
-        if ($result->isSuccess()) {
-            $payload["success"] = true;
-        } else {
-            $status_code = 400;
-            $payload["success"] = false;
-        }
-        //2) Send to service
-        $payload["message"] = $result->getMessage();
-        $payload["errors"] = $result->getData();
-        $payload["status"] = $status_code;
-        return $this->renderJson($response, $payload, $status_code);
     }
 }
