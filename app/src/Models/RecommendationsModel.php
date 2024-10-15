@@ -53,12 +53,14 @@ class RecommendationsModel extends BaseModel
      */
     public function getRecommendationsId(string $recommendation_id): mixed
     {
-
+        //sql statement
         $query = "SELECT * FROM recommendations WHERE recommendation_id = :recommendation_id";
+        //fetch single as we are expecting only one row
         $recommendation_info = $this->fetchSingle(
             $query,
             ["recommendation_id" => $recommendation_id]
         );
+        //return the object to the controller
         return $recommendation_info;
     }
 }
