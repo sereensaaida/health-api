@@ -146,11 +146,24 @@ class CountriesController extends BaseController
     }
 
     //*(Build 2: Create Country instance)
-    public function handleCreateCountry(Request $request, Response $response): Response
+    public function handleCreateCountry(Request $request, Response $response, array $uri_args): Response
     {
         //* 1) Handle Client Request (extract and validate?)
         $new_country = $request->getParsedBody();
         //dd($new_country);
+        $createParams = array(
+            ['country_id' => $uri_args["country_id"]],
+            ['name' => $uri_args["name"]],
+            ['population' => $uri_args["population"]],
+            ['vegetarian_percentage' => $uri_args["vegetarian_percentage"]],
+            ['daily_calorie_intake' => $uri_args["daily_calorie_intake"]],
+            ['consumed_dishes' => $uri_args["consumed_dishes"]],
+            ['food_culture' => $uri_args["food_culture"]],
+            ['nutritional_deficiency' => $uri_args["nutritional_deficiency"]]
+        );
+        if (!$this->isIdValid($createParams)) {
+            throw new HttpInvalidInputsException($request, "Invalid create parameters provided");
+        }
 
         //Passing Service to result var and to appropriate method
         $result = $this->countries_service->createCountry($new_country);

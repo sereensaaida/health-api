@@ -71,9 +71,6 @@ abstract class BaseController
     {
         $rules = array(
             'exercise_id' => [
-                'required',
-                'integer',
-                ['min', 1]
             ],
             'name' => [
                 'required',
@@ -102,7 +99,46 @@ abstract class BaseController
                 'int',
                 ['min', 1],
                 ['max', 4]
-            ]
+            ],
+        )
+        }
+
+    protected static function isCountryDataValid($data): bool
+    {
+        $rules = array(
+            'country_id' => [
+                'required',
+                'integer',
+                ['min', 1]
+
+            ],
+            'population' => [
+                'required',
+                'integer'
+            ],
+            'vegetarian_percentage' => [
+                'required',
+                'integer'
+            ],
+            'daily_calorie_intake' => [
+                'required',
+                'integer'
+            ],
+            'consumed_dishes' => [
+                'required',
+                'string'
+            ],
+            'food_culture' => [
+                'required',
+                'string'
+            ],
+            'nutritional_deficiency' => [
+                'required',
+                'string',
+                ['min', 1]
+            ],
+
+
         );
 
         $validator = new Validator($data, [], 'en');
