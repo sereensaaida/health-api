@@ -19,8 +19,21 @@ class CountriesService
     public function createCountry(array $new_country): Result
     {
 
-        //Step 3) Call create country method
-        // $this->countries_model->insertCountry($new_country);
+        $this->countries_model->insertCountry($new_country);
+        return Result::success("RANDOM MESSAGE");
+    }
+
+    public function updateCountry(array $new_country): Result
+    {
+
+        $this->countries_model->updateCountry($new_country);
+        return Result::success("RANDOM MESSAGE");
+    }
+
+    public function deleteCountry($country_id): Result
+    {
+
+        $this->countries_model->deleteCountry($country_id);
         return Result::success("RANDOM MESSAGE");
     }
 }

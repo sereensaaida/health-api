@@ -66,4 +66,51 @@ abstract class BaseController
         $validator->mapFieldsRules($rules);
         return $validator->validate();
     }
+
+
+    protected static function isCountryDataValid($data): bool
+    {
+        $rules = array(
+            'country_id' => [
+                'required',
+                'integer',
+                ['min', 1]
+            ],
+            'name' => [
+                'required',
+                'string',
+            ],
+            'population' => [
+                'required',
+                'integer'
+            ],
+            'vegetarian_percentage' => [
+                'required',
+                'integer'
+            ],
+            'daily_calorie_intake' => [
+                'required',
+                'integer'
+            ],
+            'consumed_dishes' => [
+                'required',
+                'string'
+            ],
+            'food_culture' => [
+                'required',
+                'string'
+            ],
+            'nutritional_deficiency' => [
+                'required',
+                'string',
+                ['min', 1]
+            ],
+
+
+        );
+
+        $validator = new Validator($data, [], 'en');
+        $validator->mapFieldsRules($rules);
+        return $validator->validate();
+    }
 }
