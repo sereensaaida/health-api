@@ -106,4 +106,18 @@ class CountriesModel extends BaseModel
 
         return $last_id;
     }
+
+    //*Update Country implementation
+    public function updateCountry(array $country)
+    {
+
+        $this->update("countries",["col1" => $col1],['country_id' => $country_id]);
+
+    }
+
+    //*Delete Country implementation
+    public function deleteCountry($country_id)
+    {
+        $this->delete("countries", ['country_id' => $country_id]);
+    }
 }

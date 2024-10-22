@@ -67,4 +67,82 @@ abstract class BaseController
         return $validator->validate();
     }
 
+    protected static function isExerciseValid($data): bool
+    {
+        $rules = array(
+            'exercise_id' => [
+            ],
+            'name' => [
+                'required',
+                'string',
+                // ['min', 1] //check if i can have minimum character
+            ],
+            'exercise_type' => [
+                'string',
+                // ['min', 1]
+                // ['max',1]
+            ],
+            'calories' => [
+                'float',
+                // ['min', 1]
+            ],
+            'equipment' => [
+                'string',
+                // ['min', 1]
+            ],
+            'difficulty' => [
+                'int',
+                ['min', 1],
+                ['max', 4]
+            ],
+            'muscle' => [
+                'int',
+                ['min', 1],
+                ['max', 4]
+            ],
+        )
+        }
+
+    protected static function isCountryDataValid($data): bool
+    {
+        $rules = array(
+            'country_id' => [
+                'required',
+                'integer',
+                ['min', 1]
+
+            ],
+            'population' => [
+                'required',
+                'integer'
+            ],
+            'vegetarian_percentage' => [
+                'required',
+                'integer'
+            ],
+            'daily_calorie_intake' => [
+                'required',
+                'integer'
+            ],
+            'consumed_dishes' => [
+                'required',
+                'string'
+            ],
+            'food_culture' => [
+                'required',
+                'string'
+            ],
+            'nutritional_deficiency' => [
+                'required',
+                'string',
+                ['min', 1]
+            ],
+
+
+        );
+
+        $validator = new Validator($data, [], 'en');
+        $validator->mapFieldsRules($rules);
+        return $validator->validate();
+    }
 }

@@ -18,7 +18,12 @@ class CountriesController extends BaseController
 {
 
     //*Creating Construct Method
-    
+    /**
+     * Countries constructor.
+     *
+     * @param CountriesModel $countries_model Reference to the countries model
+     * @param CountriesService $countries_service reference to the countries service
+     */
     public function __construct(private CountriesModel $countries_model, private CountriesService $countries_service)
     {
         parent::__construct();
@@ -27,6 +32,13 @@ class CountriesController extends BaseController
     }
 
     //* Get /countries -> countries collection handler
+    /**
+     * Handler for getting the countries collection
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetCountries(Request $request, Response $response): Response
     {
         //*Pagination  and filter implementation
@@ -45,6 +57,14 @@ class CountriesController extends BaseController
     }
 
     //* Get /countries/{country_id}
+    /**
+     * Handler for getting the country collection by id
+     *
+     * @param Request $request The user request
+     * @param array $uri_args Arguments representing id entered by user
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetCountryId(Request $request, Response $response, array $uri_args): Response
     {
 
@@ -81,6 +101,13 @@ class CountriesController extends BaseController
     }
 
     //* Subcollection implementation
+    /**
+     * Handler for getting the countries sub-collection of guidelines
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetCountryGuidelines(Request $request, Response $response,  array $uri_args): Response
     {
         //* Checking if country ID is present, if not throw an error
@@ -119,11 +146,24 @@ class CountriesController extends BaseController
     }
 
     //*(Build 2: Create Country instance)
-    public function handleCreateCountry(Request $request, Response $response): Response
+    public function handleCreateCountry(Request $request, Response $response, array $uri_args): Response
     {
         //* 1) Handle Client Request (extract and validate?)
         $new_country = $request->getParsedBody();
         //dd($new_country);
+        $createParams = array(
+            ['country_id' => $uri_args["country_id"]],
+            ['name' => $uri_args["name"]],
+            ['population' => $uri_args["population"]],
+            ['vegetarian_percentage' => $uri_args["vegetarian_percentage"]],
+            ['daily_calorie_intake' => $uri_args["daily_calorie_intake"]],
+            ['consumed_dishes' => $uri_args["consumed_dishes"]],
+            ['food_culture' => $uri_args["food_culture"]],
+            ['nutritional_deficiency' => $uri_args["nutritional_deficiency"]]
+        );
+        if (!$this->isIdValid($createParams)) {
+            throw new HttpInvalidInputsException($request, "Invalid create parameters provided");
+        }
 
         //Passing Service to result var and to appropriate method
         $result = $this->countries_service->createCountry($new_country);
