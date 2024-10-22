@@ -97,8 +97,6 @@ class FactsController extends BaseController
             );
         }
 
-
-
         return $this->renderJson(
             $response,
             $fact

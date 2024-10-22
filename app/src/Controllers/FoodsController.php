@@ -167,6 +167,13 @@ class FoodsController extends BaseController
         //dd($new_food);
 
         //* Step 2) Pass the data that is received to the service
+        if (!$this->isFoodValid($new_food)) {
+            throw new HttpInvalidInputsException(
+                $request,
+                "Invalid parameters inputted. Please try again."
+            );
+        }
+
         $result = $this->food_service->createFood($new_food);
 
         $payload = [];
@@ -176,8 +183,9 @@ class FoodsController extends BaseController
             $payload["success"] = true;
         } else {
             $status_code = 400;
-            $payload['success'] = false;
+            $payload['error'] = false;
         }
+
         $payload["message"] = $result->getMessage();
         $payload["errors"] = $result->getData();
         $payload["status"] = $status_code;
@@ -185,3 +193,6 @@ class FoodsController extends BaseController
         return $this->renderJson($response, $payload, $status_code);
     }
 }
+
+//? Notes
+// For the POST the input has to be inserted in the request body in JSON format.

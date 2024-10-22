@@ -66,4 +66,5 @@ abstract class BaseController
         $validator->mapFieldsRules($rules);
         return $validator->validate();
     }
+
 }
