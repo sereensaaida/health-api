@@ -43,6 +43,8 @@ return static function (Slim\App $app): void {
     $app->get('/foods/{food_id}/facts', [FoodsController::class, 'handleGetFoodFacts']);
     // POST
     $app->post('/foods', [FoodsController::class, 'handleCreateFood']);
+    $app->put('/foods', [FoodsController::class, 'handleUpdateFood']);
+    $app->delete('/foods', [FoodsController::Class, 'handleDeleteFood']);
 
     //* FACTS ROUTES
     // GET

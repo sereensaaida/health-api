@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\FoodsModel;
+use App\Validation\Validator;
 use App\Core\Result;
 
 class FoodsService
@@ -12,32 +13,21 @@ class FoodsService
         $this->food_model = $food_model;
     }
 
-    public function createFood(array $new_food) : Result
+    public function createFood(array $new_food): Result
     {
-        //* Step 1) Using Validtron, validate the data
-            // If its valid, INSERT into the database
-            // If its not valid, send an error message
-
-        //* Step 2) Insert into the database
-        return Result::success("RANDOM");
-    }
-
-    protected static function isFoodValid($data): bool
-    {
+        //* Step 1) Using Valitron, validate the data
         $rules = array(
-            'id' => [
-                'required',
+            'food_id' => [
                 'integer',
                 ['min', 1]
             ],
             'name' => [
-                'required',
                 'alpha',
                 ['min', 1],
                 ['max', 100]
             ],
             'category' => [
-                'alpha ',
+                'alpha',
                 ['min', 1],
                 ['max', 50]
             ],
@@ -46,13 +36,100 @@ class FoodsService
                 ['min', 1]
             ],
             'serving_size' => [
-                'float',
+                'integer',
             ],
             'content' => [
-                'float',
+                'integer',
             ],
             'avg_price' => [
-                'decimal',
+                'integer',
+            ],
+            'is_vegan' => [
+                'integer',
+                ['min', 1],
+                ['max', 1]
+            ],
+        );
+
+        //* Step 2) Insert into the database
+        $validator = new Validator($new_food, [], 'en');
+
+        // Fix this:
+        //$validator->mapFieldsRules($rules);
+
+        if ($validator->validate()) {
+            $this->food_model->insertFood($new_food);
+            return Result::success("Food has been inserted!");
+        } else {
+            return Result::fail("Data not valid.");
+        }
+    }
+
+    public function updateFood(array $food_info): Result
+    {
+        //* Step 2) Insert into the database
+        $validator = new Validator($food_info, [], 'en');
+
+        // Fix this:
+        //$validator->mapFieldsRules($rules);
+
+        if ($validator->validate()) {
+            $this->food_model->updateFood($food_info);
+            return Result::success("Food has been updated.");
+        } else {
+            return Result::fail("Data not valid.");
+        }
+    }
+
+    public function deleteFood(array $food_info): Result
+    {
+
+
+        //* Step 2) Insert into the database
+        $validator = new Validator($food_info, [], 'en');
+
+        // Fix this:
+        //$validator->mapFieldsRules($rules);
+
+        if ($validator->validate()) {
+            $this->food_model->deleteFood($food_info);
+            return Result::success("Food has been deleted.");
+        } else {
+            return Result::fail("Data not valid.");
+        }
+    }
+
+
+    public function isFoodValid($data): bool
+    {
+        $rules = array(
+            'id' => [
+                'required',
+                'integer',
+                ['min', 1]
+            ],
+            'name' => [
+                'alpha',
+                ['min', 1],
+                ['max', 100]
+            ],
+            'category' => [
+                'alpha',
+                ['min', 1],
+                ['max', 50]
+            ],
+            'calories' => [
+                'integer',
+                ['min', 1]
+            ],
+            'serving_size' => [
+                'integer',
+            ],
+            'content' => [
+                'integer',
+            ],
+            'avg_price' => [
+                'integer',
             ],
             'is_vegan' => [
                 'integer',
@@ -65,5 +142,4 @@ class FoodsService
         $validator->mapFieldsRules($rules);
         return $validator->validate();
     }
-
 }

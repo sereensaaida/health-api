@@ -164,17 +164,63 @@ class FoodsController extends BaseController
     {
         //* Step 1) Retrieve data included in the POST request body
         $new_food = $request->getParsedBody();
-        //dd($new_food);
+        //dd($new_food[0]);
 
         //* Step 2) Pass the data that is received to the service
-        if (!$this->isFoodValid($new_food)) {
-            throw new HttpInvalidInputsException(
-                $request,
-                "Invalid parameters inputted. Please try again."
-            );
+        // if (!$this->food_service->isFoodValid($new_food)) {
+        //     throw new HttpInvalidInputsException(
+        //         $request,
+        //         "Invalid parameters inputted. Please try again."
+        //     );
+        // }
+
+        $result = $this->food_service->createFood($new_food[0]);
+
+        $payload = [];
+        $status_code = 201;
+
+        if ($result->isSuccess()) {
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload['error'] = false;
         }
 
-        $result = $this->food_service->createFood($new_food);
+        $payload["message"] = $result->getMessage();
+        $payload["errors"] = $result->getData();
+        $payload["status"] = $status_code;
+
+        return $this->renderJson($response, $payload, $status_code);
+    }
+
+    public function handleUpdateFood(Request $request, Response $response): Response
+    {
+        $new_food = $request->getParsedBody();
+
+        $result = $this->food_service->updateFood($new_food[0]);
+
+        $payload = [];
+        $status_code = 201;
+
+        if ($result->isSuccess()) {
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload['error'] = false;
+        }
+
+        $payload["message"] = $result->getMessage();
+        $payload["errors"] = $result->getData();
+        $payload["status"] = $status_code;
+
+        return $this->renderJson($response, $payload, $status_code);
+    }
+
+    public function handleDeleteFood(Request $request, Response $response): Response
+    {
+        $new_food = $request->getParsedBody();
+
+        $result = $this->food_service->deleteFood($new_food[0]);
 
         $payload = [];
         $status_code = 201;

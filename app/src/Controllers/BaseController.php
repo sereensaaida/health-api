@@ -70,8 +70,7 @@ abstract class BaseController
     protected static function isExerciseValid($data): bool
     {
         $rules = array(
-            'exercise_id' => [
-            ],
+            'exercise_id' => [],
             'name' => [
                 'required',
                 'string',
@@ -100,8 +99,8 @@ abstract class BaseController
                 ['min', 1],
                 ['max', 4]
             ],
-        )
-        }
+        );
+    }
 
     protected static function isCountryDataValid($data): bool
     {

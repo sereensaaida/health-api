@@ -146,4 +146,19 @@ class FoodsModel extends BaseModel
 
         return $last_id;
     }
+
+    public function updateFood(array $food_info): void
+    {
+        // Storing the food id because we cant keep it in the array when we are updating the food since it will interfere
+        $food_id = $food_info["food_id"];
+
+        unset($food_info["food_id"]);
+
+        $this->update("foods", $food_info, ["food_id" => $food_id]);
+    }
+
+    public function deleteFood(array $food_info): void
+    {
+        $this->delete("foods", $food_info, 1);
+    }
 }
