@@ -166,14 +166,6 @@ class FoodsController extends BaseController
         $new_food = $request->getParsedBody();
         //dd($new_food[0]);
 
-        //* Step 2) Pass the data that is received to the service
-        // if (!$this->food_service->isFoodValid($new_food)) {
-        //     throw new HttpInvalidInputsException(
-        //         $request,
-        //         "Invalid parameters inputted. Please try again."
-        //     );
-        // }
-
         $result = $this->food_service->createFood($new_food[0]);
 
         $payload = [];
@@ -193,9 +185,26 @@ class FoodsController extends BaseController
         return $this->renderJson($response, $payload, $status_code);
     }
 
+    //? PUT /foods
+    /**
+     * Handler for updating a food
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleUpdateFood(Request $request, Response $response): Response
     {
         $new_food = $request->getParsedBody();
+
+        // Checking if the food id is in the DB
+        $food = $this->foods_model->getFoodId($new_food[0]["food_id"]);
+        if ($food === false) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching food found"
+            );
+        }
 
         $result = $this->food_service->updateFood($new_food[0]);
 
@@ -216,9 +225,26 @@ class FoodsController extends BaseController
         return $this->renderJson($response, $payload, $status_code);
     }
 
+    //? DELETE /foods
+    /**
+     * Handler for deleting a food
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
     public function handleDeleteFood(Request $request, Response $response): Response
     {
         $new_food = $request->getParsedBody();
+
+        // CHecking if the food id is in the DB
+        $food = $this->foods_model->getFoodId($new_food[0]["food_id"]);
+        if ($food === false) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching food found"
+            );
+        }
 
         $result = $this->food_service->deleteFood($new_food[0]);
 
