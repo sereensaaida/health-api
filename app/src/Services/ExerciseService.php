@@ -13,67 +13,73 @@ class ExerciseService
         $this->exercisesModel = $exercisesModel;
     }
     //return an instance of the result
-
-    //make sure it is the one from App core
-    public function createExercise(array $new_exercise): Result
+    public function isExerciseValid(array $new_exercise)
     {
-        //Validate the data of the new exercise collection using validront
+        $data = array(
+            "exercise_id" => $new_exercise["exercise_id"],
+            "name" => isset($new_exercise["name"]),
+            "exercise_type" => isset($new_exercise["exercise_type"]),
+            "calories_burned_per_min" => isset($new_exercise["calories_burned_per_min"]),
+            "equipment_needed" =>  isset($new_exercise["equipment_needed"]),
+            "difficulty_level" =>  isset($new_exercise["difficulty_level"]),
+            "muscles_targeted" =>  isset($new_exercise["muscles_targeted"]),
+        );
         $rules = array(
             'exercise_id' => [
-                'required',
                 'integer',
                 ['min', 1]
             ],
-            'name' => [
+            'name' => array(
                 'required',
-                // ['min', 1] //check if i can have minimum character
-            ],
-            'exercise_type' => [
-                'alpha',
-                // ['min', 1]
-                // ['max',1]
-            ],
-            'calories' => [
+                array('lengthMin', 1)
+            ), //check if i can have minimum character
+            'exercise_type' =>
+            array(
+                'required',
+                array('lengthMin', 4)
+            ),
+            'calories_burned_per_min' => [
                 'integer',
-                // ['min', 1]
+                ['min', 1]
             ],
-            'equipment' => [
-                'alpha',
-                // ['min', 1]
-            ],
-            'difficulty' => [
-                'integer',
-                ['min', 1],
-                ['max', 4]
-            ],
-            'muscle' => [
+            'equipment_needed' =>
+            array(
+                'required',
+                array('lengthMin', 1)
+            ),
+            'difficulty_level' => [
                 'integer',
                 ['min', 1],
                 ['max', 4]
-            ]
+            ],
+            'muscles_targeted' => array(
+                'required',
+                array('lengthMin', 1)
+            ),
         );
-
-        $validator = new Validator($new_exercise, [], 'en');
+        $validator = new Validator($data);
         $validator->mapFieldsRules($rules);
-        if ($validator->validate()) {
-            return Result::success("");
+
+        return $validator->validate();
+    }
+    //make sure it is the one from App core
+    public function createExercise(array $new_exercise): Result
+    {
+        if ($this->isExerciseValid($new_exercise)) {
+            $this->exercisesModel->insertExercise($new_exercise);
+            return Result::success("Exercise was successfully created");
         } else {
             return Result::fail("no");
         }
+    }
 
-
-        //if valid, insert it in the db.
-        //if not, add an error message related to the current item of the errors array
-
-        //insert into db
-        // $this->exercisesModel->insertExercise();
-        // return Result::fail(
-        //     "Random",
-        //     [
-        //         "Missing ID",
-        //         "AYE"
-        //     ]
-        // );
-        //return Result::success("");
+    public function updateExercise(array $update_exercise): Result
+    {
+        if ($this->isExerciseValid($update_exercise)) {
+            $this->exercisesModel->updateExercise($update_exercise);
+            return Result::success("Exercise was successfully updated");
+        } else {
+            return Result::fail("no", $update_exercise);
+        }
     }
 }

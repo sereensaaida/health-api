@@ -86,8 +86,31 @@ class ExercisesController extends BaseController
         //echo "aye";
         // 1) Retrieve data included in the request (post body)
         $new_exercise = $request->getParsedBody();
-        var_dump($new_exercise);
-        $result = $this->exerciseService->createExercise($new_exercise);
+
+        $result = $this->exerciseService->createExercise($new_exercise[0]);
+        $payload = [];
+        $status_code = 201;
+
+        if ($result->isSuccess()) {
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload["success"] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["errors"] = $result->getData();
+        $payload["status"] = $status_code;
+        //pass the received data to the service
+        return $this->renderJson($response, $payload, $status_code);
+    }
+
+    //*UPDATE exercises
+
+    public function handleUpdateExercises(Request $request, Response $response): Response
+    {
+        $update_exercise = $request->getParsedBody();
+        var_dump($update_exercise[0]);
+        $result = $this->exerciseService->updateExercise($update_exercise[0]);
         $payload = [];
         $status_code = 201;
 

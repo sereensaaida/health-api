@@ -36,6 +36,9 @@ return static function (Slim\App $app): void {
     //POST
     $app->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
 
+    //UPDATE
+    $app->put('/exercises', [ExercisesController::class, 'handleUpdateExercises']);
+
     //* FOODS ROUTES
     //GET
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);

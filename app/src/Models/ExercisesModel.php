@@ -103,4 +103,15 @@ class ExercisesModel extends BaseModel
         //missing the http response
         return $last_id;
     }
+
+    //*UPDATE
+    public function updateExercise(array $updated_exercise): mixed
+    {
+        $exercise_id = $updated_exercise["exercise_id"];
+        //var_dump($exercise_id);
+        unset($updated_exercise["exercise_id"]);
+        $last_id = $this->update("exercises", $updated_exercise, ["exercise_id" => $exercise_id]);
+
+        return $last_id;
+    }
 }
