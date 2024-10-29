@@ -147,6 +147,12 @@ class FoodsModel extends BaseModel
         return $last_id;
     }
 
+    /**
+     * Model method for updating a food
+     *
+     * @param array $food_info The food information inputted by the user
+     * @return void Updates the food.
+     */
     public function updateFood(array $food_info): void
     {
         // Storing the food id because we cant keep it in the array when we are updating the food since it will interfere
@@ -157,6 +163,12 @@ class FoodsModel extends BaseModel
         $this->update("foods", $food_info, ["food_id" => $food_id]);
     }
 
+    /**
+     * Model method for deleting a food
+     *
+     * @param array $food_info The food information inputted by the user
+     * @return mixed Deletes the food.
+     */
     public function deleteFood(array $food_info): void
     {
         $this->delete("foods", $food_info, 1);
