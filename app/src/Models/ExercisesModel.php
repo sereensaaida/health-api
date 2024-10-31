@@ -97,14 +97,26 @@ class ExercisesModel extends BaseModel
     }
 
     //*POST
+    /**
+     * Inserts a new Exercise item into the database.
+     *
+     * @param array $new_exercise An array containing the information for the new exercise item.
+     * @return mixed return a string or a bool.
+     */
     public function insertExercise(array $new_exercise): mixed
     {
         $last_id = $this->insert("exercises",  $new_exercise);
-        //missing the http response
+
         return $last_id;
     }
 
     //*UPDATE
+    /**
+     * Model method for updating an exercise
+     *
+     * @param array $updated_exercise The exercise information inputted by the user
+     * @return void Updates the exercise.
+     */
     public function updateExercise(array $updated_exercise): mixed
     {
         $exercise_id = $updated_exercise["exercise_id"];
@@ -113,5 +125,20 @@ class ExercisesModel extends BaseModel
         $last_id = $this->update("exercises", $updated_exercise, ["exercise_id" => $exercise_id]);
 
         return $last_id;
+    }
+
+    //*DELETE
+    /**
+     * Model method for deleting a food
+     *
+     * @param array $delete_id The exercise information inputted by the user
+     * @return mixed Deletes the exercise.
+     */
+    public function deleteExercise(array $delete_id)
+    {
+        $exercise_id = $delete_id["exercise_id"];
+        $deleted_id = $this->delete("exercises", ["exercise_id" => $exercise_id]);
+
+        return $deleted_id;
     }
 }

@@ -8,21 +8,32 @@ use App\Models\ExercisesModel;
 
 class ExerciseService
 {
+    /**
+     * Constructor for FoodsService class
+     *
+     * @param ExercisesModel $exercisesModel Instance of the ExerciseModel class
+     */
     public function __construct(private ExercisesModel $exercisesModel)
     {
         $this->exercisesModel = $exercisesModel;
     }
     //return an instance of the result
+    /**
+     * Function for validating data with Valitron
+     *
+     * @param array $new_exercise
+     * @return boolean returns a true or false
+     */
     public function isExerciseValid(array $new_exercise)
     {
         $data = array(
             "exercise_id" => $new_exercise["exercise_id"],
-            "name" => isset($new_exercise["name"]),
-            "exercise_type" => isset($new_exercise["exercise_type"]),
-            "calories_burned_per_min" => isset($new_exercise["calories_burned_per_min"]),
-            "equipment_needed" =>  isset($new_exercise["equipment_needed"]),
-            "difficulty_level" =>  isset($new_exercise["difficulty_level"]),
-            "muscles_targeted" =>  isset($new_exercise["muscles_targeted"]),
+            "name" => $new_exercise["name"],
+            "exercise_type" => $new_exercise["exercise_type"],
+            "calories_burned_per_min" => $new_exercise["calories_burned_per_min"],
+            "equipment_needed" =>  $new_exercise["equipment_needed"],
+            "difficulty_level" =>  $new_exercise["difficulty_level"],
+            "muscles_targeted" => $new_exercise["muscles_targeted"],
         );
         $rules = array(
             'exercise_id' => [
@@ -62,24 +73,66 @@ class ExerciseService
 
         return $validator->validate();
     }
-    //make sure it is the one from App core
+    /**
+     * Service for creating a new exercise
+     *
+     * @param array $new_exercise The array of exercise information from the request body
+     * @return Result Returning the result in JSON format
+     */
     public function createExercise(array $new_exercise): Result
     {
         if ($this->isExerciseValid($new_exercise)) {
             $this->exercisesModel->insertExercise($new_exercise);
             return Result::success("Exercise was successfully created");
         } else {
-            return Result::fail("no");
+            return Result::fail("The exercise was not created. Make sure that all the data is correct before trying again.");
         }
     }
-
+    /**
+     * Service for updating exercise
+     *
+     * @param array $update_exercise The array of exercise information from the request body
+     * @return Result Returning the result in JSON format
+     */
     public function updateExercise(array $update_exercise): Result
     {
         if ($this->isExerciseValid($update_exercise)) {
             $this->exercisesModel->updateExercise($update_exercise);
             return Result::success("Exercise was successfully updated");
         } else {
-            return Result::fail("no", $update_exercise);
+            return Result::fail("The exercise was not updated. Make sure that all the data is correct before trying again.", $update_exercise);
+        }
+    }
+
+    /**
+     * Service for deleting exercise
+     *
+     * @param array $food_info The array of exercise information from the request body
+     * @return Result Returning the result in JSON format
+     */
+    public function deleteExercise(array $exercise_id)
+    {
+        //validate the id
+        $data = array(
+            "exercise_id" => $exercise_id["exercise_id"],
+        );
+
+        $rules = array(
+            'exercise_id' => [
+                'integer',
+                ['min', 1]
+            ],
+        );
+
+        $validator = new Validator($data);
+        $validator->mapFieldsRules($rules);
+
+        if ($validator->validate()) {
+            //delete the exercise
+            $this->exercisesModel->deleteExercise($exercise_id);
+            return Result::success("The exercise was successfully deleted");
+        } else {
+            return Result::fail("The exercise could not be deleted");
         }
     }
 }

@@ -39,6 +39,9 @@ return static function (Slim\App $app): void {
     //UPDATE
     $app->put('/exercises', [ExercisesController::class, 'handleUpdateExercises']);
 
+    //DELETE
+    $app->delete('/exercises', [ExercisesController::class, 'deleteExercise']);
+
     //* FOODS ROUTES
     //GET
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
@@ -47,7 +50,7 @@ return static function (Slim\App $app): void {
     // POST
     $app->post('/foods', [FoodsController::class, 'handleCreateFood']);
     $app->put('/foods', [FoodsController::class, 'handleUpdateFood']);
-    $app->delete('/foods', [FoodsController::Class, 'handleDeleteFood']);
+    $app->delete('/foods', [FoodsController::class, 'handleDeleteFood']);
 
     //* FACTS ROUTES
     // GET
