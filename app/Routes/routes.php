@@ -32,13 +32,10 @@ return static function (Slim\App $app): void {
     $app->get('/exercises', [ExercisesController::class, 'handleGetExercises']);
     $app->get('/exercises/{exercise_id}', [ExercisesController::class, 'handleGetExercisesById']);
     $app->get('/exercises/{exercise_id}/recommendations', [ExercisesController::class, 'handleGetRecommendationsByExercise']);
-
     //POST
     $app->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
-
     //UPDATE
     $app->put('/exercises', [ExercisesController::class, 'handleUpdateExercises']);
-
     //DELETE
     $app->delete('/exercises', [ExercisesController::class, 'deleteExercise']);
 
@@ -49,7 +46,9 @@ return static function (Slim\App $app): void {
     $app->get('/foods/{food_id}/facts', [FoodsController::class, 'handleGetFoodFacts']);
     // POST
     $app->post('/foods', [FoodsController::class, 'handleCreateFood']);
+    //PUT
     $app->put('/foods', [FoodsController::class, 'handleUpdateFood']);
+    //DELETE
     $app->delete('/foods', [FoodsController::class, 'handleDeleteFood']);
 
     //* FACTS ROUTES
@@ -87,4 +86,8 @@ return static function (Slim\App $app): void {
     $app->get('/countries/{country_id}/guidelines', [CountriesController::class, 'handleGetCountryGuidelines']);
     //POST
     $app->post('/countries', [CountriesController::class, 'handleCreateCountry']);
+    //PUT
+    $app->put('/countries', [CountriesController::class, 'handleUpdateCountry']);
+    //DELETE
+    $app->delete('/countries', [CountriesController::class, 'handleDeleteCountry']);
 };

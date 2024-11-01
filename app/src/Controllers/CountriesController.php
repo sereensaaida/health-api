@@ -146,39 +146,96 @@ class CountriesController extends BaseController
     }
 
     //*(Build 2: Create Country instance)
-    public function handleCreateCountry(Request $request, Response $response, array $uri_args): Response
+    /**
+     * Handler for creating a country
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
+    public function handleCreateCountry(Request $request, Response $response): Response
     {
         //* 1) Handle Client Request (extract and validate?)
         $new_country = $request->getParsedBody();
-        //dd($new_country);
-        $createParams = array(
-            ['country_id' => $uri_args["country_id"]],
-            ['name' => $uri_args["name"]],
-            ['population' => $uri_args["population"]],
-            ['vegetarian_percentage' => $uri_args["vegetarian_percentage"]],
-            ['daily_calorie_intake' => $uri_args["daily_calorie_intake"]],
-            ['consumed_dishes' => $uri_args["consumed_dishes"]],
-            ['food_culture' => $uri_args["food_culture"]],
-            ['nutritional_deficiency' => $uri_args["nutritional_deficiency"]]
-        );
-        if (!$this->isIdValid($createParams)) {
-            throw new HttpInvalidInputsException($request, "Invalid create parameters provided");
-        }
-
-        //Passing Service to result var and to appropriate method
-        $result = $this->countries_service->createCountry($new_country);
+        //Call Country service create method
+        $result = $this->countries_service->createCountry($new_country[0]);
         $payload = [];
         $status_code = 201;
+
+        //* 2) checking for success and retrieving appropriate errors
         if ($result->isSuccess()) {
             $payload["success"] = true;
         } else {
             $status_code = 400;
             $payload["success"] = false;
         }
-        //2) Send to service
         $payload["message"] = $result->getMessage();
         $payload["errors"] = $result->getData();
         $payload["status"] = $status_code;
+        //* 3) pass the received data to the service
+        return $this->renderJson($response, $payload, $status_code);
+    }
+
+    //*Update Country Instance
+    /**
+     * Handler for updating a country
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
+    public function handleUpdateCountries(Request $request, Response $response): Response
+    {
+        //* 1) Handle Client Request (extract and validate?)
+        $update_country = $request->getParsedBody();
+        //Call Country service update method
+        $result = $this->countries_service->updateCountry($update_country[0]);
+        $payload = [];
+        $status_code = 201;
+
+
+        //* 2) checking for success and retrieving appropriate errors
+        if ($result->isSuccess()) {
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload["success"] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["errors"] = $result->getData();
+        $payload["status"] = $status_code;
+        //* 3) pass the received data to the service
+        return $this->renderJson($response, $payload, $status_code);
+    }
+
+    //*Delete Country Instance
+    /**
+     * Handler for deleting a country
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @return Response Returning the response in JSON format
+     */
+    public function handleDeleteCounties(Request $request, Response $response): Response
+    {
+        //* 1) Handle Client Request (extract and validate?)
+        $delete_country = $request->getParsedBody();
+        //Call create Country Service
+        $result = $this->countries_service->deleteCountry($delete_country[0]);
+        $payload = [];
+        $status_code = 201;
+
+        //* 2) checking for success and retrieving appropriate errors
+        if ($result->isSuccess()) {
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload["success"] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["errors"] = $result->getData();
+        $payload["status"] = $status_code;
+        //* 3) pass the received data to the service
         return $this->renderJson($response, $payload, $status_code);
     }
 }

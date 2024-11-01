@@ -97,27 +97,47 @@ class CountriesModel extends BaseModel
     }
 
     //*(Build 2): Create Country implementation
+    /**
+     * Inserts a new Country item into the database.
+     *
+     * @param array $country An array containing the information for the new Country item.
+     * @return mixed return a string or a bool.
+     */
     public function insertCountry(array $country): mixed
     {
-        $last_id = $this->insert(
-            "Countries",
-            $country
-        );
+        $last_id = $this->insert("countries",  $country);
 
         return $last_id;
     }
 
-    //*Update Country implementation
-    public function updateCountry(array $country)
+    //*UPDATE
+    /**
+     * Model method for updating a country
+     *
+     * @param array $country The country information inputted by the user
+     * @return void Updates the country.
+     */
+    public function updateCountry(array $country): mixed
     {
+        $country_id = $country["country_id"];
+        unset($country["country_id"]);
+        $last_id = $this->update("countries", $country, ["country_id" => $country_id]);
 
-        $this->update("countries",["col1" => $col1],['country_id' => $country_id]);
-
+        return $last_id;
     }
 
-    //*Delete Country implementation
-    public function deleteCountry($country_id)
+    //*DELETE
+    /**
+     * Model method for deleting a country
+     *
+     * @param array $delete_id the id associated with the country to be deleted
+     * @return mixed Deletes the country.
+     */
+    public function deleteCountry(array $delete_id)
     {
-        $this->delete("countries", ['country_id' => $country_id]);
+        $country_id = $delete_id["country_id"];
+        $deleted_id = $this->delete("countries", ["country_id" => $country_id]);
+
+        return $deleted_id;
     }
 }
