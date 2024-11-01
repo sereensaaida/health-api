@@ -9,13 +9,13 @@ use App\Models\ExercisesModel;
 class ExerciseService
 {
     /**
-     * Constructor for FoodsService class
+     * Constructor for ExerciseService class
      *
-     * @param ExercisesModel $exercisesModel Instance of the ExerciseModel class
+     * @param ExercisesModel $exercises_model Instance of the ExerciseModel class
      */
-    public function __construct(private ExercisesModel $exercisesModel)
+    public function __construct(private ExercisesModel $exercises_model)
     {
-        $this->exercisesModel = $exercisesModel;
+        $this->exercises_model = $exercises_model;
     }
     //return an instance of the result
     /**
@@ -82,7 +82,7 @@ class ExerciseService
     public function createExercise(array $new_exercise): Result
     {
         if ($this->isExerciseValid($new_exercise)) {
-            $this->exercisesModel->insertExercise($new_exercise);
+            $this->exercises_model->insertExercise($new_exercise);
             return Result::success("Exercise was successfully created");
         } else {
             return Result::fail("The exercise was not created. Make sure that all the data is correct before trying again.");
@@ -97,7 +97,7 @@ class ExerciseService
     public function updateExercise(array $update_exercise): Result
     {
         if ($this->isExerciseValid($update_exercise)) {
-            $this->exercisesModel->updateExercise($update_exercise);
+            $this->exercises_model->updateExercise($update_exercise);
             return Result::success("Exercise was successfully updated");
         } else {
             return Result::fail("The exercise was not updated. Make sure that all the data is correct before trying again.", $update_exercise);
@@ -129,7 +129,7 @@ class ExerciseService
 
         if ($validator->validate()) {
             //delete the exercise
-            $this->exercisesModel->deleteExercise($exercise_id);
+            $this->exercises_model->deleteExercise($exercise_id);
             return Result::success("The exercise was successfully deleted");
         } else {
             return Result::fail("The exercise could not be deleted");

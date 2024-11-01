@@ -111,6 +111,7 @@ class FoodsService
 
         $rules = array(
             'food_id' => [
+                'required',
                 'integer',
                 ['min', 1]
             ],
