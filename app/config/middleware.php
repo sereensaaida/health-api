@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Middleware\LogMiddleware;
 use Slim\App;
 use App\Middleware\ContentNegotiationMiddleware;
 
@@ -11,6 +12,8 @@ return function (App $app) {
     // Add your middleware here.
     $app->addBodyParsingMiddleware();
     $app->addRoutingMiddleware();
+    //add the access log middleware
+    $app->addMiddleware(new LogMiddleware());
 
     //!NOTE: the error handling middleware MUST be added last.
     $errorMiddleware = $app->addErrorMiddleware(true, true, true);

@@ -6,7 +6,10 @@ declare(strict_types=1);
 define('APP_BASE_PATH', dirname(__DIR__, 2));
 // Holds the name of the app's root directory.
 define('APP_ROOT_DIR', basename(dirname(__FILE__, 3)));
-
+//define the app log path
+define('APP_LOGS_PATH', APP_BASE_PATH . '/var/logs');
+//define the app error log
+define('APP_ERRORS_PATH', APP_BASE_PATH . '/var/logs');
 //* HTTP response status code.
 const HTTP_OK = 200;
 const HTTP_CREATED = 201;

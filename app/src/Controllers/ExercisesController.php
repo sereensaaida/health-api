@@ -197,4 +197,21 @@ class ExercisesController extends BaseController
 
         return $this->renderJson($response, $payload, $status_code);
     }
+
+    //handle log
+    public function handleLog(Request $request, Response $response): Response
+    {
+        //get the information from the server
+        $ip_address = $_SERVER["REMOTE_ADDR"];
+        //by default, the date and time is added to the message
+        $resource_uri = $_SERVER["REQUEST_URI"];
+        $request_method = $_SERVER["REQUEST_METHOD"];
+        $queryString = $request->getUri()->getQuery();
+        $log_message = "\nTest message" . "\nClient IP address: " . $ip_address . "\nResource uri: " . $resource_uri . "\nRequest method: " . $request_method . "\Query strings: " . $queryString;
+
+        //call the
+
+
+        return $response;
+    }
 }
