@@ -264,6 +264,12 @@ class FoodsController extends BaseController
 
         return $this->renderJson($response, $payload, $status_code);
     }
+
+    public function handleAccessLog(Request $request, Response $response): Response
+    {
+        
+    }
+
 }
 
 //? Notes
