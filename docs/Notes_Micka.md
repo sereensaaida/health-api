@@ -13,8 +13,11 @@
 
 6 - Each member must implement at least one value-returning computation functionality (Ex : BMI calculator) the data sent must be as a POST method encoded in JSON. You need to validate each input. You are not suppose to read data from an API. It should be the result of a computation.You need to return the result of that computation. Omni calculator
 
-
-
+# Configuring a logger
+- Create the logger with the channel name
+- Add the handlers
+- Use the handler
+- *Test the code in the callback, use it wherever you want afterwards* 
 
 
 

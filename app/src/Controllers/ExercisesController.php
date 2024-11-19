@@ -8,6 +8,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Fig\Http\Message\StatusCodeInterface;
 use App\Exceptions\HttpInvalidInputsException;
+use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpSpecializedException;
 
 class ExercisesController extends BaseController
 {
@@ -120,8 +122,8 @@ class ExercisesController extends BaseController
         //echo "aye";
         // 1) Retrieve data included in the request (post body)
         $new_exercise = $request->getParsedBody();
-
-        $result = $this->exerciseService->createExercise($new_exercise[0]);
+        var_dump($new_exercise);
+        $result = $this->exerciseService->createExercise($new_exercise); //there is an issue because i had [0] before
         $payload = [];
         $status_code = 201;
 
@@ -150,6 +152,13 @@ class ExercisesController extends BaseController
     {
         $update_exercise = $request->getParsedBody();
 
+        $exercise = $this->exercisesModel->getExercisesById($update_exercise["exercise_id"]);
+        if ($exercise === false) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching exercise found"
+            );
+        }
         var_dump($update_exercise[0]);
 
         $result = $this->exerciseService->updateExercise($update_exercise[0]);
@@ -182,7 +191,15 @@ class ExercisesController extends BaseController
         //get the array from the JSON body
         $delete_exercise = $request->getParsedBody();
 
-        $result = $this->exerciseService->deleteExercise($delete_exercise[0]);
+        $exercise = $this->exercisesModel->getExercisesById($delete_exercise["exercise_id"]);
+        if ($exercise === false) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching exercise found"
+            );
+        }
+
+        $result = $this->exerciseService->deleteExercise($delete_exercise); //there is an issue because i had [0] before
         $payload = [];
         $status_code = 201;
         if ($result->isSuccess()) {
@@ -196,5 +213,22 @@ class ExercisesController extends BaseController
         $payload["status"] = $status_code;
 
         return $this->renderJson($response, $payload, $status_code);
+    }
+
+    //handle log
+    public function handleLog(Request $request, Response $response): Response
+    {
+        //get the information from the server
+        $ip_address = $_SERVER["REMOTE_ADDR"];
+        //by default, the date and time is added to the message
+        $resource_uri = $_SERVER["REQUEST_URI"];
+        $request_method = $_SERVER["REQUEST_METHOD"];
+        $queryString = $request->getUri()->getQuery();
+        $log_message = "\nTest message" . "\nClient IP address: " . $ip_address . "\nResource uri: " . $resource_uri . "\nRequest method: " . $request_method . "\Query strings: " . $queryString;
+
+        //call the
+
+
+        return $response;
     }
 }
