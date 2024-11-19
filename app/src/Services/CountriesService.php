@@ -31,10 +31,10 @@ class CountriesService
     public function isCountryValid(array $new_country)
     {
         $data = array(
-            "country_id" => $new_country["country_id"],
+            // "country_id" => $new_country["country_id"],
             "name" => $new_country["name"],
             "population" => $new_country["population"],
-            "vegetarian" => $new_country["vegetarian"],
+            "vegetarian_percentage" => $new_country["vegetarian_percentage"],
             "daily_calorie_intake" =>  $new_country["daily_calorie_intake"],
             "consumed_dishes" =>  $new_country["consumed_dishes"],
             "food_culture" => $new_country["food_culture"],
@@ -52,9 +52,9 @@ class CountriesService
             'population' =>
             array(
                 'integer',
-                array('lengthMin', 4)
+                ['min', 1]
             ),
-            'vegetarian' => [
+            'vegetarian_percentage' => [
                 'required',
                 'integer',
                 ['min', 1]
@@ -63,7 +63,7 @@ class CountriesService
             array(
                 'required',
                 'integer',
-                array('lengthMin', 1)
+                ['min', 1]
             ),
             'consumed_dishes' => [
                 'required',
@@ -92,8 +92,10 @@ class CountriesService
      */
     public function createCountry(array $new_country): Result
     {
+        var_dump($new_country);
         if ($this->isCountryValid($new_country)) {
             $this->countries_model->insertCountry($new_country);
+
             return Result::success("country was successfully created");
         } else {
             return Result::fail("The country was not created. Make sure that all the data is correct before trying again.");
