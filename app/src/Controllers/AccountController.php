@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Firebase\JWT\JWT;
+use Firebase\JWT\JWT as JWT;
 use Firebase\JWT\Key;
 
 class AccountController extends BaseController
@@ -17,28 +17,28 @@ class AccountController extends BaseController
         // When the user is logged in:
         //! Generate JWT (token) containing private claims about the authenticated user.
         $issued_at = time();
-        $expires_at = $issued_at + 60;
+        $expires_at = $issued_at + 3600;
         $registered_claims = [
             'iss' => 'http://localhost/health-api/',
-            'aud' => 'http:///health-api.com',
+            'aud' => 'http://healthapi.com',
             'iat' => $issued_at,
             'exp' => $expires_at
         ];
 
-        $private_claims = [
+        $private_claims = array(
             'user_id' => 1,
             'email' => 'health@gmail.com',
             'username' => 'lasagna',
             'role' => 'admin'
-        ];
+        );
 
-        $payload = array_merge($registered_claims, $private_claims);
+        $payload = array_merge($private_claims, $registered_claims);
         $jwt = JWT::encode($payload, SECRET_KEY, 'HS256');
-        $jwt_data = [
+        $jwt_data = array(
             "status" => "Success",
             "message" => "Successfully logged in!",
             "token" => $jwt
-        ];
+        );
 
         return $this->renderJson($response, $jwt_data);
     }

@@ -11,7 +11,7 @@ return function (App $app) {
     //! Content negotiation middlewear class
     $app->addMiddleware(new ContentNegotiationMiddleware());
     // Authentication middleware
-    //$app->addMiddleware(new AuthMiddleware());
+    $app->addMiddleware(new AuthMiddleware());
     // Add your middleware here.
     $app->addBodyParsingMiddleware();
     $app->addRoutingMiddleware();
