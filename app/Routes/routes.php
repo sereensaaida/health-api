@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controllers\AboutController;
 use App\Controllers\DietsController;
 use App\Controllers\FoodsController;
+use App\Controllers\AccountController;
 use App\Controllers\CountriesController;
 use App\Controllers\ExercisesController;
 use App\Controllers\GuidelinesController;
@@ -90,4 +91,7 @@ return static function (Slim\App $app): void {
     $app->put('/countries', [CountriesController::class, 'handleUpdateCountry']);
     //DELETE
     $app->delete('/countries', [CountriesController::class, 'handleDeleteCountry']);
+
+    // Log in route
+    $app->post('/login', [AccountController::class, 'handleUserLogin']);
 };

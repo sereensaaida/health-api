@@ -38,3 +38,15 @@
   1. `StreamHandler`
   2. `FirePHPHandler`
 
+## AA
+### JWT (Json Web Token)
+`The user/client must be identified before generating their token (JWT)`
+Structure of JWT:
+1. Header
+2. Payload
+3. Signature
+- We have to use the RFC standardized terms like IAT, NBF, EXP ... etc
+  - [RFC7519](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1)
+
+Creating a token: [Php-jwt](https://github.com/firebase/php-jwt)
+

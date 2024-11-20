@@ -211,7 +211,6 @@ class ExercisesController extends BaseController
 
         //call the
 
-
         return $response;
     }
 }

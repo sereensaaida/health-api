@@ -267,10 +267,12 @@ class FoodsController extends BaseController
 
     public function handleAccessLog(Request $request, Response $response): Response
     {
-        
+
     }
 
 }
 
 //? Notes
 // For the POST the input has to be inserted in the request body in JSON format.
+
+// For AA

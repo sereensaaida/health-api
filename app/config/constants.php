@@ -10,6 +10,10 @@ define('APP_ROOT_DIR', basename(dirname(__FILE__, 3)));
 define('APP_LOGS_PATH', APP_BASE_PATH . '/var/logs');
 //define the app error log
 define('APP_ERRORS_PATH', APP_BASE_PATH . '/var/logs');
+
+// Constant to store the token key
+define('SECRET_KEY', 'Got a secret, can you keep it?');
+
 //* HTTP response status code.
 const HTTP_OK = 200;
 const HTTP_CREATED = 201;

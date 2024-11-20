@@ -36,54 +36,65 @@ class FoodsModel extends BaseModel
         $sortBy = isset($filter_params['sort_by']) ? $filter_params['sort_by'] : 'food_id';
         $order = isset($filter_params['order']) ? $filter_params['order'] : 'asc';
 
-        // Validating te sorting params
+        // Validating the sorting params
         $validSortingParameters = ['food_id', 'name', 'category', 'avg_price', 'calories'];
         $sortBy = in_array($sortBy, $validSortingParameters) ? $sortBy : 'food_id';
         $order = ($order === 'desc') ? 'desc' : 'asc';
 
-        $sql = "SELECT * FROM foods WHERE 1";
+        // Base query
+        $sql = "SELECT * FROM foods WHERE 1=1";
 
         //* FILTERING:
+
+        // General filtering (e.g., category, serving_size)
         $allowed_fields = ['category', 'serving_size'];
         $filter_result = $this->buildFilterConditions($filter_params, $allowed_fields);
         $sql .= $filter_result['sql_conditions'];
-        $named_params = $filter_result['named_params'];
-        // CALORIES
+        $named_params_values = array_merge($named_params_values, $filter_result['named_params']);
 
-        //TODO Check that minimum is smaller than maximum
-        // Minimum
-        //? i didnt apply the global filtering method as i dont really get why you're doing >=
-        if (isset($filter_params['minimum_calories'])) {
-            $sql .= " AND calories >= CONCAT(:minimum_calories)";
-            $named_params_values['minimum_calories'] = $filter_params['minimum_calories'];
-        }
+        // CALORIES (validate min/max range)
+        if (
+            isset($filter_params['minimum_calories']) &&
+            isset($filter_params['maximum_calories']) &&
+            $filter_params['minimum_calories'] > $filter_params['maximum_calories']
+        )
 
-        // Maximum
+            if (isset($filter_params['minimum_calories'])) {
+                $sql .= " AND calories >= :minimum_calories";
+                $named_params_values['minimum_calories'] = (int) $filter_params['minimum_calories'];
+            }
+
         if (isset($filter_params['maximum_calories'])) {
-            $sql .= " AND calories <= CONCAT(:maximum_calories)";
-            $named_params_values['maximum_calories'] = $filter_params['maximum_calories'];
+            $sql .= " AND calories <= :maximum_calories";
+            $named_params_values['maximum_calories'] = (int) $filter_params['maximum_calories'];
         }
 
-        // CONTENT SIZE
-        //TODO Check that minimum is smaller than maximum
-        // Minimum
-        if (isset($filter_params['minimum_content'])) {
-            $sql .= " AND content >= CONCAT(:minimum_content)";
-            $named_params_values['minimum_content'] = $filter_params['minimum_content'];
-        }
+        // CONTENT SIZE (validate min/max range)
+        if (
+            isset($filter_params['minimum_content']) &&
+            isset($filter_params['maximum_content']) &&
+            $filter_params['minimum_content'] > $filter_params['maximum_content']
+        )
 
-        // Maximum
+            if (isset($filter_params['minimum_content'])) {
+                $sql .= " AND content >= :minimum_content";
+                $named_params_values['minimum_content'] = (int) $filter_params['minimum_content'];
+            }
+
         if (isset($filter_params['maximum_content'])) {
-            $sql .= " AND content <= CONCAT(:maximum_content)";
-            $named_params_values['maximum_content'] = $filter_params['maximum_content'];
+            $sql .= " AND content <= :maximum_content";
+            $named_params_values['maximum_content'] = (int) $filter_params['maximum_content'];
         }
 
         // Sorting
         $sql .= " ORDER BY $sortBy $order";
 
+        // Execute paginated query
         $foods = (array) $this->paginate($sql, $named_params_values);
+
         return $foods;
     }
+
 
     /**
      * Retrieves a singleton resource of Food by its ID
