@@ -27,7 +27,6 @@ class ExerciseService
     public function isExerciseValid(array $new_exercise)
     {
         $data = array(
-            "exercise_id" => $new_exercise["exercise_id"],
             "name" => $new_exercise["name"],
             "exercise_type" => $new_exercise["exercise_type"],
             "calories_burned_per_min" => $new_exercise["calories_burned_per_min"],
