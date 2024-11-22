@@ -21,8 +21,12 @@ return static function (Slim\App $app): void {
 
 
     // get /
-    $app->get('/', [AboutController::class, 'handleAboutWebService']);
+    // $app->get('/', [AboutController::class, 'handleAboutWebService']);
 
+    //! Error route (for the error.log)
+    $app->get('/error', function (Request $request, Response $response) {
+        throw new \Slim\Exception\HttpNotFoundException($request, "Something went wrong amigo :( ");
+    });
     //* DIET ROUTES
     //GET
     $app->get('/diets', [DietsController::class, 'handleGetDiets']);

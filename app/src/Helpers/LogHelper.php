@@ -20,14 +20,14 @@ class LogHelper
         $logger->info($log_message);
     }
     //handle the error.log
-    // public static function handleError($log_message)
-    // {
-    //     //1)Instantiate the logger
-    //     $logger = new Logger("ERROR");
-    //     //Push the handlers
-    //     $logger->pushHandler(new StreamHandler(APP_ERRORS_PATH . '/errors.log'));
+    public static function handleError($log_message)
+    {
+        //1)Instantiate the logger
+        $logger = new Logger("ERROR");
+        //Push the handlers
+        $logger->pushHandler(new StreamHandler(APP_ERRORS_PATH . '/errors.log'));
 
-    //     //use the error log level
-    //     $logger->error($log_message);
-    // }
+        //use the error log level
+        $logger->error($log_message);
+    }
 }
