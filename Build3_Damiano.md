@@ -26,6 +26,7 @@
   1. BMI calculator (`Exercises`) : https://www.calculator.net/bmi-calculator.html
   2. Calorie calculator (`Foods`) : https://www.calculator.net/bmi-calculator.html
   3. Ideal weight calculator (`Exercises`) : https://www.calculator.net/ideal-weight-calculator.html
+  4. Healthy weight calculator: (`Countries`) https://www.calculator.net/healthy-weight-calculator.html
 
 - The data sent in the remote processing request has to be encoded in JSON. This function is purely a response containing a computational result from our own function. We cannot pull this calculated result from an API.
 
