@@ -57,6 +57,7 @@ class AccountController extends BaseController
     public function handleRegistration(Request $request, Response $response): Response
     {
         $new_user = $request->getParsedBody();
+        //var_dump($new_user);
 
         $result = $this->account_service->createUser($new_user[0]);
 

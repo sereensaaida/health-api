@@ -29,10 +29,12 @@ class AccountService
             "first_name" => $new_user['first_name'],
             "last_name" => $new_user['last_name'],
             "email" => $new_user['email'],
-            "password" => $this->cryptPassword($new_user['password']),
+            "password" => $new_user['password'],
             "role" => $new_user['role'],
         );
 
+
+        //! Update the rules to meet better constraints, like password requirements.
         $rules = array(
             'user_id' => [
                 'integer',
@@ -54,11 +56,13 @@ class AccountService
                 'required',
                 array('lengthMin', 4)
             ),
-            'created_at' => array(
+            'role' => array(
                 'required',
                 array('lengthMin', 4)
             )
         );
+
+
 
         //* Step 2) Insert into the database
         $validator = new Validator($data, [], 'en');
@@ -67,6 +71,7 @@ class AccountService
         $validator->mapFieldsRules($rules);
 
         if ($validator->validate()) {
+            $new_user['password'] = $this->cryptPassword($new_user['password']);
             $this->account_model->insertUser($new_user);
             return Result::success("User has been inserted!");
         } else {

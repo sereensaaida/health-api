@@ -94,4 +94,7 @@ return static function (Slim\App $app): void {
 
     // Log in route
     $app->post('/login', [AccountController::class, 'handleUserLogin']);
+
+    //!TO_BE_DELETED
+    $app->post('/register', [AccountController::class, 'handleRegistration']);
 };
