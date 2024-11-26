@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : mar. 17 sep. 2024 à 17:40
--- Version du serveur : 10.4.32-MariaDB
--- Version de PHP : 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Nov 22, 2024 at 06:35 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,14 +18,14 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `health`
+-- Database: `health`
 --
 CREATE DATABASE IF NOT EXISTS `health` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `health`;
 -- --------------------------------------------------------
 
 --
--- Structure de la table `countries`
+-- Table structure for table `countries`
 --
 
 CREATE TABLE `countries` (
@@ -40,7 +40,7 @@ CREATE TABLE `countries` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Déchargement des données de la table `countries`
+-- Dumping data for table `countries`
 --
 
 INSERT INTO `countries` (`country_id`, `name`, `population`, `vegetarian_percentage`, `daily_calorie_intake`, `consumed_dishes`, `food_culture`, `nutritional_deficiency`) VALUES
@@ -55,7 +55,7 @@ INSERT INTO `countries` (`country_id`, `name`, `population`, `vegetarian_percent
 -- --------------------------------------------------------
 
 --
--- Structure de la table `diets`
+-- Table structure for table `diets`
 --
 
 CREATE TABLE `diets` (
@@ -71,7 +71,7 @@ CREATE TABLE `diets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Déchargement des données de la table `diets`
+-- Dumping data for table `diets`
 --
 
 INSERT INTO `diets` (`diet_id`, `name`, `description`, `calorie_goal`, `protein_goal`, `fat_goal`, `carbohydrate_goal`, `is_vegetarian`, `is_gluten_free`) VALUES
@@ -86,7 +86,7 @@ INSERT INTO `diets` (`diet_id`, `name`, `description`, `calorie_goal`, `protein_
 -- --------------------------------------------------------
 
 --
--- Structure de la table `exercises`
+-- Table structure for table `exercises`
 --
 
 CREATE TABLE `exercises` (
@@ -100,7 +100,7 @@ CREATE TABLE `exercises` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Déchargement des données de la table `exercises`
+-- Dumping data for table `exercises`
 --
 
 INSERT INTO `exercises` (`exercise_id`, `name`, `exercise_type`, `calories_burned_per_min`, `equipment_needed`, `difficulty_level`, `muscles_targeted`) VALUES
@@ -115,7 +115,7 @@ INSERT INTO `exercises` (`exercise_id`, `name`, `exercise_type`, `calories_burne
 -- --------------------------------------------------------
 
 --
--- Structure de la table `facts`
+-- Table structure for table `facts`
 --
 
 CREATE TABLE `facts` (
@@ -132,7 +132,7 @@ CREATE TABLE `facts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Déchargement des données de la table `facts`
+-- Dumping data for table `facts`
 --
 
 INSERT INTO `facts` (`nutrition_id`, `food_id`, `fat`, `fiber`, `sodium`, `cholesterol`, `description`, `sugar`, `carbohydrates`, `protein`) VALUES
@@ -147,7 +147,7 @@ INSERT INTO `facts` (`nutrition_id`, `food_id`, `fat`, `fiber`, `sodium`, `chole
 -- --------------------------------------------------------
 
 --
--- Structure de la table `foods`
+-- Table structure for table `foods`
 --
 
 CREATE TABLE `foods` (
@@ -162,7 +162,7 @@ CREATE TABLE `foods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Déchargement des données de la table `foods`
+-- Dumping data for table `foods`
 --
 
 INSERT INTO `foods` (`food_id`, `name`, `category`, `calories`, `serving_size`, `content`, `avg_price`, `is_vegan`) VALUES
@@ -172,12 +172,14 @@ INSERT INTO `foods` (`food_id`, `name`, `category`, `calories`, `serving_size`, 
 (4, 'Broccoli', 'Vegetable', 55, 100, 3.7, 1.00, 1),
 (5, 'Salmon', 'Fish', 208, 100, 13, 6.00, 0),
 (6, 'Quinoa', 'Grain', 120, 100, 1.9, 2.50, 1),
-(7, 'Greek Yogurt', 'Dairy', 59, 100, 0.4, 1.50, 0);
+(7, 'Greek Yogurt', 'Dairy', 59, 100, 0.4, 1.50, 0),
+(8, 'Starfruit', 'Fruit', 22, 75, 35, 1.00, 1),
+(9, 'Starfruit', 'Fruit', 22, 75, 35, 1.00, 1);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `guidelines`
+-- Table structure for table `guidelines`
 --
 
 CREATE TABLE `guidelines` (
@@ -193,7 +195,7 @@ CREATE TABLE `guidelines` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Déchargement des données de la table `guidelines`
+-- Dumping data for table `guidelines`
 --
 
 INSERT INTO `guidelines` (`guideline_id`, `country_id`, `calorie_intake`, `protein_intake`, `fats`, `carbohydrates`, `servings_per_day`, `guideline_notes`, `suggested_food_groups`) VALUES
@@ -208,7 +210,7 @@ INSERT INTO `guidelines` (`guideline_id`, `country_id`, `calorie_intake`, `prote
 -- --------------------------------------------------------
 
 --
--- Structure de la table `recommendations`
+-- Table structure for table `recommendations`
 --
 
 CREATE TABLE `recommendations` (
@@ -223,7 +225,7 @@ CREATE TABLE `recommendations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Déchargement des données de la table `recommendations`
+-- Dumping data for table `recommendations`
 --
 
 INSERT INTO `recommendations` (`recommendation_id`, `diet_id`, `exercise_id`, `duration_minutes`, `reps`, `sets`, `distance`, `additional_notes`) VALUES
@@ -235,50 +237,80 @@ INSERT INTO `recommendations` (`recommendation_id`, `diet_id`, `exercise_id`, `d
 (6, 6, 6, 25, 12, 4, NULL, 'Targets back and leg muscles effectively'),
 (7, 7, 7, 40, NULL, NULL, NULL, 'Enhances flexibility and relaxation');
 
+-- --------------------------------------------------------
+
 --
--- Index pour les tables déchargées
+-- Table structure for table `ws_log`
+--
+
+CREATE TABLE `ws_log` (
+  `log_id` int(10) UNSIGNED NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `user_action` varchar(255) NOT NULL,
+  `logged_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `user_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ws_users`
+--
+
+CREATE TABLE `ws_users` (
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(150) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(10) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `countries`
+-- Indexes for table `countries`
 --
 ALTER TABLE `countries`
   ADD PRIMARY KEY (`country_id`);
 
 --
--- Index pour la table `diets`
+-- Indexes for table `diets`
 --
 ALTER TABLE `diets`
   ADD PRIMARY KEY (`diet_id`);
 
 --
--- Index pour la table `exercises`
+-- Indexes for table `exercises`
 --
 ALTER TABLE `exercises`
   ADD PRIMARY KEY (`exercise_id`);
 
 --
--- Index pour la table `facts`
+-- Indexes for table `facts`
 --
 ALTER TABLE `facts`
   ADD PRIMARY KEY (`nutrition_id`),
   ADD KEY `food_id` (`food_id`);
 
 --
--- Index pour la table `foods`
+-- Indexes for table `foods`
 --
 ALTER TABLE `foods`
   ADD PRIMARY KEY (`food_id`);
 
 --
--- Index pour la table `guidelines`
+-- Indexes for table `guidelines`
 --
 ALTER TABLE `guidelines`
   ADD PRIMARY KEY (`guideline_id`),
   ADD KEY `country_id` (`country_id`);
 
 --
--- Index pour la table `recommendations`
+-- Indexes for table `recommendations`
 --
 ALTER TABLE `recommendations`
   ADD PRIMARY KEY (`recommendation_id`),
@@ -286,69 +318,94 @@ ALTER TABLE `recommendations`
   ADD KEY `exercise_id` (`exercise_id`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- Indexes for table `ws_log`
+--
+ALTER TABLE `ws_log`
+  ADD PRIMARY KEY (`log_id`);
+
+--
+-- Indexes for table `ws_users`
+--
+ALTER TABLE `ws_users`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `countries`
+-- AUTO_INCREMENT for table `countries`
 --
 ALTER TABLE `countries`
   MODIFY `country_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT pour la table `diets`
+-- AUTO_INCREMENT for table `diets`
 --
 ALTER TABLE `diets`
   MODIFY `diet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT pour la table `exercises`
+-- AUTO_INCREMENT for table `exercises`
 --
 ALTER TABLE `exercises`
   MODIFY `exercise_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT pour la table `facts`
+-- AUTO_INCREMENT for table `facts`
 --
 ALTER TABLE `facts`
   MODIFY `nutrition_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT pour la table `foods`
+-- AUTO_INCREMENT for table `foods`
 --
 ALTER TABLE `foods`
-  MODIFY `food_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `food_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT pour la table `guidelines`
+-- AUTO_INCREMENT for table `guidelines`
 --
 ALTER TABLE `guidelines`
   MODIFY `guideline_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT pour la table `recommendations`
+-- AUTO_INCREMENT for table `recommendations`
 --
 ALTER TABLE `recommendations`
   MODIFY `recommendation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- Contraintes pour les tables déchargées
+-- AUTO_INCREMENT for table `ws_log`
+--
+ALTER TABLE `ws_log`
+  MODIFY `log_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ws_users`
+--
+ALTER TABLE `ws_users`
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `facts`
+-- Constraints for table `facts`
 --
 ALTER TABLE `facts`
   ADD CONSTRAINT `facts_ibfk_1` FOREIGN KEY (`food_id`) REFERENCES `foods` (`food_id`);
 
 --
--- Contraintes pour la table `guidelines`
+-- Constraints for table `guidelines`
 --
 ALTER TABLE `guidelines`
   ADD CONSTRAINT `guidelines_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`country_id`);
 
 --
--- Contraintes pour la table `recommendations`
+-- Constraints for table `recommendations`
 --
 ALTER TABLE `recommendations`
   ADD CONSTRAINT `recommendations_ibfk_1` FOREIGN KEY (`diet_id`) REFERENCES `diets` (`diet_id`),

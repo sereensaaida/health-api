@@ -31,4 +31,5 @@ class LogMiddleware implements MiddlewareInterface
 
         return $handler->handle($request);
     }
+    
 }
