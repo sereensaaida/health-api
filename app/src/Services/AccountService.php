@@ -62,8 +62,6 @@ class AccountService
             )
         );
 
-
-
         //* Step 2) Insert into the database
         $validator = new Validator($data, [], 'en');
 
@@ -71,6 +69,7 @@ class AccountService
         $validator->mapFieldsRules($rules);
 
         if ($validator->validate()) {
+            //* Hashing the password if the requirements were passed on the plain password.
             $new_user['password'] = $this->cryptPassword($new_user['password']);
             $this->account_model->insertUser($new_user);
             return Result::success("User has been inserted!");
