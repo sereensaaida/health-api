@@ -34,7 +34,7 @@
   "git.path": "",
   "composer.workingPath": "",
   "editor.mouseWheelZoom": true,
-  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreview": true,
   // Code formatting settings.
 
   "[jsonc]": {
