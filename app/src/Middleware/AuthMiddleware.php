@@ -8,6 +8,7 @@ use App\Helpers\LogHelper;
 use LogicException;
 use Psr\Http\Server\MiddlewareInterface;
 use Slim\Exception\HttpUnauthorizedException;
+use App\Exceptions\HttpInvalidInputsException;
 use UnexpectedValueException;
 use Firebase\JWT\JWT as JWT;
 use Firebase\JWT\Key;
@@ -34,15 +35,20 @@ class AuthMiddleware implements MiddlewareInterface
 
         $auth_header = $request->getHeaderLine("Authorization");
         $jwt = str_replace("Bearer ", "", $auth_header);
-        //var_dump($jwt);
 
         try {
-            $decoded = JWT::decode($jwt, new Key(SECRET_KEY, "HS256"));
+            $decoded_token = (array)(JWT::decode($jwt, new Key(SECRET_KEY, "HS256")));
+
+            $method = $request->getMethod();
+            if ($decoded_token["role"] == "user" && $method != "GET") {
+                throw new HttpUnauthorizedException($request, "insuffiient priviledge :(");
+            }
         } catch (LogicException $e) {
             throw new HttpUnauthorizedException($request, $e->getMessage());
         } catch (UnexpectedValueException $e) {
-            throw new HttpUnauthorizedException($request, $e->getMessage());
+            throw new HttpInvalidInputsException($request, $e->getMessage());
         }
+
 
         $response = $handler->handle($request);
 
