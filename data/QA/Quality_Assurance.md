@@ -170,7 +170,7 @@ The Exercise resource allows the following sorting filters through the `sort_by`
 2. `name`: Sort by name (alphabetically)
 3. `exercise_type`: Sort by exercise type
 
-Sample request: Sorting by carbohydrates in descending order
+Sample request: Sorting by name in descending order
 `https://localhost/health-api/exercises?sort_by=name&order=desc`
 Sample response:
 ```json
@@ -224,6 +224,88 @@ For the order, use `desc` for descending and `asc` for ascending
 
 Example of a GET request combining all the query parameters: `diets?diet_name=Keto&calorie_goal=2000&sort_by=diet_id&order=asc`
 
+## GET /countries
+`https://localhost/health-api/countries`
+
+Fetches all the records from the `countries` table.
+
+### Filtering
+The countries resource allows the following filters:
+1.`name`: Filter by name
+2.`population`: Filter by population
+3.`vegetarian_percentage`: Filter by vegetarian percentage
+4.`daily_calorie_intake`: Filter by daily calorie intake
+5.`consumed_dishes`: Filter by consumed dishes
+6.`food_culture`: Filter by food culture
+7.`nutritional_deficiency`: Filter by nutritional deficiency
+
+Sample request filter parameters:
+```json
+Single example : ?difficulty_level=1
+Multiple filters example: ?name=brazil&vegetarian_percentage=21
+```
+
+### Sorting
+The `order` field includes:
+- `asc`: Sort by ascending order
+- `desc`: Sort by descending order
+
+The countries resource allows the following sorting filters through the `sort_by` field:
+1.`name`: Sort by name (alphabetically)
+2.`population`: Sort by population
+3.`vegetarian_percentage`: Sort by vegetarian_percentage
+4.`daily_calorie_intake`: Sort by daily_calorie_intake
+5.`consumed_dishes`: Sort by consumed_dishes
+6.`food_culture`: Sort by food_culture
+7.`nutritional_deficiency`: Sort by nutritional_deficiency
+
+Sample request: Sorting by name in descending order
+`https://localhost/health-api/countries?sort_by=name&order=desc`
+Sample response:
+```json
+
+```
+## GET /guidelines
+`https://localhost/health-api/guidelines`
+
+Fetches all the records from the `guidelines` table.
+
+### Filtering
+The guidelines resource allows the following filters:
+1.`country_id`: Filter by country_id
+2.`calorie_intake`: Filter by calorie_intake
+3.`protein_intake`: Filter by protein_intake
+4.`fats`: Filter by fats
+5.`carbohydrates`: Filter by carbohydrates
+6.`servings_per_day`: Filter by servings_per_day
+7.`guideline_notes`: Filter by guideline_notes
+
+Sample request filter parameters:
+```json
+Single example : ?difficulty_level=1
+Multiple filters example: ?country_id=1&fats=20
+```
+
+### Sorting
+The `order` field includes:
+- `asc`: Sort by ascending order
+- `desc`: Sort by descending order
+
+The guidelines resource allows the following sorting filters through the `sort_by` field:
+1.`country_id`: Sort by country_id
+2.`calorie_intake`: Sort by calorie_intake
+3.`protein_intake`: Sort by protein_intake
+4.`fats`: Sort by fats
+5.`carbohydrates`: Sort by carbohydrates
+6.`servings_per_day`: Sort by servings_per_day
+7.`guideline_notes`: Sort by guideline_notes
+
+Sample request: Sorting by carbohydrates in descending order
+`https://localhost/health-api/guidelines?sort_by=carbohydrates&order=desc`
+Sample response:
+```json
+
+```
 
 ## POST /foods
 Given you are an admin with an authorized token, you can create a new item of foods.
@@ -278,6 +360,35 @@ Make sure to follow the following requirements for each field
 - `difficulty_level`: At least 1 alphanumeric character with a maximum of 4 
 - `muscles_targeted`: At least 1 alphanumeric character
 
+
+## POST /countries
+Given you are an admin with an authorized token, you can create a new country.
+The countries table requires the following fields:
+1. `name`: country name
+2. `population`: population amount
+3. `vegetarian_percentage`: % of vegetarians
+4. `daily_calorie_intake`: amount of daily calorie intake
+5. `consumed_dishes`: list of consumed dishes
+6. `food_culture`:  list of food prices
+7. `nutritional_deficiency`:  list of nutritional deficiency
+
+Sample POST request body:
+```json
+[
+  {
+    "name": "Canada",
+    "population": 38000000,
+    "vegetarian_percentage": 10,
+    "daily_calorie_intake": 2500,
+    "consumed_dishes": "Poutine, Maple Syrup",
+    "food_culture": "North American",
+    "nutritional_deficiency": "Vitamin D"
+  }
+]
+```
+>[!NOTE]
+The `country_id` field is auto-incremented since it is the primary key.
+
 ### PUT /foods
 Given you are an admin with an authorized token, you can update an existing item of foods.
 The /PUT operation must have the `food_id` to identify the food being updated, and the additional field you want to update.
@@ -325,6 +436,37 @@ Make sure to follow the following requirements for each field
 - `difficulty_level`: At least 1 alphanumeric character with a maximum of 4 
 - `muscles_targeted`: At least 1 alphanumeric character
 
+## PUT /countries
+!- Everything is mandatory
+The body needs to follow a JSON format
+```
+[
+    {
+        "country_id": 1,
+        "name": "Canada",
+        "population": 38000000,
+        "vegetarian_percentage": 10,
+        "daily_calorie_intake": 2500,
+        "consumed_dishes": "Poutine, Maple Syrup",
+        "food_culture": "North American",
+        "nutritional_deficiency": "Vitamin D"
+    }
+
+]
+```
+>[!CAUTION]
+Make sure to follow the following requirements for each field
+
+- `name`: At least 1 alphanumeric character
+- `population`: At least 1 sized of integer
+- `vegetarian_percentage` : percentage of not more than 100
+- `daily_calorie_intake`: at least 1 sized of integer
+- `consumed_dishes`: At least 1 alphanumeric character 
+- `food_culture`: At least 1 alphanumeric character
+- `nutritional_deficiency`: At least 1 alphanumeric character
+
+  
+
 ### DELETE /foods
 Given you are an admin with an authorized token, you can delete an existing item of foods.
 The DELETE operation requires the following field(s):
@@ -347,5 +489,20 @@ You can only delete with the ID.
     {
         "exercise_id": 1,
     }
+]
+```
+
+### DELETE /countries
+Given you are an admin with an authorized token, you can delete an existing country record.
+The DELETE operation requires the following field(s):
+
+country_id: The ID of the country
+Sample DELETE request body:
+```
+[
+    {
+    "country_id" : 1,
+    }
+    
 ]
 ```
