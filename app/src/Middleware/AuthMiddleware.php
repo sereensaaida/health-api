@@ -17,7 +17,7 @@ use Firebase\JWT\Key;
 //This class is the callback
 class AuthMiddleware implements MiddlewareInterface
 {
-
+    // public function __construct(private AccessLogModel $accessLogModel) {}
     public function process(\Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Server\RequestHandlerInterface $handler): ResponseInterface
     {
 

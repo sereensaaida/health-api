@@ -123,7 +123,7 @@ class ExercisesController extends BaseController
         // 1) Retrieve data included in the request (post body)
         $new_exercise = $request->getParsedBody();
         var_dump($new_exercise);
-        $result = $this->exerciseService->createExercise($new_exercise); //there is an issue because i had [0] before
+        $result = $this->exerciseService->createExercise($new_exercise[0]); //there is an issue because i had [0] before
         $payload = [];
         $status_code = 201;
 
@@ -199,7 +199,7 @@ class ExercisesController extends BaseController
             );
         }
 
-        $result = $this->exerciseService->deleteExercise($delete_exercise); //there is an issue because i had [0] before
+        $result = $this->exerciseService->deleteExercise($delete_exercise[0]); //there is an issue because i had [0] before
         $payload = [];
         $status_code = 201;
         if ($result->isSuccess()) {
