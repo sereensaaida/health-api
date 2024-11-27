@@ -216,7 +216,7 @@ class CountriesController extends BaseController
      * @param Response $response The generated response
      * @return Response Returning the response in JSON format
      */
-    public function handleDeleteCounties(Request $request, Response $response): Response
+    public function handleDeleteCountry(Request $request, Response $response): Response
     {
         //* 1) Handle Client Request (extract and validate?)
         $delete_country = $request->getParsedBody();
