@@ -184,7 +184,7 @@ class CountriesController extends BaseController
      * @param Response $response The generated response
      * @return Response Returning the response in JSON format
      */
-    public function handleUpdateCountries(Request $request, Response $response): Response
+    public function handleUpdateCountry(Request $request, Response $response): Response
     {
         //* 1) Handle Client Request (extract and validate?)
         $update_country = $request->getParsedBody();
