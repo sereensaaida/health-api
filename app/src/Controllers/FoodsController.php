@@ -265,11 +265,12 @@ class FoodsController extends BaseController
         return $this->renderJson($response, $payload, $status_code);
     }
 
-    public function handleAccessLog(Request $request, Response $response): Response
+    public function handleFoodComputation(Request $request, Response $response): Response
     {
-
+        $body = $request->getParsedBody();
     }
 
+    public function handleAccessLog(Request $request, Response $response): Response {}
 }
 
 //? Notes
