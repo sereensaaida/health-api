@@ -48,7 +48,7 @@ class LogMiddleware implements MiddlewareInterface
                  */
             //var_dump($time);
             $log_information = [
-                "user_id" => $decoded_token["user_id"],
+                "user_id" => 1,
                 "email" => $decoded_token["email"],
                 "ip_address" => $ip_address,
                 "method" => $request_method,

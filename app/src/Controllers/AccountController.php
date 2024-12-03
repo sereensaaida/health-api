@@ -24,6 +24,7 @@ class AccountController extends BaseController
 
         // TODO: 1) Validate the received user credentials against the DB: check if there is a record matching the log in information from the client. ex: user/email: password.
         //todo :'(
+        $user_info = $request->getParsedBody();
 
         // When the user is logged in:
         //! Generate JWT (token) containing private claims about the authenticated user.
@@ -37,10 +38,9 @@ class AccountController extends BaseController
         ];
 
         $private_claims = array(
-            'user_id' => 1,
-            'email' => 'health@gmail.com',
-            'username' => 'lasagna',
-            'role' => 'admin'
+            'email' => $user_info['email'],
+            'username' => $user_info['first_name'],
+            'role' => "admin"
         );
 
         $payload = array_merge($private_claims, $registered_claims);
