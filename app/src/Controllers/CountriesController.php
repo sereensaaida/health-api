@@ -10,6 +10,7 @@ use App\Services\CountriesService;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpSpecializedException;
 use Fig\Http\Message\StatusCodeInterface;
+use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
@@ -237,5 +238,36 @@ class CountriesController extends BaseController
         $payload["status"] = $status_code;
         //* 3) pass the received data to the service
         return $this->renderJson($response, $payload, $status_code);
+    }
+
+
+    public function handleCompositeCountry(Request $request, Response $response,  array $uri_args): Response
+    {
+        $country_id = $uri_args["country_id"];
+        $country = $this->countries_model->getCountryId(country_id: $country_id);
+
+        $name = $country['name'];
+        $url = "https://www.apicountries.com/name/{$name}";
+
+
+        $client = new Client(
+            [
+                "base_url" => $url,
+            ]
+
+        );
+        $res = $client->request('GET', 'https://www.apicountries.com/countries', [
+            'headers' => [
+                'Accept' => 'application/json'
+            ]
+        ]);
+
+        $response = $client->request('GET');
+        $status_code = $response->getStatusCode();
+        $body = $response->getBody();
+        $payload = $body->getContents();
+
+
+        return $this->renderJson($response, $country);
     }
 }
