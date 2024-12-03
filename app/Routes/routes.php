@@ -6,6 +6,7 @@ use App\Controllers\AboutController;
 use App\Controllers\DietsController;
 use App\Controllers\FoodsController;
 use App\Controllers\AccountController;
+use App\Controllers\BMIController;
 use App\Controllers\CountriesController;
 use App\Controllers\ExercisesController;
 use App\Controllers\GuidelinesController;
@@ -13,6 +14,7 @@ use App\Controllers\FactsController;
 use App\Controllers\RecommendationsController;
 use App\Helpers\DateTimeHelper;
 use App\Middleware\AuthMiddleware;
+use App\Services\BMICalculator;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Middleware\RoutingMiddleware;
@@ -74,6 +76,10 @@ return static function (Slim\App $app): void {
     $app->get('/countries/{country_id}', [CountriesController::class, 'handleGetCountryId']);
     $app->get('/countries/{country_id}/guidelines', [CountriesController::class, 'handleGetCountryGuidelines']);
 
+
+    //*BMI CALCULATOR
+    $app->post("/bmi", [BMIController::class, 'calculateBMI']);
+
     $app->group('admin', function (RouteCollectorProxy $group) {
         //POST
         $group->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
@@ -98,15 +104,15 @@ return static function (Slim\App $app): void {
         // Log in route
 
         // //* PING ROUTES
-        // $group->get('/ping', function (Request $request, Response $response, $args) {
+        $group->get('/ping', function (Request $request, Response $response, $args) {
 
-        //     $payload = [
-        //         "greetings" => "Reporting! Hello there!",
-        //         "now" => DateTimeHelper::now(DateTimeHelper::Y_M_D_H_M),
-        //     ];
-        //     $response->getBody()->write(json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR));
-        //     return $response;
-        // });
+            $payload = [
+                "greetings" => "Reporting! Hello there!",
+                "now" => DateTimeHelper::now(DateTimeHelper::Y_M_D_H_M),
+            ];
+            $response->getBody()->write(json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR));
+            return $response;
+        });
 
         // // get /
         // $group->get('/', [AboutController::class, 'handleAboutWebService']);

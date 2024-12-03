@@ -20,6 +20,7 @@ return function (App $app) {
     $app->addRoutingMiddleware();
     //add the access log middleware
     $app->add(LogMiddleware::class);
+    // $app->addMiddleware(new AuthMiddleware());
 
     //!NOTE: the error handling middleware MUST be added last.
     $errorMiddleware = $app->addErrorMiddleware(true, true, true);

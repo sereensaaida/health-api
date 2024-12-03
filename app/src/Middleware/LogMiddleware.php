@@ -36,27 +36,28 @@ class LogMiddleware implements MiddlewareInterface
         $jwt = str_replace("Bearer ", "", $auth_header);
         $date = new DateTimeHelper();
         $time = $date->nowForDb();
-        try {
-            $decoded_token = (array)(JWT::decode($jwt, new Key(SECRET_KEY, "HS256")));
-            /*
+        // try {
+        $decoded_token = (array)(JWT::decode($jwt, new Key(SECRET_KEY, "HS256")));
+        /*
             'user_id' => 1,
             'email' => 'health@gmail.com',
             'username' => 'lasagna',
             'role' => 'admin'
              */
-            // var_dump($time);
-            $log_information = [
-                "user_id" => $decoded_token["user_id"],
-                "email" => $decoded_token["email"],
-                "ip_address" => $ip_address,
-                "method" => $request_method,
-                "logged_at" => $time
-            ];
-            //log into db
-            $this->accessLogModel->insertLogDb($log_information);
-        } catch (UnexpectedValueException $e) {
-            throw new HttpInvalidInputsException($request, $e->getMessage());
-        };
+        // var_dump($time);
+        $log_information = [
+            "user_id" => $decoded_token["user_id"],
+            "email" => $decoded_token["email"],
+            "ip_address" => $ip_address,
+            "method" => $request_method,
+            "logged_at" => $time
+        ];
+        //log into db
+        $this->accessLogModel->insertLogDb($log_information);
+        // } catch (UnexpectedValueException $e) {
+        //     // throw new HttpInvalidInputsException($request, $e->getMessage());
+        //     echo "yur";
+        // };
 
 
         //var_dump($request);
