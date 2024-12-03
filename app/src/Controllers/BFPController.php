@@ -13,12 +13,12 @@ class BFPController extends BaseController
         // Get the body from the request
         $body = $request->getParsedBody();
 
-        $weight = $body["weight"];
-        $height = $body["height"];
-        $age = $body["age"];
-        $gender = $body["gender"]; 
+        $weight = $body[0]["weight"];
+        $height = $body[0]["height"];
+        $age = $body[0]["age"];
+        $gender = $body[0]["gender"];
 
-     
+
 
         // calling service
         $calculator = new BFPService();
@@ -35,7 +35,7 @@ class BFPController extends BaseController
         // Render JSON response
         return $this->renderJson(
             $response,
-            $bfp_information 
+            $bfp_information
         );
     }
 }
