@@ -16,9 +16,9 @@ class BFPController extends BaseController
         $weight = $body["weight"];
         $height = $body["height"];
         $age = $body["age"];
-        $gender = $body["gender"]; 
+        $gender = $body["gender"];
 
-     
+
 
         // calling service
         $calculator = new BFPService();
@@ -32,10 +32,9 @@ class BFPController extends BaseController
             "Your calculated BFP (rounded)" => round($bfp, 2)
         ];
 
-        // Render JSON response
         return $this->renderJson(
             $response,
-            $bfp_information 
+            $bfp_information
         );
     }
 }

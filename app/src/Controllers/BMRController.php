@@ -18,10 +18,10 @@ class BMRController extends BaseController
         //echo "hello";
         $user_information = $request->getParsedBody();
 
-        $gender = $user_information[0]['gender'];
-        $age = $user_information[0]['age'];
-        $height = $user_information[0]['height'];
-        $weight = $user_information[0]['weight'];
+        $gender = $user_information['gender'];
+        $age = $user_information['age'];
+        $height = $user_information['height'];
+        $weight = $user_information['weight'];
 
         $computed_result = $this->BMR_service->BMRcalculation($gender, $age, $height, $weight);
 

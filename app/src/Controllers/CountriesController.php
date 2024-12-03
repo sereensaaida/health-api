@@ -10,6 +10,7 @@ use App\Services\CountriesService;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpSpecializedException;
 use Fig\Http\Message\StatusCodeInterface;
+use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
@@ -237,5 +238,61 @@ class CountriesController extends BaseController
         $payload["status"] = $status_code;
         //* 3) pass the received data to the service
         return $this->renderJson($response, $payload, $status_code);
+    }
+
+
+    public function handleCompositeCountry(Request $request, Response $response,  array $uri_args): Response
+    {
+        $country_id = $uri_args["country_id"];
+        $country = $this->countries_model->getCountryId(country_id: $country_id);
+
+        $name = $country['name'];
+        $url = "https://www.apicountries.com/name/{$name}";
+
+
+        $client = new Client(
+            [
+                "base_url" => $url,
+            ]
+        );
+
+        $res = $client->request('GET', "https://www.apicountries.com/name/{$name}", [
+            'headers' => [
+                'Accept' => 'application/json'
+            ]
+        ]);
+
+        $body = $res->getBody();
+        //var_dump($body);
+        //$res = $client->request('GET');
+        $status_code = $response->getStatusCode();
+        $body = $res->getBody();
+        $payload = $body->getContents();
+
+        $country_info = json_decode($payload);
+        $country_info = $country_info[0];
+
+
+        // Parse the data (list of leagues)
+        // Inspect everything -> Its an object with an array of objects
+        // Iterate through every row of data
+
+        $countries = array(
+            'capital' => $country_info->capital,
+            'region' => $country_info->region,
+            'subregion' => $country_info->subregion,
+            'nativeName' => $country_info->nativeName,
+            'currencies' => $country_info->currencies[0]->code,
+            'independent' => $country_info->independent
+        );
+
+        //var_dump($nutrition);
+
+        $data = array(
+            'Database Information' => $country,
+            'NinjaAPI' => $countries
+        );
+
+        return $this->renderJson($response, $data);
     }
 }
