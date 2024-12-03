@@ -16,7 +16,7 @@ class BMIController extends BaseController
         $weight = $body["weight"];
         $height = $body["height"];
         //TODO:Data validation
-        // var_dump($body);
+
         //call the service method to calculate the BMI
         $calculator = new BMIService();
         $bmi = $calculator->BMIcalculation($weight, $height);
@@ -27,6 +27,7 @@ class BMIController extends BaseController
                 "Your height:" => $height,
                 "Your calculated BMI (rounded)" => round($bmi)
             ];
+
         //renderjson after
         return $this->renderJson(
             $response,

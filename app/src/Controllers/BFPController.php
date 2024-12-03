@@ -32,7 +32,6 @@ class BFPController extends BaseController
             "Your calculated BFP (rounded)" => round($bfp, 2)
         ];
 
-        // Render JSON response
         return $this->renderJson(
             $response,
             $bfp_information
