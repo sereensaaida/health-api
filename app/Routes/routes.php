@@ -20,6 +20,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Middleware\RoutingMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 use App\Controllers\BMRController;
+use App\Controllers\BFPController;
+
 
 return static function (Slim\App $app): void {
 
@@ -77,6 +79,8 @@ return static function (Slim\App $app): void {
     $app->get('/countries/{country_id}', [CountriesController::class, 'handleGetCountryId']);
     $app->get('/countries/{country_id}/guidelines', [CountriesController::class, 'handleGetCountryGuidelines']);
 
+    //*BFP CALCULATOR
+    $app->post("/bfp", [BFPController::class, 'calculateBFP']);
 
     //*BMI CALCULATOR
     $app->post("/bmi", [BMIController::class, 'calculateBMI']);

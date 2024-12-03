@@ -23,7 +23,7 @@ class AccountController extends BaseController
     {
 
         // TODO: 1) Validate the received user credentials against the DB: check if there is a record matching the log in information from the client. ex: user/email: password.
-
+        //todo :'(
 
         // When the user is logged in:
         //! Generate JWT (token) containing private claims about the authenticated user.
