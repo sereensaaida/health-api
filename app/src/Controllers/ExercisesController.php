@@ -191,7 +191,7 @@ class ExercisesController extends BaseController
         //get the array from the JSON body
         $delete_exercise = $request->getParsedBody();
 
-        $exercise = $this->exercisesModel->getExercisesById($delete_exercise["exercise_id"]);
+        $exercise = $this->exercisesModel->getExercisesById($delete_exercise[0]["exercise_id"]);
         if ($exercise === false) {
             throw new HttpNotFoundException(
                 $request,
@@ -199,7 +199,7 @@ class ExercisesController extends BaseController
             );
         }
 
-        $result = $this->exerciseService->deleteExercise($delete_exercise[0]); //there is an issue because i had [0] before
+        $result = $this->exerciseService->deleteExercise($delete_exercise); //there is an issue because i had [0] before
         $payload = [];
         $status_code = 201;
         if ($result->isSuccess()) {

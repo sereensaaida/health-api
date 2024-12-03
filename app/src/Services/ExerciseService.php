@@ -112,8 +112,9 @@ class ExerciseService
     public function deleteExercise(array $exercise_id)
     {
         //validate the id
+        //var_dump($exercise_id);
         $data = array(
-            "exercise_id" => $exercise_id["exercise_id"],
+            "exercise_id" => $exercise_id[0]["exercise_id"],
         );
 
         $rules = array(
