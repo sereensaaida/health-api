@@ -267,7 +267,30 @@ class CountriesController extends BaseController
         $body = $response->getBody();
         $payload = $body->getContents();
 
+        $country_info = json_decode($payload);
+        $country_info = $country_info[0];
 
-        return $this->renderJson($response, $country);
+
+        // Parse the data (list of leagues)
+        // Inspect everything -> Its an object with an array of objects
+        // Iterate through every row of data
+
+        $countries = array(
+            'capital' => $country_info->capital,
+            'region' => $country_info->region,
+            'subregion' => $country_info->subregion,
+            'nativeName' => $country_info->nativeName,
+            'currencies' => $country_info->currencies['code'],
+            'independent' => $country_info->independent
+        );
+
+        //var_dump($nutrition);
+
+        $data = array(
+            'Database Information' => $country,
+            'NinjaAPI' => $countries
+        );
+
+        return $this->renderJson($response, $data);
     }
 }

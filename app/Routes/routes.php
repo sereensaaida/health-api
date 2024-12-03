@@ -85,7 +85,7 @@ return static function (Slim\App $app): void {
 
 
 
-    $app->group('admin', function (RouteCollectorProxy $group) {
+    $app->group('', function (RouteCollectorProxy $group) {
         //POST
         $group->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
         //UPDATE
