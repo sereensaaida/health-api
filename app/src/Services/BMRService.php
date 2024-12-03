@@ -8,10 +8,10 @@ class BMRService
     {
         // Men and female have different results
         $bmr = 0;
-        if ($gender === "m") {
+        if ($gender === "male") {
             $bmr = 88.362 + (13.397 * $weight) + (4.799 * $height) - (5.677 * $age);
         }
-        if ($gender === "f") {
+        if ($gender === "female") {
             $bmr = 447.593 + (9.247 * $weight) + (3.098 * $height) - (4.330 * $age);
         }
 

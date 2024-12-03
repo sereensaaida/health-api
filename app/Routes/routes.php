@@ -83,9 +83,9 @@ return static function (Slim\App $app): void {
     $app->get('/countries/{country_id}/compositeCountry', [CountriesController::class, 'handleCompositeCountry']);
 
 
+    //$app->post("/bmr", [BMRController::class, 'calculateBMR']);
 
-
-    $app->group('admin', function (RouteCollectorProxy $group) {
+    $app->group('', function (RouteCollectorProxy $group) {
         //POST
         $group->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
         //UPDATE

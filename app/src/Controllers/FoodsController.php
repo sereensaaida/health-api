@@ -269,10 +269,35 @@ class FoodsController extends BaseController
     public function handleGetCompositeNutrition(Request $request, response $response, array $uri_args): Response
     {
         //$query_params = $request->getQueryParams();
-
         $food_id = $uri_args['food_id'];
-        $food_db = $this->foods_model->getFoodId($food_id);
 
+        //* Validating that a valid ID is inputted in the URI - Because we can never trust what the user is putting in.
+        if (!isset($uri_args["food_id"])) {
+            return $this->renderJson(
+                $response,
+                [
+                    "status" => "error",
+                    "code" => "400",
+                    "message" => "No food ID provided."
+
+                ],
+                StatusCodeInterface::STATUS_BAD_REQUEST
+            );
+        }
+
+        if (!$this->isIdValid(['id' => $food_id])) {
+            throw new HttpInvalidInputsException($request, "Invalid food ID provided.");
+        }
+
+        //* Step 3) If valid, fetch the appropriate data for the specific food from the DB
+        $food_db = $this->foods_model->getFoodId($food_id);
+        if ($food_db === false) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching food found"
+            );
+        }
+        // Getting the food name to use for the composite API
         $food_name = $food_db['name'];
 
         //API call
@@ -296,17 +321,11 @@ class FoodsController extends BaseController
         //var_dump($body);
         // Then get contents from the body
         $response_payload = $body->getContents();
-        //log($response_payload);
-        // Catch it into a variable $response_payload (its as a string so we need to decode it into json representation)
 
         // Decode it and convert it into JSON(array or object)
         $nutrition_info = json_decode($response_payload);
         $nutrition_info = $nutrition_info[0];
         //var_dump($nutrition_info);
-
-        // Parse the data (list of leagues)
-        // Inspect everything -> Its an object with an array of objects
-        // Iterate through every row of data
 
         $nutrition = array(
             'fat_total_g' => $nutrition_info->fat_total_g,
