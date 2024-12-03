@@ -254,17 +254,19 @@ class CountriesController extends BaseController
             [
                 "base_url" => $url,
             ]
-
         );
-        $res = $client->request('GET', 'https://www.apicountries.com/countries', [
+
+        $res = $client->request('GET', "https://www.apicountries.com/name/{$name}", [
             'headers' => [
                 'Accept' => 'application/json'
             ]
         ]);
 
-        $response = $client->request('GET');
+        $body = $res->getBody();
+        //var_dump($body);
+        //$res = $client->request('GET');
         $status_code = $response->getStatusCode();
-        $body = $response->getBody();
+        $body = $res->getBody();
         $payload = $body->getContents();
 
         $country_info = json_decode($payload);
@@ -280,7 +282,7 @@ class CountriesController extends BaseController
             'region' => $country_info->region,
             'subregion' => $country_info->subregion,
             'nativeName' => $country_info->nativeName,
-            'currencies' => $country_info->currencies['code'],
+            'currencies' => $country_info->currencies[0]->code,
             'independent' => $country_info->independent
         );
 
