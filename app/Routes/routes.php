@@ -74,7 +74,7 @@ return static function (Slim\App $app): void {
     $app->get('/countries/{country_id}', [CountriesController::class, 'handleGetCountryId']);
     $app->get('/countries/{country_id}/guidelines', [CountriesController::class, 'handleGetCountryGuidelines']);
 
-    $app->group('', function (RouteCollectorProxy $group) {
+    $app->group('admin', function (RouteCollectorProxy $group) {
         //POST
         $group->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
         //UPDATE
@@ -84,6 +84,7 @@ return static function (Slim\App $app): void {
 
         // POST
         $group->post('/foods', [FoodsController::class, 'handleCreateFood']);
+        $group->post('/foods/calculate', [FoodsController::class, 'handleFoodComputation']);
         //PUT
         $group->put('/foods', [FoodsController::class, 'handleUpdateFood']);
         //DELETE
