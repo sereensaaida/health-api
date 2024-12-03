@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\PDOService;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Class FoodsModel
@@ -10,6 +11,8 @@ use App\Core\PDOService;
  * This model class handles operations related to the Food table
  */
 
+// Api key
+// /J+4XMLi0cWNeQ3F70t39Q==oNVAN6eElkdV58Fl
 class FoodsModel extends BaseModel
 {
     /**
