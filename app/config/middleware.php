@@ -19,7 +19,7 @@ return function (App $app) {
     $app->addBodyParsingMiddleware();
     $app->addRoutingMiddleware();
     //add the access log middleware
-    $app->addMiddleware(new LogMiddleware());
+    $app->add(LogMiddleware::class);
 
     //!NOTE: the error handling middleware MUST be added last.
     $errorMiddleware = $app->addErrorMiddleware(true, true, true);
