@@ -42,12 +42,8 @@ class AccountController extends BaseController
 
         $private_claims = array(
             'email' => $user_info['email'],
-<<<<<<< Updated upstream
             'username' => $user_info['first_name'],
             'role' => "admin"
-=======
-            'username' => $user_info['first_name']
->>>>>>> Stashed changes
         );
 
         $payload = array_merge($private_claims, $registered_claims);
