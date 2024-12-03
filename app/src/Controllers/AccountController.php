@@ -26,6 +26,9 @@ class AccountController extends BaseController
         //todo :'(
         $user_info = $request->getParsedBody();
 
+        $user_info = $request->getParsedBody();
+        // var_dump($user_info)
+
         // When the user is logged in:
         //! Generate JWT (token) containing private claims about the authenticated user.
         $issued_at = time();
@@ -39,8 +42,12 @@ class AccountController extends BaseController
 
         $private_claims = array(
             'email' => $user_info['email'],
+<<<<<<< Updated upstream
             'username' => $user_info['first_name'],
             'role' => "admin"
+=======
+            'username' => $user_info['first_name']
+>>>>>>> Stashed changes
         );
 
         $payload = array_merge($private_claims, $registered_claims);
