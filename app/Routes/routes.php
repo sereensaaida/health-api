@@ -19,6 +19,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Middleware\RoutingMiddleware;
 use Slim\Routing\RouteCollectorProxy;
+use App\Controllers\BMRController;
 
 return static function (Slim\App $app): void {
 
@@ -79,6 +80,9 @@ return static function (Slim\App $app): void {
 
     //*BMI CALCULATOR
     $app->post("/bmi", [BMIController::class, 'calculateBMI']);
+
+    //* BMR CALCULATOR
+    $app->post("/bmr", [BMRController::class, 'calculateBMR']);
 
     $app->group('admin', function (RouteCollectorProxy $group) {
         //POST
