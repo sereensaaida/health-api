@@ -10,6 +10,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use App\Exceptions\HttpInvalidInputsException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpSpecializedException;
+use GuzzleHttp\Client;
 
 class ExercisesController extends BaseController
 {
@@ -228,6 +229,75 @@ class ExercisesController extends BaseController
 
         //call the
 
+        return $response;
+    }
+
+    public function handleComposite(Request $request, Response $response, array $uri_args): Response
+    {
+
+        $exercise_id = $uri_args['exercise_id'];
+        $exercise_db = $this->exercisesModel->getExercisesById($exercise_id);
+        //var_dump($exercise_db);
+        $exercise_type = $exercise_db["exercise_type"];
+        // var_dump($exercise_type);
+        //API call
+        // Api key:
+        //$api_url = "https://api.api-ninjas.com/v1/nutrition?type={$exercise_type}";
+        //dd($api_url);
+        $api_key =  "xPGnQwQ8Xr3NNAKUemA1hhxD7VDBNfFQJXVMvMV1";
+        $client = new Client([
+            'base_uri' => 'https://api.api-ninjas.com/v1/',
+        ]);
+        $response = $client->request('GET', "exercises?type={$exercise_type}", [
+            'headers' => [
+                'X-Api-Key' => 'xPGnQwQ8Xr3NNAKUemA1hhxD7VDBNfFQJXVMvMV1',
+                'Accept' => 'application/json'
+            ]
+        ]);
+
+        // Get the content -> Get the body from the response
+        $body = $response->getBody();
+        //var_dump($body);
+        // Then get contents from the body
+        $response_payload = $body->getContents();
+        //log($response_payload);
+        // Catch it into a variable $response_payload (its as a string so we need to decode it into json representation)
+
+        // Decode it and convert it into JSON(array or object)
+        $exercise_info = json_decode($response_payload);
+        //$exercise_info = $exercise_info;
+
+        // Parse the data (list of leagues)
+        // Inspect everything -> Its an object with an array of objects
+        // Iterate through every row of data
+        $api_exercise = [];
+        // var_dump($exercise_info);
+        foreach ($exercise_info as $exercise) {
+            //var_dump($exercise);
+            $data = [
+                'name' => $exercise->name,
+                'type' => $exercise->type,
+                'muscle' => $exercise->muscle,
+                'equipment' => $exercise->equipment,
+                'difficulty' => $exercise->difficulty,
+                'instructions' => $exercise->instructions,
+            ];
+            // var_dump($data);
+            // exit;
+            $api_exercise = array_merge($api_exercise, $data);
+            // var_dump($api_exercise);
+            // $api_exercise += $data;
+        }
+        //var_dump($api_exercise);
+        // $api_exercise = array(
+        //     'name' => $exercise_info->name,
+        //     'type' => $exercise_info->type,
+        //     'muscle' => $exercise_info->muscle,
+        //     'equipment' => $exercise_info->equipment,
+        //     'difficulty' => $exercise_info->difficulty,
+        //     'instructions' => $exercise_info->instructions,
+        // );
+        var_dump($api_exercise);
         return $response;
     }
 }
