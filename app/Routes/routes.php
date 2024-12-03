@@ -58,6 +58,7 @@ return static function (Slim\App $app): void {
     $app->get('/foods', [FoodsController::class, 'handleGetFoods']);
     $app->get('/foods/{food_id}', [FoodsController::class, 'handleGetFoodId']);
     $app->get('/foods/{food_id}/facts', [FoodsController::class, 'handleGetFoodFacts']);
+    $app->get('/foods/{food_id}/composite_nutrition', [FoodsController::class, 'handleGetCompositeNutrition']);
 
     //* FACTS ROUTES
     // GET

@@ -12,6 +12,7 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpSpecializedException;
 use validation\index;
 use App\Services\FoodsService;
+use GuzzleHttp\Client;
 
 /**
  * Class FoodsController
@@ -265,12 +266,68 @@ class FoodsController extends BaseController
         return $this->renderJson($response, $payload, $status_code);
     }
 
-    public function handleFoodComputation(Request $request, Response $response): Response
+    public function handleGetCompositeNutrition(Request $request, response $response, array $uri_args): Response
     {
-        $body = $request->getParsedBody();
-    }
+        //$query_params = $request->getQueryParams();
 
-    public function handleAccessLog(Request $request, Response $response): Response {}
+        $food_id = $uri_args['food_id'];
+        $food_db = $this->foods_model->getFoodId($food_id);
+
+        $food_name = $food_db['name'];
+
+        //API call
+        // Api key:
+        $api_url = "https://api.api-ninjas.com/v1/nutrition?query={$food_name}";
+        //dd($api_url);
+        $api_key =  "xPGnQwQ8Xr3NNAKUemA1hhxD7VDBNfFQJXVMvMV1";
+        $client = new Client([
+            'base_uri' => $api_url,
+        ]);
+
+        $api_call = $client->request('GET', "https://api.api-ninjas.com/v1/nutrition?query={$food_name}", [
+            'headers' => [
+                'X-Api-Key' => 'xPGnQwQ8Xr3NNAKUemA1hhxD7VDBNfFQJXVMvMV1',
+                'Accept' => 'application/json'
+            ]
+        ]);
+
+        // Get the content -> Get the body from the response
+        $body = $api_call->getBody();
+        //var_dump($body);
+        // Then get contents from the body
+        $response_payload = $body->getContents();
+        //log($response_payload);
+        // Catch it into a variable $response_payload (its as a string so we need to decode it into json representation)
+
+        // Decode it and convert it into JSON(array or object)
+        $nutrition_info = json_decode($response_payload);
+        $nutrition_info = $nutrition_info[0];
+        //var_dump($nutrition_info);
+
+        // Parse the data (list of leagues)
+        // Inspect everything -> Its an object with an array of objects
+        // Iterate through every row of data
+
+        $nutrition = array(
+            'fat_total_g' => $nutrition_info->fat_total_g,
+            'fat_saturated_g' => $nutrition_info->fat_saturated_g,
+            'fat_total_g' => $nutrition_info->fat_total_g,
+            'sodium_mg' => $nutrition_info->sodium_mg,
+            'potassium_mg' => $nutrition_info->potassium_mg,
+            'cholesterol_mg' => $nutrition_info->cholesterol_mg,
+            'carbohydrates_total_g' => $nutrition_info->carbohydrates_total_g,
+            'fiber_g' => $nutrition_info->fiber_g
+        );
+
+        //var_dump($nutrition);
+
+        $data = array(
+            'Database Information' => $food_db,
+            'NinjaAPI' => $nutrition
+        );
+
+        return $this->renderJson($response, $data);
+    }
 }
 
 //? Notes
