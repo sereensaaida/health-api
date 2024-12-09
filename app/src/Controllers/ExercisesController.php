@@ -215,65 +215,47 @@ class ExercisesController extends BaseController
 
         return $this->renderJson($response, $payload, $status_code);
     }
-
-    //handle log
-    public function handleLog(Request $request, Response $response): Response
-    {
-        //get the information from the server
-        $ip_address = $_SERVER["REMOTE_ADDR"];
-        //by default, the date and time is added to the message
-        $resource_uri = $_SERVER["REQUEST_URI"];
-        $request_method = $_SERVER["REQUEST_METHOD"];
-        $queryString = $request->getUri()->getQuery();
-        $log_message = "\nTest message" . "\nClient IP address: " . $ip_address . "\nResource uri: " . $resource_uri . "\nRequest method: " . $request_method . "\Query strings: " . $queryString;
-
-        //call the
-
-        return $response;
-    }
-
+    /**
+     * Handler for the composite resource
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @param array $uri_args The array containing the exercise ID
+     * @return Response Returning the response in JSON format
+     */
     public function handleComposite(Request $request, Response $response, array $uri_args): Response
     {
 
         $exercise_id = $uri_args['exercise_id'];
         $exercise_db = $this->exercisesModel->getExercisesById($exercise_id);
-        //var_dump($exercise_db);
+        if ($exercise_db === false) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching exercise found"
+            );
+        }
         $exercise_type = $exercise_db["exercise_type"];
-        // var_dump($exercise_type);
-        //API call
-        // Api key:
-        //$api_url = "https://api.api-ninjas.com/v1/nutrition?type={$exercise_type}";
-        //dd($api_url);
+
         $api_key =  "xPGnQwQ8Xr3NNAKUemA1hhxD7VDBNfFQJXVMvMV1";
         $client = new Client([
             'base_uri' => 'https://api.api-ninjas.com/v1/',
         ]);
-        $response = $client->request('GET', "exercises?type={$exercise_type}", [
+        $api_call = $client->request('GET', "exercises?type={$exercise_type}", [
             'headers' => [
                 'X-Api-Key' => 'xPGnQwQ8Xr3NNAKUemA1hhxD7VDBNfFQJXVMvMV1',
                 'Accept' => 'application/json'
             ]
         ]);
-
-        // Get the content -> Get the body from the response
-        $body = $response->getBody();
-        //var_dump($body);
+        $body =  $api_call->getBody();
         // Then get contents from the body
         $response_payload = $body->getContents();
-        //log($response_payload);
-        // Catch it into a variable $response_payload (its as a string so we need to decode it into json representation)
 
         // Decode it and convert it into JSON(array or object)
         $exercise_info = json_decode($response_payload);
-        //$exercise_info = $exercise_info;
 
-        // Parse the data (list of leagues)
-        // Inspect everything -> Its an object with an array of objects
         // Iterate through every row of data
         $api_exercise = [];
-        // var_dump($exercise_info);
         foreach ($exercise_info as $exercise) {
-            //var_dump($exercise);
             $data = [
                 'name' => $exercise->name,
                 'type' => $exercise->type,
@@ -282,22 +264,14 @@ class ExercisesController extends BaseController
                 'difficulty' => $exercise->difficulty,
                 'instructions' => $exercise->instructions,
             ];
-            // var_dump($data);
-            // exit;
-            $api_exercise = array_merge($api_exercise, $data);
-            // var_dump($api_exercise);
-            // $api_exercise += $data;
+            $api_exercise[] = $data;
         }
-        //var_dump($api_exercise);
-        // $api_exercise = array(
-        //     'name' => $exercise_info->name,
-        //     'type' => $exercise_info->type,
-        //     'muscle' => $exercise_info->muscle,
-        //     'equipment' => $exercise_info->equipment,
-        //     'difficulty' => $exercise_info->difficulty,
-        //     'instructions' => $exercise_info->instructions,
-        // );
-        var_dump($api_exercise);
-        return $response;
+        //merge the 2 arrays
+        $composite = [
+            "Database Information" => $exercise_db,
+            "NinjaAPI" => $api_exercise
+        ];
+
+        return $this->renderJson($response, $composite);
     }
 }
