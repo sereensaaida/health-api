@@ -40,14 +40,19 @@ class ExercisesController extends BaseController
     {
         //get the query parameters
         $filter_params = $request->getQueryParams();
-        //: handle pagination validation
-        if (isset($filter_params["current_page"])) {
-            if ($this->isPagingParamsValid($filter_params)) {
-                $this->exercisesModel->setPaginationOptions(
-                    $filter_params["current_page"],
-                    $filter_params["page_size"]
-                );
-            }
+        // Handle pagination validation
+        $current_page = $filter_params["current_page"] ?? 1;
+        $page_size = $filter_params["page_size"] ?? 5;
+        $value = [
+            "current_page" => $current_page,
+            "page_size" => $page_size
+        ];
+        // var_dump($value);
+        if ($this->isPagingParamsValid($value)) {
+            $this->exercisesModel->setPaginationOptions(
+                $value["current_page"],
+                $value["page_size"]
+            );
         }
         //get data & encode the data into json format
         $exercisesData = $this->exercisesModel->getExercises($filter_params);
@@ -123,7 +128,7 @@ class ExercisesController extends BaseController
         //echo "aye";
         // 1) Retrieve data included in the request (post body)
         $new_exercise = $request->getParsedBody();
-        var_dump($new_exercise);
+        //var_dump($new_exercise);
         $result = $this->exerciseService->createExercise($new_exercise[0]); //there is an issue because i had [0] before
         $payload = [];
         $status_code = 201;
@@ -153,7 +158,7 @@ class ExercisesController extends BaseController
     {
         $update_exercise = $request->getParsedBody();
 
-        $exercise = $this->exercisesModel->getExercisesById($update_exercise["exercise_id"]);
+        $exercise = $this->exercisesModel->getExercisesById($update_exercise[0]["exercise_id"]);
         if ($exercise === false) {
             throw new HttpNotFoundException(
                 $request,

@@ -17,13 +17,17 @@ class RecommendationsController extends BaseController
     public function handleGetRecommendations(Request $request, Response $response): Response
     {
         $filter_params = $request->getQueryParams();
-        if (isset($filter_params["current_page"])) {
-            if ($this->isPagingParamsValid($filter_params)) {
-                $this->recommendations_model->setPaginationOptions(
-                    $filter_params["current_page"],
-                    $filter_params["page_size"]
-                );
-            }
+        $current_page = $filter_params["current_page"] ?? 1;
+        $page_size = $filter_params["page_size"] ?? 5;
+        $value = [
+            "current_page" => $current_page,
+            "page_size" => $page_size
+        ];
+        if ($this->isPagingParamsValid($value)) {
+            $this->recommendations_model->setPaginationOptions(
+                $value["current_page"],
+                $value["page_size"]
+            );
         }
         $recommendations = $this->recommendations_model->getRecommendations($filter_params);
         return $this->renderJson($response, $recommendations);

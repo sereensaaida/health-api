@@ -39,7 +39,7 @@ class AccountController extends BaseController
             'iat' => $issued_at,
             'exp' => $expires_at
         ];
-
+        //var_dump($user_info);
         $private_claims = array(
             'email' => $user_info['email'],
             'username' => $user_info['first_name'],

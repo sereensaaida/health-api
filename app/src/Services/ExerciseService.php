@@ -81,6 +81,7 @@ class ExerciseService
     public function createExercise(array $new_exercise): Result
     {
         if ($this->isExerciseValid($new_exercise)) {
+            var_dump("yes");
             $this->exercises_model->insertExercise($new_exercise);
             return Result::success("Exercise was successfully created");
         } else {
