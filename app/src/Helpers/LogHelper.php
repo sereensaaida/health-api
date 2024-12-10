@@ -5,11 +5,26 @@ namespace App\Helpers;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
-//where public static methods for writing log messages to a specific file (access.log, error.log) should be implemented
+/**
+ * LogHelper class provides static methods for logging messages to specific log files.
+ *
+ * This helper class supports two main types of logs:
+ * - Access logs: Written to `access.log` for recording access-related messages.
+ * - Error logs: Written to `errors.log` for recording error-related messages.
+ */
 class LogHelper
 {
 
-    //handle the access.log
+    /**
+     * Handles writing access logs to the `access.log` file.
+     *
+     * This method initializes a Monolog logger instance, sets up a StreamHandler
+     * to direct log messages to the `access.log` file, and logs the provided message
+     * with an informational log level.
+     *
+     * @param string $log_message The message to be logged in the access log.
+     * @return void
+     */
     public static function handleAccess($log_message)
     {
         //1) Instantiate the logger
@@ -19,7 +34,16 @@ class LogHelper
         //use the log level
         $logger->info($log_message);
     }
-    //handle the error.log
+    /**
+     * Handles writing error logs to the `errors.log` file.
+     *
+     * This method initializes a Monolog logger instance, sets up a StreamHandler
+     * to direct log messages to the `errors.log` file, and logs the provided message
+     * with an error log level.
+     *
+     * @param string $log_message The message to be logged in the error log.
+     * @return void
+     */
     public static function handleError($log_message)
     {
         //1)Instantiate the logger

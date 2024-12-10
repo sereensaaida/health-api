@@ -23,14 +23,17 @@ class DietsController extends BaseController
     {
         //*Retrieve filtering
         $filter_params = $request->getQueryParams();
-
-        if (isset($filter_params["current_page"])) {
-            if ($this->isPagingParamsValid($filter_params)) {
-                $this->dietsModel->setPaginationOptions(
-                    $filter_params["current_page"],
-                    $filter_params["page_size"]
-                );
-            }
+        $current_page = $filter_params["current_page"] ?? 1;
+        $page_size = $filter_params["page_size"] ?? 5;
+        $value = [
+            "current_page" => $current_page,
+            "page_size" => $page_size
+        ];
+        if ($this->isPagingParamsValid($value)) {
+            $this->dietsModel->setPaginationOptions(
+                $value["current_page"],
+                $value["page_size"]
+            );
         }
         $diets = $this->dietsModel->getDiets($filter_params);
 

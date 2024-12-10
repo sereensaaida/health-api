@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2024 at 06:35 PM
+-- Generation Time: Dec 03, 2024 at 06:38 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,8 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `health`
 --
-CREATE DATABASE IF NOT EXISTS `health` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `health`;
+
 -- --------------------------------------------------------
 
 --
@@ -246,10 +245,18 @@ INSERT INTO `recommendations` (`recommendation_id`, `diet_id`, `exercise_id`, `d
 CREATE TABLE `ws_log` (
   `log_id` int(10) UNSIGNED NOT NULL,
   `email` varchar(150) NOT NULL,
-  `user_action` varchar(255) NOT NULL,
   `logged_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `user_id` int(10) UNSIGNED NOT NULL
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `ip_address` varchar(30) NOT NULL,
+  `method` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `ws_log`
+--
+
+INSERT INTO `ws_log` (`log_id`, `email`, `logged_at`, `user_id`, `ip_address`, `method`) VALUES
+(1, 'dmil@gmail.com', '2024-12-03 17:31:00', 1, '127.0.0.1', 'GET');
 
 -- --------------------------------------------------------
 
@@ -380,7 +387,7 @@ ALTER TABLE `recommendations`
 -- AUTO_INCREMENT for table `ws_log`
 --
 ALTER TABLE `ws_log`
-  MODIFY `log_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `log_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ws_users`

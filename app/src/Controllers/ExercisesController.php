@@ -10,6 +10,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use App\Exceptions\HttpInvalidInputsException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpSpecializedException;
+use GuzzleHttp\Client;
 
 class ExercisesController extends BaseController
 {
@@ -39,14 +40,19 @@ class ExercisesController extends BaseController
     {
         //get the query parameters
         $filter_params = $request->getQueryParams();
-        //: handle pagination validation
-        if (isset($filter_params["current_page"])) {
-            if ($this->isPagingParamsValid($filter_params)) {
-                $this->exercisesModel->setPaginationOptions(
-                    $filter_params["current_page"],
-                    $filter_params["page_size"]
-                );
-            }
+        // Handle pagination validation
+        $current_page = $filter_params["current_page"] ?? 1;
+        $page_size = $filter_params["page_size"] ?? 5;
+        $value = [
+            "current_page" => $current_page,
+            "page_size" => $page_size
+        ];
+        // var_dump($value);
+        if ($this->isPagingParamsValid($value)) {
+            $this->exercisesModel->setPaginationOptions(
+                $value["current_page"],
+                $value["page_size"]
+            );
         }
         //get data & encode the data into json format
         $exercisesData = $this->exercisesModel->getExercises($filter_params);
@@ -122,7 +128,7 @@ class ExercisesController extends BaseController
         //echo "aye";
         // 1) Retrieve data included in the request (post body)
         $new_exercise = $request->getParsedBody();
-        var_dump($new_exercise);
+        //var_dump($new_exercise);
         $result = $this->exerciseService->createExercise($new_exercise[0]); //there is an issue because i had [0] before
         $payload = [];
         $status_code = 201;
@@ -152,7 +158,7 @@ class ExercisesController extends BaseController
     {
         $update_exercise = $request->getParsedBody();
 
-        $exercise = $this->exercisesModel->getExercisesById($update_exercise["exercise_id"]);
+        $exercise = $this->exercisesModel->getExercisesById($update_exercise[0]["exercise_id"]);
         if ($exercise === false) {
             throw new HttpNotFoundException(
                 $request,
@@ -214,20 +220,63 @@ class ExercisesController extends BaseController
 
         return $this->renderJson($response, $payload, $status_code);
     }
-
-    //handle log
-    public function handleLog(Request $request, Response $response): Response
+    /**
+     * Handler for the composite resource
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @param array $uri_args The array containing the exercise ID
+     * @return Response Returning the response in JSON format
+     */
+    public function handleComposite(Request $request, Response $response, array $uri_args): Response
     {
-        //get the information from the server
-        $ip_address = $_SERVER["REMOTE_ADDR"];
-        //by default, the date and time is added to the message
-        $resource_uri = $_SERVER["REQUEST_URI"];
-        $request_method = $_SERVER["REQUEST_METHOD"];
-        $queryString = $request->getUri()->getQuery();
-        $log_message = "\nTest message" . "\nClient IP address: " . $ip_address . "\nResource uri: " . $resource_uri . "\nRequest method: " . $request_method . "\Query strings: " . $queryString;
 
-        //call the
+        $exercise_id = $uri_args['exercise_id'];
+        $exercise_db = $this->exercisesModel->getExercisesById($exercise_id);
+        if ($exercise_db === false) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching exercise found"
+            );
+        }
+        $exercise_type = $exercise_db["exercise_type"];
 
-        return $response;
+        $api_key =  "xPGnQwQ8Xr3NNAKUemA1hhxD7VDBNfFQJXVMvMV1";
+        $client = new Client([
+            'base_uri' => 'https://api.api-ninjas.com/v1/',
+        ]);
+        $api_call = $client->request('GET', "exercises?type={$exercise_type}", [
+            'headers' => [
+                'X-Api-Key' => 'xPGnQwQ8Xr3NNAKUemA1hhxD7VDBNfFQJXVMvMV1',
+                'Accept' => 'application/json'
+            ]
+        ]);
+        $body =  $api_call->getBody();
+        // Then get contents from the body
+        $response_payload = $body->getContents();
+
+        // Decode it and convert it into JSON(array or object)
+        $exercise_info = json_decode($response_payload);
+
+        // Iterate through every row of data
+        $api_exercise = [];
+        foreach ($exercise_info as $exercise) {
+            $data = [
+                'name' => $exercise->name,
+                'type' => $exercise->type,
+                'muscle' => $exercise->muscle,
+                'equipment' => $exercise->equipment,
+                'difficulty' => $exercise->difficulty,
+                'instructions' => $exercise->instructions,
+            ];
+            $api_exercise[] = $data;
+        }
+        //merge the 2 arrays
+        $composite = [
+            "Database Information" => $exercise_db,
+            "NinjaAPI" => $api_exercise
+        ];
+
+        return $this->renderJson($response, $composite);
     }
 }

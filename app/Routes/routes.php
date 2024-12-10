@@ -51,6 +51,7 @@ return static function (Slim\App $app): void {
     //GET
     $app->get('/exercises', [ExercisesController::class, 'handleGetExercises']);
     $app->get('/exercises/{exercise_id}', [ExercisesController::class, 'handleGetExercisesById']);
+    $app->get('/exercises/{exercise_id}/composite', [ExercisesController::class, 'handleComposite']);
     $app->get('/exercises/{exercise_id}/recommendations', [ExercisesController::class, 'handleGetRecommendationsByExercise']);
 
     //* FOODS ROUTES

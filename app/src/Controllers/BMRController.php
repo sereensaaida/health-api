@@ -6,13 +6,31 @@ use App\Services\BMRService;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
+/**
+ * Class BMRController
+ *
+ * This controller class handles the computational operations to calculate BMR based on height, weight, age, and gender
+ */
 class BMRController extends BaseController
 {
+    /**
+     * BMRController constructor.
+     *
+     * @param BMRService $BMR_service Reference to the BMR service
+     */
     public function __construct(private BMRService $BMR_service)
     {
         parent::__construct();
         $this->BMR_service = $BMR_service;
     }
+
+    /**
+     * CalculateBMR method
+     *
+     * @param Request $request Client request
+     * @param Response $response Server response
+     * @return Response Returning a response object
+     */
     public function calculateBMR(Request $request, Response $response): Response
     {
         //echo "hello";
