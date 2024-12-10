@@ -2,8 +2,22 @@
 
 namespace App\Services;
 
+/**
+ * Class BMRService
+ *
+ * This service class handles returning the appropriate computed result from the user's BMR
+ */
 class BMRService
 {
+    /**
+     * CalculateBMR method
+     *
+     * @param string $gender gender
+     * @param int $age age
+     * @param float $height height
+     * @param float $weight weight
+     * @return array Returns an array
+     */
     public function BMRcalculation(string $gender, int $age, float $height, float $weight)
     {
         // Men and female have different results
