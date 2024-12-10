@@ -23,7 +23,7 @@ class FoodsController extends BaseController
 {
 
     /**
-     * FoodsModel constructor.
+     * FoodsController constructor.
      *
      * @param FoodsModel $foods_model Reference to the foods model
      */
@@ -266,6 +266,14 @@ class FoodsController extends BaseController
         return $this->renderJson($response, $payload, $status_code);
     }
 
+    /**
+     * Handler for composite resource
+     *
+     * @param Request $request The user request
+     * @param Response $response The generated response
+     * @param array $uri_args The arguments from the URI
+     * @return Response Returning the response in JSON format
+     */
     public function handleGetCompositeNutrition(Request $request, response $response, array $uri_args): Response
     {
         //$query_params = $request->getQueryParams();

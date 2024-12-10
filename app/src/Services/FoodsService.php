@@ -189,49 +189,4 @@ class FoodsService
             return Result::fail("Data not valid.");
         }
     }
-
-    /*
-    public function isFoodValid($data): bool
-    {
-        $rules = array(
-            'id' => [
-                'required',
-                'integer',
-                ['min', 1]
-            ],
-            'name' => [
-                'alpha',
-                ['min', 1],
-                ['max', 100]
-            ],
-            'category' => [
-                'alpha',
-                ['min', 1],
-                ['max', 50]
-            ],
-            'calories' => [
-                'integer',
-                ['min', 1]
-            ],
-            'serving_size' => [
-                'integer',
-            ],
-            'content' => [
-                'integer',
-            ],
-            'avg_price' => [
-                'integer',
-            ],
-            'is_vegan' => [
-                'integer',
-                ['min', 1],
-                ['max', 1]
-            ],
-        );
-
-        $validator = new Validator($data, [], 'en');
-        $validator->mapFieldsRules($rules);
-        return $validator->validate();
-    }
-    */
 }
