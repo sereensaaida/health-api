@@ -273,7 +273,7 @@ class ExercisesController extends BaseController
         }
         //merge the 2 arrays
         $composite = [
-            "Database Information" => $exercise_db,
+            "Database_Information" => $exercise_db,
             "NinjaAPI" => $api_exercise
         ];
 
