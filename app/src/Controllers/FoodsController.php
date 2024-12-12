@@ -338,7 +338,6 @@ class FoodsController extends BaseController
         $nutrition = array(
             'fat_total_g' => $nutrition_info->fat_total_g,
             'fat_saturated_g' => $nutrition_info->fat_saturated_g,
-            'fat_total_g' => $nutrition_info->fat_total_g,
             'sodium_mg' => $nutrition_info->sodium_mg,
             'potassium_mg' => $nutrition_info->potassium_mg,
             'cholesterol_mg' => $nutrition_info->cholesterol_mg,

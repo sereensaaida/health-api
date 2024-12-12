@@ -241,58 +241,76 @@ class CountriesController extends BaseController
     }
 
 
-    public function handleCompositeCountry(Request $request, Response $response,  array $uri_args): Response
+    /**
+     * Handles retrieving country information from both the database and an external API.
+     *
+     * @param Request $request  HTTP request objec
+     * @param Response $response HTTP response object
+     * @param array $uri_args arguments from uri
+     *
+     * @return Response The JSON response
+     */
+    public function handleCompositeCountry(Request $request, Response $response, array $uri_args): Response
     {
-        $country_id = $uri_args["country_id"];
+        if (!isset($uri_args['country_id']) || !is_numeric($uri_args['country_id'])) {
+            return $this->renderJson($response->withStatus(400), [
+                'error' => 'Invalid or missing country_id parameter.'
+            ]);
+        }
+
+        $country_id = (int)$uri_args['country_id'];
+
         $country = $this->countries_model->getCountryId(country_id: $country_id);
+
+        if (empty($country)) {
+            return $this->renderJson($response->withStatus(404), [
+                'error' => 'Country not found in the database.'
+            ]);
+        }
 
         $name = $country['name'];
         $url = "https://www.apicountries.com/name/{$name}";
 
+        try {
+            $client = new Client(['base_uri' => $url]);
 
-        $client = new Client(
-            [
-                "base_url" => $url,
-            ]
-        );
+            $res = $client->request('GET', $url, [
+                'headers' => ['Accept' => 'application/json']
+            ]);
 
-        $res = $client->request('GET', "https://www.apicountries.com/name/{$name}", [
-            'headers' => [
-                'Accept' => 'application/json'
-            ]
-        ]);
+            $body = $res->getBody();
+            $payload = $body->getContents();
+            $country_info = json_decode($payload);
 
-        $body = $res->getBody();
-        //var_dump($body);
-        //$res = $client->request('GET');
-        $status_code = $response->getStatusCode();
-        $body = $res->getBody();
-        $payload = $body->getContents();
+            // Validate API response
+            if (empty($country_info) || !isset($country_info[0])) {
+                return $this->renderJson($response->withStatus(502), [
+                    'error' => 'Invalid response from the external API.'
+                ]);
+            }
 
-        $country_info = json_decode($payload);
-        $country_info = $country_info[0];
+            $country_info = $country_info[0];
 
+            $countries = [
+                'capital' => $country_info->capital ?? 'N/A',
+                'region' => $country_info->region ?? 'N/A',
+                'subregion' => $country_info->subregion ?? 'N/A',
+                'nativeName' => $country_info->nativeName ?? 'N/A',
+                'currencies' => $country_info->currencies[0]->code ?? 'N/A',
+                'independent' => $country_info->independent ?? 'N/A'
+            ];
 
-        // Parse the data (list of leagues)
-        // Inspect everything -> Its an object with an array of objects
-        // Iterate through every row of data
+            $data = [
+                'Database Information' => $country,
+                'NinjaAPI' => $countries
+            ];
 
-        $countries = array(
-            'capital' => $country_info->capital,
-            'region' => $country_info->region,
-            'subregion' => $country_info->subregion,
-            'nativeName' => $country_info->nativeName,
-            'currencies' => $country_info->currencies[0]->code,
-            'independent' => $country_info->independent
-        );
-
-        //var_dump($nutrition);
-
-        $data = array(
-            'Database Information' => $country,
-            'NinjaAPI' => $countries
-        );
-
-        return $this->renderJson($response, $data);
+            return $this->renderJson($response, $data);
+        } catch (HttpNotFoundException $e) {
+            return $this->renderJson($response->withStatus(404), [
+                'error' => 'An error occurred while fetching data from the external API.',
+                'details' => $e->getMessage()
+            ]);
+        }
     }
 }
