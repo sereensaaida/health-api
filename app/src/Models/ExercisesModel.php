@@ -136,7 +136,7 @@ class ExercisesModel extends BaseModel
      */
     public function deleteExercise(array $delete_id)
     {
-        $exercise_id = $delete_id[0]["exercise_id"];
+        $exercise_id = $delete_id["exercise_id"];
         $deleted_id = $this->delete("exercises", ["exercise_id" => $exercise_id]);
 
         return $deleted_id;

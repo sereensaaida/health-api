@@ -83,16 +83,17 @@ return static function (Slim\App $app): void {
     $app->get('/countries/{country_id}/guidelines', [CountriesController::class, 'handleGetCountryGuidelines']);
     $app->get('/countries/{country_id}/compositeCountry', [CountriesController::class, 'handleCompositeCountry']);
 
-
+    $app->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
+    $app->delete('/exercises', [ExercisesController::class, 'deleteExercise']);
     //$app->post("/bmr", [BMRController::class, 'calculateBMR']);
 
     $app->group('', function (RouteCollectorProxy $group) {
         //POST
-        $group->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
+        // $group->post('/exercises', [ExercisesController::class, 'handleGetExercisesClass']);
         //UPDATE
         $group->put('/exercises', [ExercisesController::class, 'handleUpdateExercises']);
         //DELETE
-        $group->delete('/exercises', [ExercisesController::class, 'deleteExercise']);
+        // $group->delete('/exercises', [ExercisesController::class, 'deleteExercise']);
 
         // POST
         $group->post('/foods', [FoodsController::class, 'handleCreateFood']);

@@ -103,7 +103,7 @@ class FoodsController extends BaseController
                 "No matching food found"
             );
         }
-
+        
         return $this->renderJson(
             $response,
             $food
