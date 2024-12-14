@@ -105,7 +105,6 @@ class CountriesModel extends BaseModel
      */
     public function insertCountry(array $country): mixed
     {
-        var_dump($country);
         $last_id = $this->insert("countries",  $country);
 
         return $last_id;
