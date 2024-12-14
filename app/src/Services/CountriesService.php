@@ -92,7 +92,6 @@ class CountriesService
      */
     public function createCountry(array $new_country): Result
     {
-        var_dump($new_country);
         if ($this->isCountryValid($new_country)) {
             $this->countries_model->insertCountry($new_country);
 
